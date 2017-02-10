@@ -1,0 +1,95 @@
+\documentclass[]{article}
+\usepackage[main=english,french]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{enumitem}  
+\usepackage{listings}
+%opening
+\title{Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT$^{-1}$}
+\author{Cl\'ement Cazorla, Vincent Chrun, Bastien Fundaro, Cl\'ement Maliet \\ENSEEIHT - 3EN TSI 2016-2017}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The present document is to serve as both a technical report and a documentation for the code produced during the long project. As such the first part will explain the theoretical framework and the state-of-the-art of the field. The second part will give some insight about the code structure and the conventions that were adopted and last but not least, the third part will serve as an actual documentation and details every class, methods and attributes.
+\end{abstract}
+\newpage
+\tableofcontents
+
+
+\newpage
+\part{Theoretical framework}\label{sec:theoretical-framework}
+\section{Sound synthesis}\label{sec:sound-synthesis}
+\subsection{Frequency domain}\label{sec:frequency-domain}
+\subsection{Sinusoidal model}\label{sec:sinusoidal-model}
+\subsection{Phase Vocoder}\label{sec:phase-vocoder}
+\section{Theoretical synthesis with phase vocoder and FFT$^{-1}$}\label{sec:theoretical-synthesis-with-phase-vocoder-and-fft-1}
+\subsection{Stationary case}\label{sec:stationary-case}
+\subsection{Non-stationary case}\label{sec:non-stationary-case}
+
+
+\newpage
+\part{Code structure and conventions}\label{sec:code-structure-and-conventions}
+
+\section{Conventions}\label{sec:conventions}
+
+In this section we remind the reader of a few coding convention necessary to ensure a seamless work flow and a bug free program as much as possible.
+Files should contains an entire module (as described in \ref{sec:general-structure}) not just a single class to limit the number of files and ease the bug tracking.
+Imports in files should be kept to a minimum and left in namespaces (do not use the \lstinline[columns=fixed,language=Python]|from module import *| syntax). It is preferable to import a whole module if more than three elements from the module are needed in the file, otherwise consider the \lstinline[columns=fixed,language=Python]|from module import element1, element2| syntax to avoid unnecessary memory flooding. If conflicts exists, notwithstanding the number of elements needed, the whole modules are to be loaded with a namespace.
+Namespaces may be abbreviated to the programmer's convenience however some abbreviation are to be universally respected :
+\begin{enumerate}[label=(\roman*)]
+	\item \texttt{numpy} should always be imported as \texttt{np}
+	\item \texttt{matplotlib.pyplot} should always be imported as \texttt{plt}
+\end{enumerate}
+
+Finally math functions should always come from the numpy module and not python's math module to guarantee a universal behaviour across the program.
+
+\subsection{Naming conventions}\label{sec:naming-conventions}
+
+Naming conventions are freely adapted from Python recommended conventions defined in PEP8 \cite{pep8}, as such :
+\begin{enumerate}[label=(\roman*)]
+	\item \emph{Class} should be named in \texttt{CapitalizedWord}
+	\item \emph{Methods} and \emph{functions} should be named in \texttt{lower\_case\_with\_underscores}
+	\item \emph{Attributes} and \emph{variables} should be names in \texttt{lower\_case\_with\_underscores}
+	\item \emph{Instantiation} following the fact that everything is an object in python should be named as \emph{variables}.
+\end{enumerate}
+Moreover during class declaration, the following principles should be adopted :
+\begin{enumerate}[label=(\roman*)]
+	\item Non-public methods and attributes should use one leading underscore.
+	\item Elements that conflicts with python reserved name should use one trailing underscore rather that simplification or a misspelling.
+	\item Accessors or mutators using one leading underscore should be interpreted as properties of their associated attribute. As such it should be guaranteed that they induce a low computational cost.
+	\item Non-public elements that should not be inherited or may cause conflicts during inheritance should use two leading underscore and make use of Python name-mangling.
+\end{enumerate}
+To seamlessly manipulate both \emph{stationary} and \emph{non stationary} models, class that are inherited in two versions are preceded with either \texttt{Stationary} are \texttt{NonStationary} respectively.
+\subsection{Spectrums and sinusoids parameters}\label{sec:spectrums-and-sinusoids-parameters}
+\section{Code structure}\label{sec:code-structure}
+\subsection{General structure}\label{sec:general-structure}
+\subsection{Class structure}\label{sec:class-structure}
+
+
+\newpage
+\part{Documentation}\label{sec:documentation}
+\section{Core module}
+\subsection{Synthesizer}
+\subsection{StationarySynthesizer}
+\subsection{NonStationarySynthesizer}
+\section{Spectrum generation module}\label{sec:spectrum-generation-module}
+\subsection{SpectrumGenerator}\label{sec:spectrumgenerator}
+\subsection{StaionarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
+\subsection{NonStationarySpectrumGenerator}\label{sec:nonstationaryspectrumgenerator}
+\subsection{StationnaryLobe}\label{sec:stationnarylobe}
+\subsection{NonStationaryLUT}\label{sec:nonstationarylut}
+\section{Phase Vocoder module}\label{sec:phase-vocoder-module}
+\subsection{PhaseVocoder}\label{sec:phasevocoder}
+\subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
+\subsection{NonStationaryPhaseVocoder}\label{sec:nonstationaryphasevocoder}
+
+\newpage
+\section*{Conclusion}
+
+\newpage
+\bibliographystyle{unsrt}
+\bibliography{biblio}
+\end{document}

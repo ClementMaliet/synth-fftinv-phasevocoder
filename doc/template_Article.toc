@@ -1,0 +1,31 @@
+\select@language {english}
+\contentsline {part}{I\hspace {1em}Theoretical framework}{3}
+\contentsline {section}{\numberline {1}Sound synthesis}{3}
+\contentsline {subsection}{\numberline {1.1}Frequency domain}{3}
+\contentsline {subsection}{\numberline {1.2}Sinusoidal model}{3}
+\contentsline {subsection}{\numberline {1.3}Phase Vocoder}{3}
+\contentsline {section}{\numberline {2}Theoretical synthesis with phase vocoder and FFT$^{-1}$}{3}
+\contentsline {subsection}{\numberline {2.1}Stationary case}{3}
+\contentsline {subsection}{\numberline {2.2}Non-stationary case}{3}
+\contentsline {part}{II\hspace {1em}Code structure and conventions}{4}
+\contentsline {section}{\numberline {3}Conventions}{4}
+\contentsline {subsection}{\numberline {3.1}Naming conventions}{4}
+\contentsline {subsection}{\numberline {3.2}Spectrums and sinusoids parameters}{5}
+\contentsline {section}{\numberline {4}Code structure}{5}
+\contentsline {subsection}{\numberline {4.1}General structure}{5}
+\contentsline {subsection}{\numberline {4.2}Class structure}{5}
+\contentsline {part}{III\hspace {1em}Documentation}{6}
+\contentsline {section}{\numberline {5}Core module}{6}
+\contentsline {subsection}{\numberline {5.1}Synthesizer}{6}
+\contentsline {subsection}{\numberline {5.2}StationarySynthesizer}{6}
+\contentsline {subsection}{\numberline {5.3}NonStationarySynthesizer}{6}
+\contentsline {section}{\numberline {6}Spectrum generation module}{6}
+\contentsline {subsection}{\numberline {6.1}SpectrumGenerator}{6}
+\contentsline {subsection}{\numberline {6.2}StaionarySpectrumGenerator}{6}
+\contentsline {subsection}{\numberline {6.3}NonStationarySpectrumGenerator}{6}
+\contentsline {subsection}{\numberline {6.4}StationnaryLobe}{6}
+\contentsline {subsection}{\numberline {6.5}NonStationaryLUT}{6}
+\contentsline {section}{\numberline {7}Phase Vocoder module}{6}
+\contentsline {subsection}{\numberline {7.1}PhaseVocoder}{6}
+\contentsline {subsection}{\numberline {7.2}StationaryPhaseVocoder}{6}
+\contentsline {subsection}{\numberline {7.3}NonStationaryPhaseVocoder}{6}
