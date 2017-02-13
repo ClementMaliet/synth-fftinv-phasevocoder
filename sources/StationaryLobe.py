@@ -41,15 +41,7 @@ class StationaryLobe:
         print w1
         self._lobe.set_complex_spectrum(w1)
 
-        # plt.figure
-        # plt.plot(linspace(0, 1, len(ampl)), ampl)
-        # plt.ylabel('Amplitude')
-        # plt.show()
-        #
-        # plt.figure
-        # plt.plot(linspace(0, 1, len(phase)), phase)
-        # plt.ylabel('Phase swaggey')
-        # plt.show()
+
 
     def get_lobe(self):
         return self._lobe
