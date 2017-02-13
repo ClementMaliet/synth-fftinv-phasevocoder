@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf8-*-
+# -*- coding: utf-8 -*-
 
 # Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
@@ -52,7 +52,7 @@ class Spectrum:
 
     @classmethod
     def from_complex_spectrum(cls, complex_spectrum):
-        if type(complex_spectrum) != "complex_":
+        if np.iscomplex(complex_spectrum):
             raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
         else:
             cls._amplitude = np.absolute(complex_spectrum)
@@ -68,7 +68,7 @@ class Spectrum:
             self._nfft = len(amplitude)
 
     def set_complex_spectrum(self, complex_spectrum):
-        if type(complex_spectrum) != np.complex_:
+        if np.iscomplex(complex_spectrum):
             raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
         else:
             self._amplitude = np.absolute(complex_spectrum)
