@@ -90,3 +90,102 @@ class Spectrum:
             raise BoundSpectrumError("Index out of spectrum range")
         else:
             return self._phase[k]
+
+    def get_nfft(self):
+        return self._nfft
+
+
+class ParametersError(Exception):
+    """Base class for exception regarding the spectrum class"""
+    pass
+
+
+class InconsistentParametersError(ParametersError):
+    """Base class for inconsistency of parameters, raised when the numbers of sinusoid and/or parameters do not
+    add up."""
+
+    def __init__(self, message):
+        self.message = message
+
+
+class NegativeAmplitudeError(InconsistentParametersError):
+    """Raised if one of the amplitude provided is negative"""
+
+
+class BoundParametersError(ParametersError):
+    """Raised if asked for a non existing sinusoid's parameters (index out of bound)
+    Attributes:
+            message -- explanation of the error
+        """
+
+    def __init__(self, message):
+        self.message = message
+
+
+class Parameters:
+    """The class parameters is used to store the parameters of the model's stationary sinusoid"""
+
+    def __init__(self, amplitudes, frequencies, phases):
+        if len(amplitudes) != len(frequencies) or len(amplitudes) != len(phases) or len(frequencies) != len(phases):
+            raise InconsistentParametersError("Sinusoid parameters provided are not the same length")
+        elif any([a < 0 for a in amplitudes]):
+            raise NegativeAmplitudeError("One of the amplitude provided is negative")
+        else:
+            self._amplitudes = amplitudes
+            self._frequencies = frequencies
+            self._phases = phases
+            self._number_sinuses = len(amplitudes)
+
+    def get_amplitude(self, k):
+        if k < 0:
+            raise BoundParametersError("Index negative !")
+        elif k > self._number_sinuses - 1:
+            raise BoundParametersError("Index out of parameters range")
+        else:
+            return self._amplitudes[k]
+
+    def get_frequency(self, k):
+        if k < 0:
+            raise BoundParametersError("Index negative !")
+        elif k > self._number_sinuses - 1:
+            raise BoundParametersError("Index out of parameters range")
+        else:
+            return self._frequencies[k]
+
+    def get_phase(self, k):
+        if k < 0:
+            raise BoundParametersError("Index negative !")
+        elif k > self._number_sinuses - 1:
+            raise BoundParametersError("Index out of parameters range")
+        else:
+            return self._phases[k]
+
+
+class NonStationaryParameters(Parameters):
+    """Subclass of Parameters which yields 2 extra parameters and their accessors :
+        - acr : Amplitude Change Rate
+        - fcr : Frequency Change Rate"""
+
+    def __init__(self, amplitudes, frequencies, phases, acrs, fcrs):
+        Parameters.__init__(amplitudes, frequencies, phases)
+        if len(acrs) != len(fcrs) or len(acrs) != len(amplitudes) or len(fcrs) != len(amplitudes):
+            raise InconsistentParametersError("Sinusoid parameters provided are not the same length")
+        else:
+            self._acrs = acrs
+            self._fcrs = fcrs
+
+    def get_acrs(self, k):
+        if k < 0:
+            raise BoundParametersError("Index negative !")
+        elif k > self._number_sinuses - 1:
+            raise BoundParametersError("Index out of parameters range")
+        else:
+            return self._acrs[k]
+
+    def get_fcrs(self, k):
+        if k < 0:
+            raise BoundParametersError("Index negative !")
+        elif k > self._number_sinuses - 1:
+            raise BoundParametersError("Index out of parameters range")
+        else:
+            return self._fcrs[k]
