@@ -166,6 +166,9 @@ class Parameters:
         else:
             return self._phases[k]
 
+    def get_number_sinuses(self):
+        return self._number_sinuses
+
 
 class NonStationaryParameters(Parameters):
     """Subclass of Parameters which yields 2 extra parameters and their accessors :
