@@ -52,7 +52,7 @@ class Spectrum:
 
     @classmethod
     def from_complex_spectrum(cls, complex_spectrum):
-        if np.iscomplexobj(complex_spectrum):
+        if np.iscomplexobj(complex_spectrum) is False:
             raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
         else:
             cls._amplitude = np.absolute(complex_spectrum)
@@ -74,7 +74,7 @@ class Spectrum:
             self._nfft = len(amplitude)
 
     def set_complex_spectrum(self, complex_spectrum):
-        if np.iscomplexobj(complex_spectrum):
+        if np.iscomplexobj(complex_spectrum) is False:
             raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
         else:
             self._amplitude = np.absolute(complex_spectrum)
