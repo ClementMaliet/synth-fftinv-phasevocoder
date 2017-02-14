@@ -9,10 +9,8 @@
 from SpectrumGenerator import *
 from StationaryLobe import *
 
-# Classes
 
-class StationarySpectrumGenerator(SpectrumGenerator) :
-
+class StationarySpectrumGenerator(SpectrumGenerator):
     def __init__(self, window_type, window_size, parameters):
         SpectrumGenerator.__init__(self, window_size, parameters)
         self._stationary_lobe = StationaryLobe(window_type, window_size)
@@ -26,10 +24,10 @@ class StationarySpectrumGenerator(SpectrumGenerator) :
         spectrum = Spectrum.void_spectrum(nfft)
 
         # size of positive freq. spectrum
-        hN = nfft / 2 + 1
+        h_n = nfft / 2 + 1
 
         #    avoid frequencies out of range
-        if (frequency > 0) or (frequency < hN - 2):
+        if (frequency > 0) or (frequency < h_n - 2):
 
             #   spectrum bins to fill
             b = np.int_(np.arange(9) - 4 + round(frequency) + 1)
@@ -39,18 +37,17 @@ class StationarySpectrumGenerator(SpectrumGenerator) :
                 if b[m] < 0:
                     spectrum.set_spectrum(lobe.get_amplitude(m), phase, start_bin=-b[m], stop_bin=-b[m]+1)
                 #           peak lobe croses Nyquist bin
-                elif b[m] > (hN - 1):
-                    spectrum.set_spectrum(lobe.get_amplitude(m), phase, start_bin=2 * (hN - 1)-b[m],stop_bin=2 * (hN - 1) - b[m]+1)
+                elif b[m] > (h_n - 1):
+                    spectrum.set_spectrum(lobe.get_amplitude(m), phase, start_bin=2 * (h_n - 1)-b[m], stop_bin=2 *
+                                          (h_n - 1) - b[m]+1)
 
                 #           peak lobe in positive freq. range
                 else:
-                    spectrum.set_complex_spectrum(lobe.get_amplitude(m)*np.exp(1j*phase)+lobe.get_amplitude(m)*
-                                                  np.exp(-1j*phase)*(b[m] == 0 or b[m] == hN-1),
+                    spectrum.set_complex_spectrum(lobe.get_amplitude(m)*np.exp(1j*phase)+lobe.get_amplitude(m) *
+                                                  np.exp(-1j*phase)*(b[m] == 0 or b[m] == h_n-1),
                                                   start_bin=b[m], stop_bin=b[m]+1)
             spectrum *= np.array(amplitude)
             self._spectrum += spectrum
 
         else:
             pass
-
-
