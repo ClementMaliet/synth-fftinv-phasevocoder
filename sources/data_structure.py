@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
@@ -7,8 +8,8 @@
 # The Spectrum class is the class used to exchange and store full spectra and main lobes. The spectrum points are stored
 # as amplitude and unwrapped phase and are accessed in a point wise fashion.
 # The Parameters class is the class used to exchange and store the sinusoid model parameters which consist of :
-#     - lambda, omega and phi for stationary sinusoid
-#     - lambda, mu, omega, psi, phi for non stationary sinusoid
+#     - alpha, f and phi for stationary sinusoid
+#     - alpha, mu, f, psi and phi for non stationary sinusoid
 # They are then accessed in a sinus wise fashion.
 
 import numpy as np

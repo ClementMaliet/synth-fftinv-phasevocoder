@@ -1,4 +1,11 @@
-# Import the libraries
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
+# Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
+
+
+s# Import the libraries
 
 from scipy import signal
 import numpy as np

@@ -119,12 +119,13 @@ Addition and multiplication attempts between other data type will result in a \t
 The Parameters class is more of a structure than a class and only contains the stationary sinusoidal model parameters and their respective accessors. It also stores the number of sinuses and checks that the given data are consistent upon instantiation.\\
 In the stationary sinusoidal model the signal $s(t)$ is defined as follow\footnotemark[1] :
 \begin{equation*}
-	s(t) = \sum_{i=1}^{N_{sinus}} \alpha_i \sin(2\pi f_i t+ \phi_i)
+	s(t) = \sum_{i=1}^{N_{sinus}} \alpha_i \sin(2\pi \bar{f_i} t+ \phi_i)
 \end{equation*}
+with $\bar{f_i} = \frac{f_i}{f_s}$ the normalised frequency.\\
 We then store the parameters as follows :
 \begin{description}
 	\item[\_amplitudes] stores the $\alpha_i$
-	\item[\_frequencies] stores the $f_i$
+	\item[\_frequencies] stores the $\bar{f_i}$
 	\item[\_phases] stores the $\phi_i$
 \end{description}
 \subsubsection{NonStationaryParameters}
@@ -144,7 +145,7 @@ We then store the parameters as follows :
 \end{tabular}} \medskip\newline
 The stationary sinusoidal model can be extended to the first order development to better model fast amplitude and frequency change over time. The signal $s(t)$ can then be expressed as a sum of linearly varying chirps\footnotemark[1] :
 \begin{equation*}
-	s(t) = \sum_{i=1}^{N_sinus} (\alpha_i + \mu_i t) \sin(2\pi f_i t + \frac{\psi_i}{2} t^2 + \phi_i)
+	s(t) = \sum_{i=1}^{N_sinus} (\alpha_i + \mu_i t) \sin(2\pi \bar{f_i} t + \frac{\psi_i}{2} t^2 + \phi_i)
 \end{equation*}
 Where we define the \textbf{Amplitude Change Rate} $\mu$ and the \textbf{Frequency Change Rate} $\psi$. \\
 Thus we inherit the \texttt{Parameters} class to add the two additional parameters as follow :
