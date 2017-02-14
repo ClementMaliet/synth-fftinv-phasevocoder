@@ -1,8 +1,2 @@
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/workspace.xml
-.idea/synth-fftinv-phasevocoder.iml
-.idea/dictionaries/Clément_Maliet.xml
-.idea/workspace.xml___jb_tmp___
+.idea/*
 *.pyc

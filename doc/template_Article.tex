@@ -3,6 +3,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{enumitem}  
 \usepackage{listings}
+\usepackage{arydshln}
 %opening
 \title{Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT$^{-1}$}
 \author{Cl\'ement Cazorla, Vincent Chrun, Bastien Fundaro, Cl\'ement Maliet \\ENSEEIHT - 3EN TSI 2016-2017}
@@ -63,7 +64,40 @@ Moreover during class declaration, the following principles should be adopted :
 	\item Non-public elements that should not be inherited or may cause conflicts during inheritance should use two leading underscore and make use of Python name-mangling.
 \end{enumerate}
 To seamlessly manipulate both \emph{stationary} and \emph{non stationary} models, class that are inherited in two versions are preceded with either \texttt{Stationary} are \texttt{NonStationary} respectively.
-\subsection{Spectrums and sinusoids parameters}\label{sec:spectrums-and-sinusoids-parameters}
+\subsection{Spectrum and sinusoids parameters classes}\label{sec:spectrums-and-sinusoids-parameters}
+Because many spectra, main lobes and sinusoidal model parameters have to be traded between modules we created two classes, respectively \texttt{Spectrum} and \texttt{Parameters}. They mainly serve as containers, holding the data and returning them in a point wise fashion.
+This way we can prevent conflicts and errors that would come from a non-uniform data sharing protocol.
+\subsubsection{Spectrum}
+\texttt{%
+\begin{tabular}{|lc|}
+	\hline
+	Spectrum & \\
+	\hline
+	\hline
+	\_amplitude : np.array & \\
+	\_phase : np.array  & \\
+	\_nfft : int  & \\
+	\hdashline
+	\_\_init\_\_(self, amplitude, phase) & \\
+	\_\_add\_\_(self, other) & \\
+	\_\_iadd\_\_(self, other) & \\
+	\_\_mul\_\_(self, other) & \\
+	\_\_imul\_\_(self, other) & \\
+	from\_complex\_spectrum(cls, complex\_spectrum) & @classmethod\\
+	void\_spectrum(cls) & @classmethod\\
+	set\_spectrum(self, amplitude, phase, & \\ \hspace{10mm} start\_bin=None, stop\_bin=None) & \\
+	set\_complex\_spectrum(self, complex\_spectrum, & \\ \hspace{10mm} start\_bin=None, stop\_bin=None) & \\
+	get\_amplitude(self, k) & \\
+	get\_phase(self, k) & \\
+	get\_nfft(self) & \\
+	\hline
+\end{tabular}} \medskip\newline
+The Spectrum class stores a spectrum in amplitude and phase, however it may be created or changed from a complex \texttt{np.array} respectively with the class method \texttt{from\_complex\_spectrum} and the method \texttt{set\_complex\_spectrum}. Those two methods may take optional parameters start\_bin and stop\_bin if one need to update only a part of the spectrum, for example a single lobe.
+The $+$ operation as well as the $+=$ operation have been defined between two \texttt{Spectrum} objects and between a \texttt{Spectrum} object and an array of complex numbers.\\
+The $\times$ operation as well as the $\times=$ operation have been defined between a \texttt{Spectrum} object and an array of complex numbers.
+Addition and multiplication attempts between other data type will result in a \texttt{NotImplementedError} exception.
+\subsubsection{Parameters}
+\subsubsection{NonStationaryParameters}
 \section{Code structure}\label{sec:code-structure}
 \subsection{General structure}\label{sec:general-structure}
 \subsection{Class structure}\label{sec:class-structure}
