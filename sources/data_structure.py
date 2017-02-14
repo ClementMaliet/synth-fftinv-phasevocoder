@@ -108,14 +108,14 @@ class Spectrum:
         return self
 
     def __mul__(self, other):
-        if isinstance(other, np.ndarray) and np.iscomplexobj(other):
+        if isinstance(other, np.ndarray):
             return Spectrum.from_complex_spectrum(self._amplitude*np.exp(1j*self._phase) * other)
         else:
             raise NotImplementedError
     __rmul__ = __mul__
 
     def __imul__(self, other):
-        if isinstance(other, np.ndarray) and np.iscomplexobj(other):
+        if isinstance(other, np.ndarray):
             self.set_complex_spectrum(self._amplitude*np.exp(1j*self._phase) * other)
         else:
             raise NotImplementedError

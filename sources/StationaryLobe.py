@@ -5,7 +5,7 @@
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
 
 
-s# Import the libraries
+# Import the libraries
 
 from scipy import signal
 import numpy as np
@@ -42,7 +42,6 @@ class StationaryLobe:
 
         w1 = np.fft.fft(self._window, self._window_size)
         w1 = np.concatenate([w1[-4:], w1[:5]])
-        print w1
         self._lobe.set_complex_spectrum(w1)
 
 
