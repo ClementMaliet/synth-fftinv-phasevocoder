@@ -105,6 +105,7 @@ class Spectrum:
                 raise AddSpectrumError("Addition of non equally sized spectrum attempted")
         else:
             raise NotImplementedError
+        return self
 
     def __mul__(self, other):
         if isinstance(other, np.ndarray) and np.iscomplexobj(other):
@@ -118,6 +119,7 @@ class Spectrum:
             self.set_complex_spectrum(self._amplitude*np.exp(1j*self._phase) * other)
         else:
             raise NotImplementedError
+        return self
 
     def set_spectrum(self, amplitude, phase, start_bin=None, stop_bin=None):
         if start_bin is None and stop_bin is None:
