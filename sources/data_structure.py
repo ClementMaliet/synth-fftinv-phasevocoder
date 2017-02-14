@@ -40,6 +40,16 @@ class BoundSpectrumError(SpectrumError):
         self.message = message
 
 
+class AddSpectrumError(SpectrumError):
+    """Raised if asked to add a spectrum with a compatible but non viable element
+    Attributes:
+            message -- explanation of the error
+        """
+
+    def __init__(self, message):
+        self.message = message
+
+
 class Spectrum:
     """The class Spectrum is used to store a spectrum with amplitude and phase."""
     def __init__(self, amplitude, phase):
@@ -65,21 +75,115 @@ class Spectrum:
         cls._phase = np.zeros(nfft)
         cls._nfft = nfft
 
-    def set_spectrum(self, amplitude, phase):
-        if len(amplitude) != len(phase):
-            raise InconsistentSpectrumError('Amplitude and Phase provided have different length')
+    def __add__(self, other):
+        if isinstance(other, self.__class__):
+            if other._nfft == self._nfft:
+                return Spectrum.from_complex_spectrum(self._amplitude*np.exp(1j*self._phase) +
+                                                      other._amplitude*np.exp(1j*other._phase))
+            else:
+                raise AddSpectrumError("Addition of non equally sized spectrum attempted")
+        elif isinstance(other, np.ndarray) and np.iscomplexobj(other):
+            if len(other) == self._nfft:
+                return Spectrum.from_complex_spectrum(self._amplitude*np.exp(1j*self._phase) + other)
+            else:
+                raise AddSpectrumError("Addition of non equally sized spectrum attempted")
         else:
-            self._amplitude = amplitude
-            self._phase = phase
-            self._nfft = len(amplitude)
+                raise NotImplementedError
+    __radd__ = __add__
 
-    def set_complex_spectrum(self, complex_spectrum):
-        if np.iscomplexobj(complex_spectrum) is False:
-            raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
+    def __iadd__(self, other):
+        if isinstance(other, self.__class__):
+            if other._nfft == self._nfft:
+                self.set_complex_spectrum(self._amplitude*np.exp(1j*self._phase) +
+                                          other._amplitude*np.exp(1j*other._phase))
+            else:
+                raise AddSpectrumError("Addition of non equally sized spectrum attempted")
+        elif isinstance(other, np.ndarray) and np.iscomplexobj(other):
+            if len(other) == self._nfft:
+                self.set_complex_spectrum(self._amplitude * np.exp(1j * self._phase) + other)
+            else:
+                raise AddSpectrumError("Addition of non equally sized spectrum attempted")
         else:
-            self._amplitude = np.absolute(complex_spectrum)
-            self._phase = np.angle(complex_spectrum)
-            self._nfft = len(complex_spectrum)
+            raise NotImplementedError
+
+    def __mul__(self, other):
+        if isinstance(other, np.ndarray) and np.iscomplexobj(other):
+            return Spectrum.from_complex_spectrum(self._amplitude*np.exp(1j*self._phase) * other)
+        else:
+            raise NotImplementedError
+    __rmul__ = __mul__
+
+    def __imul__(self, other):
+        if isinstance(other, np.ndarray) and np.iscomplexobj(other):
+            self.set_complex_spectrum(self._amplitude*np.exp(1j*self._phase) * other)
+        else:
+            raise NotImplementedError
+
+    def set_spectrum(self, amplitude, phase, start_bin=None, stop_bin=None):
+        if start_bin is None and stop_bin is None:
+            if len(amplitude) != len(phase):
+                raise InconsistentSpectrumError('Amplitude and Phase provided have different length')
+            else:
+                self._amplitude = amplitude
+                self._phase = phase
+                self._nfft = len(amplitude)
+        elif start_bin is None and stop_bin is not None:
+            if len(amplitude) != len(phase):
+                raise InconsistentSpectrumError('Amplitude and Phase provided have different length')
+            elif stop_bin > self._nfft:
+                raise BoundSpectrumError("Attempted to modify non existing bins (stop_bin too large)")
+            else:
+                self._amplitude[:stop_bin] = amplitude
+                self._phase[:stop_bin] = phase
+        elif start_bin is not None and stop_bin is None:
+            if len(amplitude) != len(phase):
+                raise InconsistentSpectrumError('Amplitude and Phase provided have different length')
+            elif start_bin < 0:
+                raise BoundSpectrumError("Attempted to modify non existing bins (start_bin negative)")
+            else:
+                self._amplitude[:stop_bin] = amplitude
+                self._phase[:stop_bin] = phase
+        elif start_bin is not None and stop_bin is not None:
+            if len(amplitude) != len(phase):
+                raise InconsistentSpectrumError('Amplitude and Phase provided have different length')
+            elif stop_bin > self._nfft or start_bin < 0:
+                raise BoundSpectrumError("Attempted to modify non existing bins (interval incorrect)")
+            else:
+                self._amplitude[start_bin:stop_bin] = amplitude
+                self._phase[stop_bin:stop_bin] = phase
+
+    def set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None):
+        if start_bin is None and stop_bin is None:
+            if np.iscomplexobj(complex_spectrum):
+                raise InconsistentSpectrumError('Spectrum is not complex')
+            else:
+                self._amplitude = np.absolute(complex_spectrum)
+                self._phase = np.angle(complex_spectrum)
+                self._nfft = len(complex_spectrum)
+        elif start_bin is None and stop_bin is not None:
+            if np.iscomplexobj(complex_spectrum):
+                raise InconsistentSpectrumError('Spectrum is not complex')
+            elif stop_bin > self._nfft:
+                raise BoundSpectrumError("Attempted to modify non existing bins (stop_bin too large)")
+            else:
+                self._amplitude[:stop_bin] = np.absolute(complex_spectrum)
+                self._phase[:stop_bin] = np.angle(complex_spectrum)
+        elif start_bin is not None and stop_bin is None:
+            if np.iscomplexobj(complex_spectrum):
+                raise InconsistentSpectrumError('Spectrum is not complex')
+            elif start_bin < 0:
+                raise BoundSpectrumError("Attempted to modify non existing bins (start_bin negative)")
+            else:
+                self._amplitude[:stop_bin] = np.absolute(complex_spectrum)
+                self._phase[:stop_bin] = np.angle(complex_spectrum)
+        elif start_bin is not None and stop_bin is not None:
+            if np.iscomplexobj(complex_spectrum):
+                raise InconsistentSpectrumError('Spectrum is not complex')
+            elif stop_bin > self._nfft or start_bin < 0:
+                raise BoundSpectrumError("Attempted to modify non existing bins (interval incorrect)")
+            else:
+                self._amplitude[start_bin:stop_bin] = np.absolute(complex_spectrum)
+                self._phase[stop_bin:stop_bin] = np.angle(complex_spectrum)
 
     def get_amplitude(self, k):
         if k < 0:
