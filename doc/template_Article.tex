@@ -66,7 +66,7 @@ Moreover during class declaration, the following principles should be adopted :
 To seamlessly manipulate both \emph{stationary} and \emph{non stationary} models, class that are inherited in two versions are preceded with either \texttt{Stationary} are \texttt{NonStationary} respectively.
 \subsection{Spectrum and sinusoids parameters classes}\label{sec:spectrums-and-sinusoids-parameters}
 Because many spectra, main lobes and sinusoidal model parameters have to be traded between modules we created two classes, respectively \texttt{Spectrum} and \texttt{Parameters}. They mainly serve as containers, holding the data and returning them in a point wise fashion.
-This way we can prevent conflicts and errors that would come from a non-uniform data sharing protocol.
+This way we can prevent conflicts and errors that would come from a non-uniform data sharing protocol and as well ensure that every operation performed on either spectra or parameters are made following the same principles and algorithms.
 \subsubsection{Spectrum}
 \texttt{%
 \begin{tabular}{|lc|}

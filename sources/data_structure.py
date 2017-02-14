@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
 # Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
@@ -65,15 +64,15 @@ class Spectrum:
         if np.iscomplexobj(complex_spectrum) is False:
             raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
         else:
-            cls._amplitude = np.absolute(complex_spectrum)
-            cls._phase = np.angle(complex_spectrum)
-            cls._nfft = len(complex_spectrum)
+            amplitude = np.absolute(complex_spectrum)
+            phase = np.angle(complex_spectrum)
+            return cls(amplitude, phase)
 
     @classmethod
     def void_spectrum(cls, nfft):
-        cls._amplitude = np.zeros(nfft)
-        cls._phase = np.zeros(nfft)
-        cls._nfft = nfft
+        amplitude = np.zeros(nfft)
+        phase = np.zeros(nfft)
+        return cls(amplitude, phase)
 
     def __add__(self, other):
         if isinstance(other, self.__class__):
@@ -154,14 +153,14 @@ class Spectrum:
 
     def set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None):
         if start_bin is None and stop_bin is None:
-            if np.iscomplexobj(complex_spectrum):
+            if not np.iscomplexobj(complex_spectrum):
                 raise InconsistentSpectrumError('Spectrum is not complex')
             else:
                 self._amplitude = np.absolute(complex_spectrum)
                 self._phase = np.angle(complex_spectrum)
                 self._nfft = len(complex_spectrum)
         elif start_bin is None and stop_bin is not None:
-            if np.iscomplexobj(complex_spectrum):
+            if not np.iscomplexobj(complex_spectrum):
                 raise InconsistentSpectrumError('Spectrum is not complex')
             elif stop_bin > self._nfft:
                 raise BoundSpectrumError("Attempted to modify non existing bins (stop_bin too large)")
@@ -169,7 +168,7 @@ class Spectrum:
                 self._amplitude[:stop_bin] = np.absolute(complex_spectrum)
                 self._phase[:stop_bin] = np.angle(complex_spectrum)
         elif start_bin is not None and stop_bin is None:
-            if np.iscomplexobj(complex_spectrum):
+            if not np.iscomplexobj(complex_spectrum):
                 raise InconsistentSpectrumError('Spectrum is not complex')
             elif start_bin < 0:
                 raise BoundSpectrumError("Attempted to modify non existing bins (start_bin negative)")
@@ -177,13 +176,13 @@ class Spectrum:
                 self._amplitude[:stop_bin] = np.absolute(complex_spectrum)
                 self._phase[:stop_bin] = np.angle(complex_spectrum)
         elif start_bin is not None and stop_bin is not None:
-            if np.iscomplexobj(complex_spectrum):
+            if not np.iscomplexobj(complex_spectrum):
                 raise InconsistentSpectrumError('Spectrum is not complex')
             elif stop_bin > self._nfft or start_bin < 0:
                 raise BoundSpectrumError("Attempted to modify non existing bins (interval incorrect)")
             else:
                 self._amplitude[start_bin:stop_bin] = np.absolute(complex_spectrum)
-                self._phase[stop_bin:stop_bin] = np.angle(complex_spectrum)
+                self._phase[start_bin:stop_bin] = np.angle(complex_spectrum)
 
     def get_amplitude(self, k):
         if k < 0:
