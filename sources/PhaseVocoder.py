@@ -66,12 +66,12 @@ class StationaryPhaseVocoder(PhaseVocoder):
             amplitude = self._current_analysis_spectrum.get_amplitude(k)
             phase = self._current_analysis_spectrum.get_phase(k)
             previous_phase = self._past_analysis_spectrum.get_phase(k)
-            win_size = self._past_analysis_spectrum.get_nfft()
+            nfft = self._past_analysis_spectrum.get_nfft()
 
             delta_phi = phase - previous_phase
-            delta_phi_prime = delta_phi - self._analysis_hop * 2 * np.pi * np.array[0:(win_size - 1)]/win_size
+            delta_phi_prime = delta_phi - self._analysis_hop * (2 * np.pi * k) / nfft
             delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
-            true_freq = 2 * np.pi * np.array[0:(win_size - 1)] / win_size + delta_phi_prime_mod / self._analysis_hop
+            true_freq = (2 * np.pi * k) / nfft + delta_phi_prime_mod / self._analysis_hop
 
             self.current_synthesis_spectrum += amplitude*np.exp(1j*(phase + self._synthesis_hop * true_freq)) *\
                 self._kronecker_array(k)
