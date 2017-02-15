@@ -11,7 +11,7 @@ window_type = 'hamming'
 
 s = StationaryLobe(window_type, window_size)
 
-parameters = Parameters(np.array([2]), np.array([0.3]), np.array([50]))
+parameters = Parameters(np.array([2, 3]), np.array([0.3, 0.4]), np.array([50, 40]))
 
 sg = StationarySpectrumGenerator(window_type, window_size, parameters)
 
