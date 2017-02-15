@@ -22,7 +22,7 @@ class InconsistentHopSizeError(PhaseVocoderError):
 class PhaseVocoder(object):
     __metaclass__ = ABCMeta
     """The abstract class PhaseVocoder is used to get a phase-vocoded spectrum."""
-    def __init__(self, analysis_hop, synthesis_hop, omega, past_analysis_spectrum, past_synthesis_spectrum, current_analysis_spectrum, current_synthesis_spectrum):
+    def __init__(self, analysis_hop, synthesis_hop, past_analysis_spectrum, past_synthesis_spectrum, current_analysis_spectrum, current_synthesis_spectrum):
         if len(analysis_hop) >= len(past_analysis_spectrum.get_nfft()) or len(synthesis_hop) >= len(past_synthesis_spectrum.get_nfft()):
             raise InconsistentHopSizeError('Synthesis and/or Analysis Hop provided have inconsistent size')
         else:
@@ -36,7 +36,7 @@ class PhaseVocoder(object):
 
     def _set_current_analysis_spectrum(self, new_spectrum):
         self._past_analysis_spectrum = self._current_analysis_spectrum
-        self._past_analysis_spectrum = self._current_analysis_spectrum
+        self._past_synthesis_spectrum = self._current_synthesis_spectrum
         # current synth a zero
         self._current_analysis_spectrum = new_spectrum
     current_analysis_spectrum = property(_set_current_analysis_spectrum)
@@ -49,57 +49,26 @@ class PhaseVocoder(object):
 # Stationary Phase Vocoder
 
 class StationaryPhaseVocoder(PhaseVocoder):
-    def get_pv_spectrum(self):
-        """Phase vocoder algorithm"""
 
-        # Initialisation
+
+
+    def get_pv_spectrum(self,k):
+        """Phase vocoder algorithm"""
+        amplitude = _current_analysis_spectrum.get_amplitude(k)
+        phase = _current_analysis_spectrum.get_phase(k)
+        previous_phase = _past_analysis_spectrum.get_phase(k)
+        win_size = len(_past_analysis_spectrum.get_nfft(k))
+
+        delta_phi = phase - previous_phase
+        delta_phi_prime = delta_phi - self._analysis_hop * 2 * np.pi * np.array[0:(win_size - 1)]/win_size
+        delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
+        true_freq = 2 * np.pi * np.array[0:(win_size - 1)] / win_size + delta_phi_prime_mod / self._analysis_hop
+
+
+        current_synthesis_spectrum *= phase + self._synthesis_hop * true_freq
 
         return current_synthesis_spectrum
 
 
 
 
-
-
-"""
-###############################
-        # read input and get the timescale factor
-        (sr, signalin) = wavfile.read(sys.argv[2])
-        L = len(signalin)
-        tscale = float(sys.argv[1])
-
-
-        # signal blocks for processing and output
-        phi = zeros(N)
-        out = zeros(N, dtype=complex)
-        sigout = zeros(L / tscale + N)
-
-
-        # max input amp, window
-        amp = max(signalin)
-        win = hanning(N)
-        p = 0
-        pp = 0
-
-        while p < L - (N + H):
-
-        # take the spectra of two consecutive windows
-        p1 = int(p)
-        spec1 = fft(win * signalin[p1:p1 + N])
-        spec2 = fft(win * signalin[p1 + H:p1 + N + H])
-
-
-        # take their phase difference and integrate
-        phi += (angle(spec2) - angle(spec1))
-
-
-        # bring the phase back to between pi and -pi
-        while phi < -pi: phi += 2 * pi
-        while phi >= pi: phi -= 2 * pi
-        out.real, out.imag = cos(phi), sin(phi)
-
-
-        # inverse FFT and overlap-add
-        sigout[pp:pp + N] += win * ifft(abs(spec2) * out)
-        pp += H
-        p += H * tscale """
