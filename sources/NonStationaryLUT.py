@@ -8,13 +8,10 @@ from scipy import signal
 from scipy.interpolate import interp1d
 import warnings
 from data_structure import *
+from Synthesizer import next2pow
 
 
-def next2pow(x):
-    return 2**int(np.ceil(np.log(float(x))/np.log(2.0)))
-
-
-class NonStationaryLUT(object):
+class NonStationaryLUT(LobeGenerator):  # todo : implement LobeGenerator to use polymorphism
     def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, fs=None):
         if fs is None:
             self._fs = 44100

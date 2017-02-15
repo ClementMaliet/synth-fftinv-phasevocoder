@@ -11,7 +11,7 @@ from scipy import signal
 from data_structure import *
 
 
-class StationaryLobe(object):
+class StationaryLobe(LobeGenerator):  # todo : implement LobeGenerator to use polymorphism
     def __init__(self, window_type, window_size):
         self._window_type = window_type
         self._window_size = window_size

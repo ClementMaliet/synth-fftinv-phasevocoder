@@ -20,10 +20,11 @@ class SpectrumGenerator(object):
 
     """The class SpectrumGenerator is used to generate a spectrum with 9 points per lobe"""
 
-    def __init__(self, window_size, parameters):
+    def __init__(self, window_type, window_size, parameters):
         self._parameters = parameters
         self._spectrum = Spectrum.void_spectrum(window_size)
         self._window_size = window_size
+        self._lobe_generator = LobeGenerator(window_type, window_size)  # todo : implement LobeGenerator to use polymorphism
 
     @abstractmethod
     def _add_lobe(self, k):

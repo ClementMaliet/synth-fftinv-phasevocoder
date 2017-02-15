@@ -248,6 +248,13 @@ class Parameters(object):
             self._phases = phases
             self._number_sinuses = len(amplitudes)
 
+    @classmethod
+    def void_parameters(cls, number_sinuses):
+        amplitudes = np.zeros(number_sinuses)
+        phases = np.zeros(number_sinuses)
+        frequencies = np.zeros(number_sinuses)
+        return cls(amplitudes, frequencies, phases)
+
     def get_amplitude(self, k):
         if k < 0:
             raise BoundParametersError("Index negative !")
