@@ -19,7 +19,7 @@ class InconsistentHopSizeError(PhaseVocoderError):
         self.message = message
 
 
-class PhaseVocoder:
+class PhaseVocoder(object):
     __metaclass__ = ABCMeta
     """The abstract class PhaseVocoder is used to get a phase-vocoded spectrum."""
     def __init__(self, analysis_hop, synthesis_hop, omega, past_analysis_spectrum, past_synthesis_spectrum, current_analysis_spectrum, current_synthesis_spectrum):

@@ -50,7 +50,7 @@ class AddSpectrumError(SpectrumError):
         self.message = message
 
 
-class Spectrum:
+class Spectrum(object):
     """The class Spectrum is used to store a spectrum with amplitude and phase."""
     def __init__(self, amplitude, phase):
         if len(amplitude) != len(phase):
@@ -234,7 +234,7 @@ class BoundParametersError(ParametersError):
         self.message = message
 
 
-class Parameters:
+class Parameters(object):
     """The class parameters is used to store the parameters of the model's stationary sinusoid"""
 
     def __init__(self, amplitudes, frequencies, phases):

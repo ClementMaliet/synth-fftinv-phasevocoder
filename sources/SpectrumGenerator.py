@@ -14,7 +14,7 @@ class SpectrumGeneratorError(Exception):
     pass
 
 
-class SpectrumGenerator:
+class SpectrumGenerator(object):
 
     __metaclass__ = ABCMeta
 
