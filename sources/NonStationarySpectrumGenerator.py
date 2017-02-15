@@ -1,6 +1,6 @@
 from SpectrumGenerator import *
 
-class NonStationarySpectrumGeneratorError(Exception)
+class NonStationarySpectrumGeneratorError(Exception):
     """Base class for exception regarding the spectrum class"""
     pass
 

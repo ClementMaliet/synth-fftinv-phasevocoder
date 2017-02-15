@@ -35,7 +35,7 @@ class PhaseVocoder:
 
     def _set_current_analysis_spectrum(self, new_spectrum):
         self._past_analysis_spectrum = self._current_analysis_spectrum
-        self._past_synthesis_spectrum = self.current_synthesis_spectrum
+        self._past_analysis_spectrum = self._current_analysis_spectrum
         # current synth a zero
         self._current_analysis_spectrum = new_spectrum
     current_analysis_spectrum = property(_set_current_analysis_spectrum)
@@ -50,6 +50,8 @@ class PhaseVocoder:
 class StationaryPhaseVocoder(PhaseVocoder):
     def get_pv_spectrum(self):
         """Phase vocoder algorithm"""
+
+        # Initialisation
 
         return current_synthesis_spectrum
 
