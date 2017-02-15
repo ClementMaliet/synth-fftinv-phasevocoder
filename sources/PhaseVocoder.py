@@ -1,4 +1,5 @@
-# -*- coding: utf8-*-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
@@ -18,7 +19,7 @@ class InconsistentHopSizeError(PhaseVocoderError):
         self.message = message
 
 
-class PhaseVocoder:
+class PhaseVocoder(object):
     __metaclass__ = ABCMeta
     """The abstract class PhaseVocoder is used to get a phase-vocoded spectrum."""
     def __init__(self, analysis_hop, synthesis_hop, omega, past_analysis_spectrum, past_synthesis_spectrum, current_analysis_spectrum, current_synthesis_spectrum):
