@@ -105,5 +105,5 @@ class StationarySynthesizer(Synthesizer):
                                                                self._current_parameters, self._nfft)
         self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
 
-    def get_next_frame(self):
+    def get_next_frame(self):  # todo : implement synthesis
         pass
