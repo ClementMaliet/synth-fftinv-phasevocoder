@@ -25,7 +25,8 @@ class SpectrumGenerator(object):
         self._parameters = parameters
         self._spectrum = Spectrum.void_spectrum(window_size)
         self._window_size = window_size
-        self._lobe_generator = LobeGenerator(window_type, window_size, nfft)
+        # The structure imposes :
+        # self._lobe_generator = LobeGenerator(window_type, window_size, nfft)
 
     @abstractmethod
     def _add_lobe(self, k):

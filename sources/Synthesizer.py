@@ -15,7 +15,7 @@ from StationarySpectrumGenerator import *
 
 
 def next2pow(x):
-    return 2**int(np.ceil(np.log(float(x))/np.log(2.0)))
+    return int(np.ceil(np.log(float(x))/np.log(2.0)))
 
 
 class Synthesizer(object):
@@ -23,11 +23,13 @@ class Synthesizer(object):
     __metaclass__ = ABCMeta
 
     def __init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
-                 current_parameters, fs):
-        assert isinstance(current_parameters, Parameters.__class__)
+                 current_parameters, fs=None):
+        assert isinstance(current_parameters, Parameters)
         if Synthesizer.synth_number >= 1:
             warnings.warn("More the one synthesizer will be instantiated, consider reconfiguring or resetting rather \
                           than starting from scratch", UserWarning)
+        if fs is None:
+            fs = 44100
         self._window_size = window_size
         self._window_type = window_type
         self._nfft = 2**(next2pow(window_size) + zero_padding_factor)
@@ -38,19 +40,23 @@ class Synthesizer(object):
         self._fs = fs
         self._past_spectrum = Spectrum.void_spectrum(self._nfft)
         self._current_spectrum = Spectrum.void_spectrum(self._nfft)
-        self._spectrum_generator = SpectrumGenerator(window_type, window_size, current_parameters, self._nfft)
-        self._phase_vocoder = PhaseVocoder(analysis_hop, synthesis_hop, self._current_spectrum)
+        # The structure imposes :
+        # self._spectrum_generator = SpectrumGenerator(window_type, window_size, current_parameters, self._nfft)
+        # self._phase_vocoder = PhaseVocoder(analysis_hop, synthesis_hop, self._current_spectrum)
+        # Class attribute :
         Synthesizer.synth_number += 1
 
-    def __del__(self):
-        Synthesizer.synth_number -= 1
+    @classmethod
+    def __del__(cls):
+        cls.synth_number -= 1
 
     def reset_synthetizer(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
-                 current_parameters, fs):
+                          current_parameters, fs):
         assert isinstance(current_parameters, Parameters.__class__)
         self._window_size = window_size
         self._window_type = window_type
         self._nfft = 2**(next2pow(window_size) + zero_padding_factor)
+        print self._nfft
         self._analysis_hop = analysis_hop
         self._synthesis_hop = synthesis_hop
         self._current_parameters = current_parameters
@@ -58,8 +64,6 @@ class Synthesizer(object):
         self._fs = fs
         self._past_spectrum = Spectrum.void_spectrum(self._nfft)
         self._current_spectrum = Spectrum.void_spectrum(self._nfft)
-        self._spectrum_generator = SpectrumGenerator(window_type, window_size, current_parameters, self._nfft)
-        self._phase_vocoder = PhaseVocoder(analysis_hop, synthesis_hop, self._current_spectrum)
 
     @abstractmethod
     def get_next_frame(self):
@@ -94,7 +98,7 @@ class Synthesizer(object):
 
 class StationarySynthesizer(Synthesizer):
     def __init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
-                 current_parameters, fs):
+                 current_parameters, fs=None):
         Synthesizer.__init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
                              current_parameters, fs)
         self._spectrum_generator = StationarySpectrumGenerator(self._window_type, self._window_size,
