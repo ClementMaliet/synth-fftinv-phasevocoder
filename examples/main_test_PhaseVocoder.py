@@ -8,12 +8,13 @@ from sources.StationarySpectrumGenerator import StationarySpectrumGenerator
 
 window_size = 1024
 window_type = 'hamming'
+nfft = 500
 
-s = StationaryLobe(window_type, window_size)
+s = StationaryLobe(window_type, window_size, nfft)
 
 parameters = Parameters(np.array([2, 3]), np.array([0.3, 0.4]), np.array([50, 40]))
 
-sg = StationarySpectrumGenerator(window_type, window_size, parameters)
+sg = StationarySpectrumGenerator(window_type, window_size, parameters, nfft)
 
 pv_stat_test = StationaryPhaseVocoder(1, 4, sg.get_spectrum()) #(Analyse_hop, Synthesis_hop, Current_analysis_spectrum)
 
