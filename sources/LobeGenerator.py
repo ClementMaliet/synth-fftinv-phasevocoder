@@ -12,9 +12,10 @@ from scipy import signal
 class LobeGenerator(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, window_type, window_size):
+    def __init__(self, window_type, window_size, nfft):
         self._window_type = window_type
         self._window_size = window_size
+        self._nfft = nfft
         self._window = signal.get_window(self._window_type, self._window_size)
         self._window /= np.sum(self._window)
         self._lobe = Spectrum([], [])

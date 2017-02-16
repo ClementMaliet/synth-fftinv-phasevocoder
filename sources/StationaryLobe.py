@@ -12,8 +12,8 @@ import numpy as np
 
 
 class StationaryLobe(LobeGenerator):
-    def __init__(self, window_type, window_size):
-        LobeGenerator.__init__(self, window_type, window_size)
+    def __init__(self, window_type, window_size, nfft):
+        LobeGenerator.__init__(self, window_type, window_size, nfft)
         self._gen_lobe()
 
     def _gen_lobe(self):

@@ -32,8 +32,6 @@ class NonStationaryLUT(LobeGenerator):
         self._sample_grid = [(a, b) for a in acr for b in fcr]
         n = np.array(range(self._window_size))
         t = (1/self._fs)*n
-        zero_padding_factor = 9
-        nfft = 2**(next2pow(self._window_size)+zero_padding_factor)
 
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
@@ -42,7 +40,7 @@ class NonStationaryLUT(LobeGenerator):
     def _gen_non_uniform_lut(self):
         pass
 
-    def _gen_lobes_legacy(self, i, j, acr, fcr, t, n, nfft):
+    def _gen_lobes_legacy(self, i, j, acr, fcr, t, n):
         # Generate chirp
         mu = acr[i]
         psi = fcr[j]
@@ -52,12 +50,12 @@ class NonStationaryLUT(LobeGenerator):
         s *= self._window
 
         # Correct phase
-        sw = np.zeros(nfft)
+        sw = np.zeros(self._nfft)
         sw[:(self._window_size - 1) / 2] = s[(self._window_size - 1) / 2:]
-        sw[nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2]
+        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2]
 
         # Compute the fft
-        fft_s = np.fft.fft(sw, nfft)
+        fft_s = np.fft.fft(sw, self._nfft)
         mod_fft_s = np.absolute(fft_s)
 
         # Search for the main lobe

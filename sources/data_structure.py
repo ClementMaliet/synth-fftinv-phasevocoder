@@ -289,7 +289,7 @@ class NonStationaryParameters(Parameters):
         - fcr : Frequency Change Rate"""
 
     def __init__(self, amplitudes, frequencies, phases, acrs, fcrs):
-        Parameters.__init__(amplitudes, frequencies, phases)
+        Parameters.__init__(self, amplitudes, frequencies, phases)
         if len(acrs) != len(fcrs) or len(acrs) != len(amplitudes) or len(fcrs) != len(amplitudes):
             raise InconsistentParametersError("Sinusoid parameters provided are not the same length")
         else:

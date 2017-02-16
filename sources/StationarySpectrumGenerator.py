@@ -11,9 +11,9 @@ from StationaryLobe import *
 
 
 class StationarySpectrumGenerator(SpectrumGenerator):
-    def __init__(self, window_type, window_size, parameters):
-        SpectrumGenerator.__init__(self, window_type, window_size, parameters)
-        self._lobe_generator = StationaryLobe(window_type, window_size)
+    def __init__(self, window_type, window_size, parameters, nfft):
+        SpectrumGenerator.__init__(self, window_type, window_size, parameters, nfft)
+        self._lobe_generator = StationaryLobe(window_type, window_size, nfft)
 
     def _add_lobe(self, k):
         lobe = self._lobe_generator.get_lobe()
