@@ -4,11 +4,9 @@
 # Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
 
-from scipy import signal
+
 from scipy.interpolate import interp1d
-import warnings
 from data_structure import *
-from Synthesizer import next2pow
 from LobeGenerator import LobeGenerator
 
 
