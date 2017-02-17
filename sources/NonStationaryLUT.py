@@ -8,50 +8,23 @@ from scipy import signal
 from scipy.interpolate import interp1d
 import warnings
 from data_structure import *
+from Synthesizer import next2pow
+from LobeGenerator import LobeGenerator
 
 
-def next2pow(x):
-    return 2**int(np.ceil(np.log(float(x))/np.log(2.0)))
-
-
-class NonStationaryLUT(object):
+class NonStationaryLUT(LobeGenerator):
     def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, fs=None):
         if fs is None:
             self._fs = 44100
         else:
             self._fs = fs
+        LobeGenerator.__init__(self, window_type, window_size)
         self._regular_grid = regular_grid
         self._domain = [acr_domain, fcr_domain]
         self._number_acr = number_acr
         self._number_fcr = number_fcr
         self._number_points = number_acr*number_fcr
-        self._window_type = window_type
-        self._window_size = window_size
-        self._window = signal.get_window(self._window_type, self._window_size)
-        self._window /= np.sum(self._window)  # We normalize the window
-        self._gen_lut()
-
-    def _gen_lut(self):
-        if self._regular_grid:
-            self._gen_uniform_lut()
-        else:
-            self._gen_non_uniform_lut()
-
-    def _set_window_size(self, window_size):
-        warnings.warn("LUT will be recomputed, it may take a while", UserWarning)
-        self._window_size = window_size
-        self._window = signal.get_window(self._window_type, self._window_size)
-        self._window /= sum(self._window)
-        self._gen_lut()
-
-    def _set_window_type(self, window_type):
-        warnings.warn("LUT will be recomputed, it may take a while", UserWarning)
-        self._window_type = window_type
-        self._window = signal.get_window(self._window_type, self._window_size)
-        self._window /= sum(self._window)
-        self._gen_lut()
-    window_type = property(fset=_set_window_type)
-    window_size = property(fset=_set_window_size)
+        self._gen_lobe()
 
     def _gen_uniform_lut(self):
         acr = np.linspace(self._domain[0][0], self._domain[0][1], self._number_acr)
@@ -59,8 +32,6 @@ class NonStationaryLUT(object):
         self._sample_grid = [(a, b) for a in acr for b in fcr]
         n = np.array(range(self._window_size))
         t = (1/self._fs)*n
-        zero_padding_factor = 9
-        nfft = 2**(next2pow(self._window_size)+zero_padding_factor)
 
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
@@ -69,7 +40,7 @@ class NonStationaryLUT(object):
     def _gen_non_uniform_lut(self):
         pass
 
-    def _gen_lobe_legacy(self, i, j, acr, fcr, t, n, nfft):
+    def _gen_lobes_legacy(self, i, j, acr, fcr, t, n):
         # Generate chirp
         mu = acr[i]
         psi = fcr[j]
@@ -79,12 +50,12 @@ class NonStationaryLUT(object):
         s *= self._window
 
         # Correct phase
-        sw = np.zeros(nfft)
+        sw = np.zeros(self._nfft)
         sw[:(self._window_size - 1) / 2] = s[(self._window_size - 1) / 2:]
-        sw[nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2]
+        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2]
 
         # Compute the fft
-        fft_s = np.fft.fft(sw, nfft)
+        fft_s = np.fft.fft(sw, self._nfft)
         mod_fft_s = np.absolute(fft_s)
 
         # Search for the main lobe
@@ -120,3 +91,12 @@ class NonStationaryLUT(object):
         f_interp = interp1d(lobe_index, np.unwrap(np.angle(fft_s[lobe_index])))
         arg_lobe = f_interp(x)
         x_lobe = ((x - 1) / nfft) - 0.0227  # f0/fs = 0.0227
+
+    def _gen_lobe(self):
+        if self._regular_grid:
+            self._gen_uniform_lut()
+        else:
+            self._gen_non_uniform_lut()
+
+    def get_lobe(self):
+        pass  # todo : interpolation in lut

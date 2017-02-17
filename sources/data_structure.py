@@ -187,6 +187,9 @@ class Spectrum(object):
                 self._amplitude[start_bin:stop_bin] = np.absolute(complex_spectrum)
                 self._phase[start_bin:stop_bin] = np.angle(complex_spectrum)
 
+    def get_complex_spectrum(self):
+        return self._amplitude*np.exp(1j*self._phase)
+
     def get_amplitude(self, k):
         if k < 0:
             raise BoundSpectrumError("Index negative !")
@@ -248,6 +251,13 @@ class Parameters(object):
             self._phases = phases
             self._number_sinuses = len(amplitudes)
 
+    @classmethod
+    def void_parameters(cls, number_sinuses):
+        amplitudes = np.zeros(number_sinuses)
+        phases = np.zeros(number_sinuses)
+        frequencies = np.zeros(number_sinuses)
+        return cls(amplitudes, frequencies, phases)
+
     def get_amplitude(self, k):
         if k < 0:
             raise BoundParametersError("Index negative !")
@@ -282,7 +292,7 @@ class NonStationaryParameters(Parameters):
         - fcr : Frequency Change Rate"""
 
     def __init__(self, amplitudes, frequencies, phases, acrs, fcrs):
-        Parameters.__init__(amplitudes, frequencies, phases)
+        Parameters.__init__(self, amplitudes, frequencies, phases)
         if len(acrs) != len(fcrs) or len(acrs) != len(amplitudes) or len(fcrs) != len(amplitudes):
             raise InconsistentParametersError("Sinusoid parameters provided are not the same length")
         else:
