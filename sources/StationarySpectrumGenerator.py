@@ -18,6 +18,7 @@ class StationarySpectrumGenerator(SpectrumGenerator):
     def _add_lobe(self, k):
         lobe = self._lobe_generator.get_lobe()
         amplitude = self._parameters.get_amplitude(k)
+        window_size = self._window_size
         phase = self._parameters.get_phase(k)
         nfft = self._spectrum.get_nfft()
         frequency = self._parameters.get_frequency(k) * nfft

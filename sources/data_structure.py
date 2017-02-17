@@ -108,7 +108,7 @@ class Spectrum(object):
         return self
 
     def __mul__(self, other):  # todo : multiplication with a single non array scalar
-        if isinstance(other, np.ndarray):
+        if isinstance(other, np.ndarray) :
             return Spectrum.from_complex_spectrum(self._amplitude*np.exp(1j*self._phase) * other)
         else:
             raise NotImplementedError
