@@ -91,10 +91,51 @@ class StationaryPhaseVocoder(PhaseVocoder):
         return self.current_synthesis_spectrum
 
 
-class NonStationaryPhaseVocoder(PhaseVocoder):
+class NonStationaryPhaseVocoderScalePhaseLocking(PhaseVocoder):
 
     def get_pv_spectrum(self):
         """Phase vocoder algorithm : Scale Phase-Locking"""
 
+        amplitude = self._current_analysis_spectrum.get_amplitude(0)
+        phase = self._current_analysis_spectrum.get_phase(0)
+        past_synth_phase = self._past_synthesis_spectrum.get_phase(0)
+        past_analysis_phase = self._past_analysis_spectrum.get_phase(0)
+
+        delta_phi = phase - past_analysis_phase
+        delta_phi_prime = delta_phi - self._analysis_hop * self._omega[0]
+        delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
+        true_freq = self._omega[0] + delta_phi_prime_mod / self._analysis_hop
+
+        self.current_synthesis_spectrum += amplitude * np.exp(1j * \
+                                    (past_synth_phase + self._synthesis_hop * true_freq)) * self._kronecker_array(0)
+
+
+        for k in xrange(1,self.current_synthesis_spectrum.get_nfft()):
+
+            amplitude = self._current_analysis_spectrum.get_amplitude(k)
+            phase = self._current_analysis_spectrum.get_phase(k)
+            past_synth_phase = self._past_synthesi  s_spectrum.get_phase(k)
+            past_analysis_phase = self._past_analysis_spectrum.get_phase(k)
+            nfft = self._past_analysis_spectrum.get_nfft()
+
+            # Get the phase difference
+            delta_phi = self._current_analysis_spectrum.get_phase(k-1) - past_analysis_phase
+
+            # Remove the expected phase difference
+            # Note : (2 * np.pi * k) / nfft = omega(k)
+            # delta_phi_prime = delta_phi - self._analysis_hop * (2 * np.pi * k) / nfft
+            delta_phi_prime = delta_phi - self._analysis_hop * self._omega[k]
+
+            # Map to - pi / pi range
+            delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
+
+            # Get the true frequency
+            # true_freq = (2 * np.pi * k) / nfft + delta_phi_prime_mod / self._analysis_hop
+            true_freq = self._omega[k] + delta_phi_prime_mod / self._analysis_hop
+
+            # Get the final phase
+            self.current_synthesis_spectrum += amplitude*np.exp(1j*(past_synth_phase + self._synthesis_hop * true_freq)) *\
+                self._kronecker_array(k)
+        return self.current_synthesis_spectrum
 
         pass
