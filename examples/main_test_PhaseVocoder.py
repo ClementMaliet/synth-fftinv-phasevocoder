@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 
 from sources.StationarySpectrumGenerator import StationarySpectrumGenerator
 
-window_size = 1024
+window_size = 1025
 window_type = 'hamming'
-nfft = 500
+nfft = 8192
 
 s = StationaryLobe(window_type, window_size, nfft)
 
@@ -20,9 +20,12 @@ pv_stat_test = StationaryPhaseVocoder(1, 4, sg.get_spectrum()) #(Analyse_hop, Sy
 
 #Synthetic Spectrum
 plt.figure()
-plt.plot(np.linspace(0, 1, window_size), sg.get_spectrum()._amplitude)
-
+plt.plot(np.linspace(0, 1, nfft), sg.get_spectrum()._amplitude)
+plt.title("synthesised spectrum")
 #Phase Vocoded Spectrum
 plt.figure()
-plt.plot(np.linspace(0, 1, window_size), pv_stat_test.get_pv_spectrum()._amplitude)
+plt.plot(np.linspace(0, 1, nfft), pv_stat_test.get_pv_spectrum()._amplitude)
+plt.title("Phase vocoded spectrum")
 plt.show()
+
+plt.close()
