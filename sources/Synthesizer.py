@@ -105,5 +105,16 @@ class StationarySynthesizer(Synthesizer):
                                                                self._current_parameters, self._nfft)
         self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
 
-    def get_next_frame(self):  # todo : implement synthesis
-        pass
+    def get_next_frame(self):
+        self._current_spectrum = self._spectrum_generator.get_spectrum()
+        self._current_spectrum = self._phase_vocoder.get_pv_spectrum()
+        temporal_frame = self.inverse_fft(self._current_spectrum)
+        return temporal_frame
+
+    def inverse_fft(self, current_spectrum):
+        assert isinstance(current_spectrum, Spectrum)
+        sw = np.fft.ifft(current_spectrum.get_complex_spectrum())
+        s = np.zeros(self._window_size)
+        s[(self._window_size - 1) / 2:] = sw[:(self._window_size - 1) / 2]
+        s[:(self._window_size + 1) / 2] = sw[self._nfft - (self._window_size - 1) / 2:]
+        return s

@@ -187,6 +187,9 @@ class Spectrum(object):
                 self._amplitude[start_bin:stop_bin] = np.absolute(complex_spectrum)
                 self._phase[start_bin:stop_bin] = np.angle(complex_spectrum)
 
+    def get_complex_spectrum(self):
+        return self._amplitude*np.exp(1j*self._phase)
+
     def get_amplitude(self, k):
         if k < 0:
             raise BoundSpectrumError("Index negative !")
