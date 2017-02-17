@@ -12,6 +12,7 @@ from PhaseVocoder import *
 from SpectrumGenerator import *
 from StationaryLobe import *
 from StationarySpectrumGenerator import *
+import warnings
 
 
 def next2pow(x):
@@ -70,10 +71,11 @@ class Synthesizer(object):
         pass
 
     def set_next_frame(self, next_parameters):
+        print "Set next frame"
         self._past_parameters = self._current_parameters
         self._past_spectrum = self._current_spectrum
         self._current_spectrum = Spectrum.void_spectrum(self._nfft)
-        self._current_parameters = next_parameters
+        self.current_parameters = next_parameters
 
     def _set_window_size(self, window_size):
         self._window_size = window_size
@@ -95,6 +97,11 @@ class Synthesizer(object):
         self._phase_vocoder._synthesis_hop = synthesis_hop
     synthesis_hop = property(fset=_set_synthesis_hop)
 
+    def _set_current_parameters(self, current_parameters):
+        self._spectrum_generator.parameters = current_parameters
+        self._current_parameters = current_parameters
+    current_parameters = property(fset=_set_current_parameters)
+
 
 class StationarySynthesizer(Synthesizer):
     def __init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
@@ -106,18 +113,15 @@ class StationarySynthesizer(Synthesizer):
         self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
 
     def get_next_frame(self):
-        print 11
         self._current_spectrum = self._spectrum_generator.get_spectrum()
-        print 12
+        self._phase_vocoder.current_analysis_spectrum = self._current_spectrum
         self._current_spectrum = self._phase_vocoder.get_pv_spectrum()
-        print 13
         temporal_frame = self.inverse_fft(self._current_spectrum)
-        print 14
         return temporal_frame
 
     def inverse_fft(self, current_spectrum):
         assert isinstance(current_spectrum, Spectrum)
-        sw = np.fft.fftshift(np.fft.ifft(current_spectrum.get_complex_spectrum()))
+        sw = np.fft.ifft(current_spectrum.get_complex_spectrum())
         s = np.zeros(self._window_size)
         s[(self._window_size + 1) / 2:] = sw[:(self._window_size - 1) / 2]
         s[:(self._window_size + 1) / 2] = sw[self._nfft - (self._window_size - 1) / 2 - 1:]

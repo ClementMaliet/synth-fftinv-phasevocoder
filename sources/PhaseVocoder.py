@@ -39,6 +39,7 @@ class PhaseVocoder(object):
             self.current_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
 
     def _set_current_analysis_spectrum(self, new_spectrum):
+        print "Set phase vocoder"
         self._past_analysis_spectrum = self._current_analysis_spectrum
         self._past_synthesis_spectrum = self.current_synthesis_spectrum
         self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())

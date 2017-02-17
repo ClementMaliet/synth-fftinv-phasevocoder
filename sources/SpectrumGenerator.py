@@ -23,7 +23,8 @@ class SpectrumGenerator(object):
 
     def __init__(self, window_type, window_size, parameters, nfft):
         self._parameters = parameters
-        self._spectrum = Spectrum.void_spectrum(window_size)
+        self._nfft = nfft
+        self._spectrum = Spectrum.void_spectrum(self._nfft)
         self._window_size = window_size
         # The structure imposes :
         # self._lobe_generator = LobeGenerator(window_type, window_size, nfft)
@@ -43,11 +44,13 @@ class SpectrumGenerator(object):
     window_type = property(fset=_set_window_type)
 
     def _set_parameters(self, new_parameters):
-        self._spectrum = Spectrum.void_spectrum(self._window_size)
+        print "Set parameters"
+        self._spectrum = Spectrum.void_spectrum(self._nfft)
         self._parameters = new_parameters
     parameters = property(fset=_set_parameters)
 
     def get_spectrum(self):
+        print "Make spectrum"
         for k in range(self._parameters.get_number_sinuses()):
             self._add_lobe(k)
         return self._spectrum
