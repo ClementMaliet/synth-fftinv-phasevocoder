@@ -96,45 +96,37 @@ class NonStationaryPhaseVocoderScalePhaseLocking(PhaseVocoder):
     def get_pv_spectrum(self):
         """Phase vocoder algorithm : Scale Phase-Locking"""
 
-        amplitude = self._current_analysis_spectrum.get_amplitude(0)
-        phase = self._current_analysis_spectrum.get_phase(0)
-        past_synth_phase = self._past_synthesis_spectrum.get_phase(0)
-        past_analysis_phase = self._past_analysis_spectrum.get_phase(0)
+        for k in xrange(self.current_synthesis_spectrum.get_nfft()): #todo : peak finder + peak trajectory
+            # todo : get_regions()
 
-        delta_phi = phase - past_analysis_phase
-        delta_phi_prime = delta_phi - self._analysis_hop * self._omega[0]
-        delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
-        true_freq = self._omega[0] + delta_phi_prime_mod / self._analysis_hop
-
-        self.current_synthesis_spectrum += amplitude * np.exp(1j * \
-                                    (past_synth_phase + self._synthesis_hop * true_freq)) * self._kronecker_array(0)
-
-
-        for k in xrange(1,self.current_synthesis_spectrum.get_nfft()):
+        # k1 is the current peak, k0 is the past peak
 
             amplitude = self._current_analysis_spectrum.get_amplitude(k)
             phase = self._current_analysis_spectrum.get_phase(k)
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
-            past_analysis_phase = self._past_analysis_spectrum.get_phase(k)
+            past_analysis_phase_k0 = self._past_analysis_spectrum.get_phase(k)
             nfft = self._past_analysis_spectrum.get_nfft()
 
             # Get the phase difference
-            delta_phi = self._current_analysis_spectrum.get_phase(k-1) - past_analysis_phase
+            delta_phi = phase - past_analysis_phase_k0
 
             # Remove the expected phase difference
-            # Note : (2 * np.pi * k) / nfft = omega(k)
-            # delta_phi_prime = delta_phi - self._analysis_hop * (2 * np.pi * k) / nfft
-            delta_phi_prime = delta_phi - self._analysis_hop * self._omega[k]
+            delta_phi_prime = delta_phi - self._analysis_hop * self._omega[k] #omega(k1)
 
             # Map to - pi / pi range
             delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
 
             # Get the true frequency
-            # true_freq = (2 * np.pi * k) / nfft + delta_phi_prime_mod / self._analysis_hop
             true_freq = self._omega[k] + delta_phi_prime_mod / self._analysis_hop
 
-            # Get the final phase
-            self.current_synthesis_spectrum += amplitude*np.exp(1j*(past_synth_phase + self._synthesis_hop * true_freq)) *\
+            # Get phase for k1
+            current_synthesis_phase_k1 = past_synth_phase + self._synthesis_hop * true_freq
+
+            # Get phase for all k in the current frame region
+            current_synthesis_phase = current_synthesis_phase_k1 + beta* (past_synth_phase - phase_k1)
+
+            # Get the final phase in the region
+            self.current_synthesis_spectrum += amplitude*np.exp(1j*current_synthesis_phase) *\
                 self._kronecker_array(k)
         return self.current_synthesis_spectrum
 
