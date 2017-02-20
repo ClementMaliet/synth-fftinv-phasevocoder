@@ -12,6 +12,7 @@ from PhaseVocoder import *
 from SpectrumGenerator import *
 from StationaryLobe import *
 from StationarySpectrumGenerator import *
+from scipy import signal
 import warnings
 
 
@@ -125,4 +126,5 @@ class StationarySynthesizer(Synthesizer):
         s = np.zeros(self._window_size)
         s[(self._window_size + 1) / 2:] = sw[:(self._window_size - 1) / 2]
         s[:(self._window_size + 1) / 2] = sw[self._nfft - (self._window_size - 1) / 2 - 1:]
+        s *= np.sum(signal.get_window(self._window_type, self._window_size))
         return s
