@@ -5,19 +5,14 @@
 # Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
 
 from abc import ABCMeta, abstractmethod
-from NonStationaryLUT import *
 from data_structure import *
 from NonStationarySpectrumGenerator import *
 from PhaseVocoder import *
 from SpectrumGenerator import *
-from StationaryLobe import *
 from StationarySpectrumGenerator import *
 from scipy import signal
+from next2pow import next2pow
 import warnings
-
-
-def next2pow(x):
-    return int(np.ceil(np.log(float(x))/np.log(2.0)))
 
 
 class Synthesizer(object):
@@ -122,9 +117,8 @@ class StationarySynthesizer(Synthesizer):
 
     def inverse_fft(self, current_spectrum):
         assert isinstance(current_spectrum, Spectrum)
-        sw = np.fft.ifft(current_spectrum.get_complex_spectrum())
+        sw = np.fft.ifft(current_spectrum.get_complex_spectrum()).real
         s = np.zeros(self._window_size)
         s[(self._window_size + 1) / 2:] = sw[:(self._window_size - 1) / 2]
         s[:(self._window_size + 1) / 2] = sw[self._nfft - (self._window_size - 1) / 2 - 1:]
-        s *= np.sum(signal.get_window(self._window_type, self._window_size))
         return s

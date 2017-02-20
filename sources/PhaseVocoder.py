@@ -114,7 +114,7 @@ class NonStationaryPhaseVocoderScalePhaseLocking(PhaseVocoder):
 
             amplitude = self._current_analysis_spectrum.get_amplitude(k)
             phase = self._current_analysis_spectrum.get_phase(k)
-            past_synth_phase = self._past_synthesi  s_spectrum.get_phase(k)
+            past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
             past_analysis_phase = self._past_analysis_spectrum.get_phase(k)
             nfft = self._past_analysis_spectrum.get_nfft()
 

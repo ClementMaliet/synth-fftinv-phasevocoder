@@ -209,6 +209,10 @@ class Spectrum(object):
     def get_nfft(self):
         return self._nfft
 
+    def _get_full_amplitude(self):
+        return self._amplitude
+    amplitude = property(fget=_get_full_amplitude)
+
 
 class ParametersError(Exception):
     """Base class for exception regarding the spectrum class"""

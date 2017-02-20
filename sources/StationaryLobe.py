@@ -9,6 +9,7 @@
 
 from LobeGenerator import LobeGenerator
 import numpy as np
+from next2pow import next2pow
 
 
 class StationaryLobe(LobeGenerator):
@@ -17,7 +18,7 @@ class StationaryLobe(LobeGenerator):
         self._gen_lobe()
 
     def _gen_lobe(self):
-        #w1 = np.fft.fft(self._window, self._nfft)
+        self.step = 2**(next2pow(self._nfft) - next2pow(self._window_size))
 
         # Correct phase
         sw = np.zeros(self._nfft)
@@ -26,7 +27,6 @@ class StationaryLobe(LobeGenerator):
 
         # Compute the fft
         w1 = np.fft.fft(sw, self._nfft)
-        #mod_fft_s = np.absolute(w1)
 
-        w1 = np.concatenate([w1[-4:], w1[:5]])
+        w1 = np.concatenate([w1[-4*self.step::self.step], w1[:4*self.step + 1:self.step]])
         self._lobe.set_complex_spectrum(w1)

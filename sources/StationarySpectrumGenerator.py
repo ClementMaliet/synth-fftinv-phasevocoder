@@ -8,21 +8,23 @@
 
 from SpectrumGenerator import *
 from StationaryLobe import *
+from scipy.interpolate import interp1d
 
 
 class StationarySpectrumGenerator(SpectrumGenerator):
     def __init__(self, window_type, window_size, parameters, nfft):
-        SpectrumGenerator.__init__(self, window_type, window_size, parameters, nfft)
+        SpectrumGenerator.__init__(self, window_size, parameters, nfft)
         self._lobe_generator = StationaryLobe(window_type, window_size, nfft)
 
     def _add_lobe(self, k):
         lobe = self._lobe_generator.get_lobe()
-        amplitude = self._parameters.get_amplitude(k)
-        window_size = self._window_size
+        amplitude = self._parameters.get_amplitude(k) / 2.
         phase = self._parameters.get_phase(k)
         nfft = self._spectrum.get_nfft()
         frequency = self._parameters.get_frequency(k) * nfft
         spectrum = Spectrum.void_spectrum(nfft)
+        spectrum_under_dc_bin = Spectrum.void_spectrum(nfft)
+        spectrum_over_nyquist_bin = Spectrum.void_spectrum(nfft)
 
         # size of positive freq. spectrum
         h_n = nfft / 2 + 1
@@ -31,24 +33,37 @@ class StationarySpectrumGenerator(SpectrumGenerator):
         if (frequency > 0) or (frequency < h_n - 2):
 
             #   spectrum bins to fill
-            b = np.int_(np.arange(9) - 4 + round(frequency) + 1)
+            freqs = (np.arange(lobe.get_nfft()) - lobe.get_nfft()/2)*self._lobe_generator.step + frequency
+            f = interp1d(freqs, lobe.amplitude, "quadratic")
+            b = np.arange(np.int_(np.ceil(np.min(freqs))), np.int_(np.floor(np.max(freqs))))
+            lobe_amplitudes = f(b)
+            normal = np.nonzero(np.logical_and(b >= 0, b <= h_n - 1))[0]
+            under_dc_bin = np.nonzero(b < 0)[0]
+            over_nyquist_bin = np.nonzero(b > (h_n - 1))[0]
 
-            for m in xrange(9):
-                #           peak lobe croses DC bin
-                if b[m] < 0:
-                    spectrum.set_spectrum(lobe.get_amplitude(m), phase, start_bin=-b[m], stop_bin=-b[m]+1)
-                #           peak lobe croses Nyquist bin
-                elif b[m] > (h_n - 1):
-                    spectrum.set_spectrum(lobe.get_amplitude(m), phase, start_bin=2 * (h_n - 1)-b[m], stop_bin=2 *
-                                          (h_n - 1) - b[m]+1)
+            # Normal case
+            spectrum.set_complex_spectrum(lobe_amplitudes[normal]*np.exp(1j*phase)+lobe_amplitudes[normal] *
+                                          np.exp(-1j*phase)*(np.logical_or(b[normal] == 0, b[normal] == h_n-1)),
+                                          start_bin=np.min(b[normal]), stop_bin=np.max(b[normal])+1)
+            if len(under_dc_bin) > 0:
+                # Peak crosses DC
+                spectrum_under_dc_bin.set_spectrum(np.fliplr([lobe_amplitudes[under_dc_bin]])[0],
+                                                   phase*np.ones(len(under_dc_bin)),
+                                                   start_bin=np.max(-b[under_dc_bin]),
+                                                   stop_bin=np.min(-b[under_dc_bin]) + 1)
+                spectrum += spectrum_under_dc_bin
+            if len(over_nyquist_bin) > 0:
+                # Peak crosses Nyquist bin
+                spectrum_over_nyquist_bin.set_spectrum(np.fliplr([lobe_amplitudes[over_nyquist_bin]])[0],
+                                                       phase * np.ones(len(over_nyquist_bin)),
+                                                       start_bin=2 * (h_n - 1) - np.max(b[under_dc_bin]),
+                                                       stop_bin=-2 * (h_n - 1) - np.min(b[under_dc_bin]) + 1)
+                spectrum += spectrum_over_nyquist_bin
 
-                #           peak lobe in positive freq. range
-                else:
-                    spectrum.set_complex_spectrum(lobe.get_amplitude(m)*np.exp(1j*phase)+lobe.get_amplitude(m) *
-                                                  np.exp(-1j*phase)*(b[m] == 0 or b[m] == h_n-1),
-                                                  start_bin=b[m], stop_bin=b[m]+1)
             spectrum *= np.array(amplitude)
+            # We add the lobe to the spectrum
             self._spectrum += spectrum
+            self._spectrum += np.fliplr([spectrum.get_complex_spectrum()])[0]
 
         else:
             pass
