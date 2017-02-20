@@ -7,7 +7,7 @@ window_type = "hamming"
 zero_padding_factor = 1
 nfft = 2**(next2pow(1025) + zero_padding_factor)
 
-parameter = Parameters(np.array([1, 3]), np.array([0.12, 0.29]), np.array([3., 0.2]))
+parameter = Parameters(np.array([1]), np.array([0.12]), np.array([3.]))
 synth = StationarySynthesizer(window_size, window_type, zero_padding_factor, 500, 500, parameter)
 synth.set_next_frame(parameter)
 s = synth.get_next_frame()
@@ -16,7 +16,7 @@ w /= np.sum(w)
 s_gt = np.zeros(window_size)
 for i in xrange(parameter.get_number_sinuses()):
     s_gt += parameter.get_amplitude(i)*np.exp(2*np.pi*1j*parameter.get_frequency(i)*np.array(range(window_size)) +
-                                             parameter.get_phase(i)*1j).real
+                                              parameter.get_phase(i)*1j).real
 
 s_gt *= w
 
@@ -33,7 +33,7 @@ plt.title("Synthetized spectrum")
 plt.subplot(2,1,1)
 plt.plot(omega, synth._current_spectrum._amplitude, omega, np.absolute(sfft))
 plt.subplot(2,1,2)
-plt.plot(omega, synth._current_spectrum._phase, omega, np.angle(sfft))
+plt.plot(omega, synth._current_spectrum._phase, omega, 2*np.angle(sfft))
 plt.figure()
 plt.title("ifft of synth spectrum")
 plt.plot(np.fft.ifft(synth._current_spectrum.get_complex_spectrum()))

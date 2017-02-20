@@ -63,7 +63,7 @@ class StationarySpectrumGenerator(SpectrumGenerator):
             spectrum *= np.array(amplitude)
             # We add the lobe to the spectrum
             self._spectrum += spectrum
-            self._spectrum += np.concatenate((np.array([0]), spectrum.get_complex_spectrum()[:0:-1]))
+            self._spectrum += np.concatenate((np.array([0]), np.conj(spectrum.get_complex_spectrum()[:0:-1])))
 
         else:
             pass
