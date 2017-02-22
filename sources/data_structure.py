@@ -291,6 +291,7 @@ class Parameters(object):
     def get_number_sinuses(self):
         return self._number_sinuses
 
+    def get_regions(self):
         # set the min amplitude of a peak
         min_amp = 1
         if self._amplitudes.max > min_amp:
