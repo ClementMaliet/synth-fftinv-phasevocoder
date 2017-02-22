@@ -34,7 +34,7 @@ class StationarySpectrumGenerator(SpectrumGenerator):
 
             #   spectrum bins to fill
             freqs = (np.arange(lobe.get_nfft()) - lobe.get_nfft()/2)*self._lobe_generator.step + frequency
-            f = interp1d(freqs, lobe.amplitude, "quadratic")
+            f = interp1d(freqs, lobe.amplitude, "cubic")
             b = np.arange(np.int_(np.ceil(np.min(freqs))), np.int_(np.floor(np.max(freqs))))
             lobe_amplitudes = f(b)
             normal = np.nonzero(np.logical_and(b >= 0, b <= h_n - 1))[0]

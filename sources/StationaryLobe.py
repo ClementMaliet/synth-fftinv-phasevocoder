@@ -28,5 +28,5 @@ class StationaryLobe(LobeGenerator):
         # Compute the fft
         w1 = np.fft.fft(sw, self._nfft)
 
-        w1 = np.concatenate([w1[-4*self.step::self.step], w1[:4*self.step + 1:self.step]])
+        w1 = np.concatenate([w1[-5*self.step::self.step], w1[:5*self.step + 1:self.step]])
         self._lobe.set_complex_spectrum(w1)
