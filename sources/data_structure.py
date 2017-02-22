@@ -244,7 +244,7 @@ class BoundParametersError(ParametersError):
 class Parameters(object):
     """The class parameters is used to store the parameters of the model's stationary sinusoid"""
 
-    def __init__(self, amplitudes, frequencies, phases,regions,peak_indices):
+    def __init__(self, amplitudes, frequencies, phases, regions=None, peak_indices=None):
         if len(amplitudes) != len(frequencies) or len(amplitudes) != len(phases) or len(frequencies) != len(phases):
             raise InconsistentParametersError("Sinusoid parameters provided are not the same length")
         elif any([a < 0 for a in amplitudes]):
@@ -254,8 +254,8 @@ class Parameters(object):
             self._frequencies = frequencies
             self._phases = phases
             self._number_sinuses = len(amplitudes)
-            self._regions = regions
-            self._peak_indices = peak_indices
+            self._regions = regions if regions is not None else np.array([0, self._number_sinuses])
+            self._peak_indices = peak_indices if peak_indices is not None else np.arange(self._number_sinuses)
 
     @classmethod
     def void_parameters(cls, number_sinuses):
