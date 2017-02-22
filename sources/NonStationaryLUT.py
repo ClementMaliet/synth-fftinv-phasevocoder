@@ -6,8 +6,10 @@
 
 
 from scipy.interpolate import interp1d
+from scipy.interpolate import griddata
 from data_structure import *
 from LobeGenerator import LobeGenerator
+from NonStationaryLobe import *
 
 
 class NonStationaryLUT(LobeGenerator):
@@ -33,7 +35,8 @@ class NonStationaryLUT(LobeGenerator):
 
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
-                pass
+                lobe = self._gen_lobes_legacy(i, j, acr, fcr, t, n)
+                LUT[i, j] = lobe
 
     def _gen_non_uniform_lut(self):
         pass
@@ -84,11 +87,13 @@ class NonStationaryLUT(LobeGenerator):
         x = np.linspace(lower_zero_loc * 1.001, upper_zero_loc * 0.999, 9)
 
         # Store the relevant lobe
-        f_interp = interp1d(range(nfft), mod_fft_s)
-        mag_lobe = f_interp(x)
+        f_interp = interp1d(range(self._nfft), mod_fft_s)
+        amplitude = f_interp(x)
         f_interp = interp1d(lobe_index, np.unwrap(np.angle(fft_s[lobe_index])))
-        arg_lobe = f_interp(x)
-        x_lobe = ((x - 1) / nfft) - 0.0227  # f0/fs = 0.0227
+        phase = f_interp(x)
+        abscissa= ((x - 1) / self._nfft) - 0.0227  # f0/fs = 0.0227
+        lobe = NonStationaryLobe(amplitude, phase, abscissa)
+        return lobe
 
     def _gen_lobe(self):
         if self._regular_grid:
@@ -96,5 +101,17 @@ class NonStationaryLUT(LobeGenerator):
         else:
             self._gen_non_uniform_lut()
 
-    def get_lobe(self):
-        pass  # todo : interpolation in lut
+    def get_lobe(self, i, j, N_lobe):
+
+        lobe_freq = np.zeros[N_lobe, 1]
+        lobe_mag = np.zeros[N_lobe, 1]
+        lobe_phase = np.zeros[N_lobe, 1]
+
+        for v in range(: N_lobe):
+            lobe_freq[v, 1] = griddata(self.LUT, self.LUT, self.abscissa[v,:], self.acr, self.fcr)
+            lobe_mag[v, 1] = griddata(self.LUT, self.LUT, self.amplitude[v,:], self.acr, self.fcr)
+            lobe_phase[v, 1] = griddata(self.LUT, self.LUT, self.phase[v,:], self.acr, self.fcr)
+
+        return lobe_freq
+        return lobe_mag
+        return lobe_phase
