@@ -48,14 +48,14 @@ class StationarySpectrumGenerator(SpectrumGenerator):
             if len(under_dc_bin) > 0:
                 # Peak crosses DC
                 spectrum_under_dc_bin.set_spectrum(np.fliplr([lobe_amplitudes[under_dc_bin]])[0],
-                                                   phase*np.ones(len(under_dc_bin)),
+                                                   -phase*np.ones(len(under_dc_bin)),
                                                    start_bin=np.max(-b[under_dc_bin]),
                                                    stop_bin=np.min(-b[under_dc_bin]) + 1)
                 spectrum += spectrum_under_dc_bin
             if len(over_nyquist_bin) > 0:
                 # Peak crosses Nyquist bin
                 spectrum_over_nyquist_bin.set_spectrum(np.fliplr([lobe_amplitudes[over_nyquist_bin]])[0],
-                                                       phase * np.ones(len(over_nyquist_bin)),
+                                                       -phase * np.ones(len(over_nyquist_bin)),
                                                        start_bin=2 * (h_n - 1) - np.max(b[under_dc_bin]),
                                                        stop_bin=-2 * (h_n - 1) - np.min(b[under_dc_bin]) + 1)
                 spectrum += spectrum_over_nyquist_bin
