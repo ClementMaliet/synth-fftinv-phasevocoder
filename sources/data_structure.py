@@ -152,7 +152,7 @@ class Spectrum(object):
                 raise BoundSpectrumError("Attempted to modify non existing bins (interval incorrect)")
             else:
                 self._amplitude[start_bin:stop_bin] = amplitude
-                self._phase[stop_bin:stop_bin] = phase
+                self._phase[start_bin:stop_bin] = phase
 
     def set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None):
         if start_bin is None and stop_bin is None:

@@ -6,11 +6,11 @@ fs = 44100
 window_length = 23e-3
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
-window_type = "hamming"
-zero_padding_factor = 2
+window_type = "hanning"
+zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 
-parameter = Parameters(np.array([1]), np.array([0.1]), np.array([3.]))
+parameter = Parameters(np.array([1]), np.array([0.16]), np.array([3.]))
 
 # Analysis
 w = signal.get_window(window_type, window_size)
@@ -32,8 +32,8 @@ phases = np.array([np.angle(sfft[int(round(a * nfft))]) for a in parameter._freq
 
 
 # Synthesis
-parameter._phases = phases
-synth = StationarySynthesizer(window_size, window_type, zero_padding_factor, 500, 500, parameter)
+# parameter._phases = phases
+synth = StationarySynthesizer(window_size, window_type, zero_padding_factor, 100, 100, parameter)
 synth.set_next_frame(parameter)
 s = synth.get_next_frame()
 
@@ -46,7 +46,7 @@ plt.title("Synthetized spectrum")
 plt.subplot(2,1,1)
 plt.plot(omega, 10*np.log10(np.fft.fftshift(synth._current_spectrum._amplitude)**2), omega, 10*np.log10(np.absolute(sfft)**2))
 plt.subplot(2,1,2)
-plt.plot(omega, np.fft.fftshift(synth._current_spectrum._phase), omega, 2*np.angle(sfft))
+plt.plot(omega, np.fft.fftshift(synth._current_spectrum._phase), omega, 2*np.unwrap(0.5*np.angle(sfft)))
 plt.figure()
 plt.title("Synthetised and original frame")
 plt.plot(range(window_size), s, range(window_size), s_gt)

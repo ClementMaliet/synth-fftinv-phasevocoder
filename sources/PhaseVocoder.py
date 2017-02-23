@@ -35,7 +35,7 @@ class PhaseVocoder(object):
                 ((2*np.pi)/current_analysis_spectrum.get_nfft())
             self._past_analysis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
             self._past_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
-            self._current_analysis_spectrum = current_analysis_spectrum
+            self._current_analysis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
             self.current_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
 
     def _set_current_analysis_spectrum(self, new_spectrum):
@@ -64,7 +64,8 @@ class StationaryPhaseVocoder(PhaseVocoder):
         """Phase vocoder algorithm"""
 
         for k in xrange(self.current_synthesis_spectrum.get_nfft()):
-            amplitude = self._current_analysis_spectrum.get_amplitude(k)
+            amplitude = self._current_analysis_spectrum.get_amplitude(k)  # \
+                # if self._current_analysis_spectrum.get_amplitude(k) > 1e-12 else 1e-12
             phase = self._current_analysis_spectrum.get_phase(k)
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
             past_analysis_phase = self._past_analysis_spectrum.get_phase(k)
@@ -79,15 +80,16 @@ class StationaryPhaseVocoder(PhaseVocoder):
             delta_phi_prime = delta_phi - self._analysis_hop * self._omega[k]
 
             # Map to - pi / pi range
-            delta_phi_prime_mod = (delta_phi_prime + np.pi) % (2 * np.pi) - np.pi
+            delta_phi_prime_mod = np.mod((delta_phi_prime + np.pi), (2 * np.pi)) - np.pi
 
             # Get the true frequency
             # true_freq = (2 * np.pi * k) / nfft + delta_phi_prime_mod / self._analysis_hop
             true_freq = self._omega[k] + delta_phi_prime_mod / self._analysis_hop
 
             # Get the final phase
-            self.current_synthesis_spectrum += amplitude*np.exp(1j*(past_synth_phase + self._synthesis_hop * true_freq)) *\
-                self._kronecker_array(k)
+            self.current_synthesis_spectrum.set_spectrum(np.array([amplitude]),
+                                                         np.array([past_synth_phase + self._synthesis_hop * true_freq]),
+                                                         start_bin=k, stop_bin=k+1)
         return self.current_synthesis_spectrum
 
 
