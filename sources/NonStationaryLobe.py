@@ -33,12 +33,12 @@ class NonStationaryLobe(Spectrum):
         x = np.zeros(nfft)
         return cls(amplitude, phase, x)
 
-    def set_spectrum(self, amplitude, phase, start_bin=None, stop_bin=None, x):
+    def set_spectrum(self, amplitude, phase, x, start_bin=None, stop_bin=None):
         Spectrum.set_spectrum(self, amplitude, phase, start_bin=None, stop_bin=None)
         self._x = x
 
-    def set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None, x):
-        Spectrum.set_complex_spectrum(self,complex_spectrum,start_bin=None, stop_bine=None)
+    def set_complex_spectrum(self, complex_spectrum, x, start_bin=None, stop_bin=None):
+        Spectrum.set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bine=None)
         self._x = x
 
     def get_amplitude(self, k):

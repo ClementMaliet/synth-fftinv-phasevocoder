@@ -101,16 +101,17 @@ class NonStationaryLUT(LobeGenerator):
         else:
             self._gen_non_uniform_lut()
 
+
     def get_lobe(self, i, j, N_lobe):
 
         lobe_freq = np.zeros[N_lobe, 1]
         lobe_mag = np.zeros[N_lobe, 1]
         lobe_phase = np.zeros[N_lobe, 1]
 
-        for v in range(: N_lobe):
-            lobe_freq[v, 1] = griddata(self.LUT, self.LUT, self.abscissa[v,:], self.acr, self.fcr)
-            lobe_mag[v, 1] = griddata(self.LUT, self.LUT, self.amplitude[v,:], self.acr, self.fcr)
-            lobe_phase[v, 1] = griddata(self.LUT, self.LUT, self.phase[v,:], self.acr, self.fcr)
+        for v in range(: N_lobe - 1):
+            lobe_freq[v, 1] = griddata(self.LUT, self.LUT, self.abscissa[v - 1,:], self.acr, self.fcr)
+            lobe_mag[v, 1] = griddata(self.LUT, self.LUT, self.amplitude[v - 1,:], self.acr, self.fcr)
+            lobe_phase[v, 1] = griddata(self.LUT, self.LUT, self.phase[v - 1,:], self.acr, self.fcr)
 
         return lobe_freq
         return lobe_mag
