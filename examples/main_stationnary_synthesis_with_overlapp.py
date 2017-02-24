@@ -3,17 +3,17 @@ from scipy import signal
 import matplotlib.pyplot as plt
 
 fs = 44100
-sine_duration = 46e-3
-window_length = 23e-3
+sine_duration = 0.5  # s
+window_length = 23e-3  # s
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
 window_type = "hanning"
-zero_padding_factor = 3
+zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 analysis_hop = 505
 synthesis_hop = 505
 
-parameter = Parameters(np.array([1]), np.array([0.1]), np.array([3.]))
+parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
 
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
@@ -34,7 +34,18 @@ for i in xrange(parameter.get_number_sinuses()):
                                               parameter.get_phase(i)*1j).real
 
 for i in xrange(number_frames):
+    vector_frames[i, :] = s_gt[i*analysis_hop:i*analysis_hop + window_size]
+    vector_frames[i, :] *= w
+
+    sw_gt = np.zeros(nfft)
+    sw_gt[:(window_size - 1) / 2] = vector_frames[i, ((window_size + 1) / 2):]
+    sw_gt[nfft - (window_size - 1) / 2 - 1:] = vector_frames[i, :(window_size + 1) / 2]
+
+    sfft = np.fft.fft(sw_gt, nfft)
+    phases = np.array([np.angle(sfft[int(round(a * nfft))]) for a in parameter._frequencies])
+
     # Synthesis
+    parameter._phases = phases
     synth.set_next_frame(parameter)
     s = synth.get_next_frame()
     vector_frames[i, :] = s

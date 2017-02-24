@@ -38,7 +38,7 @@ class NonStationaryLobe(Spectrum):
         self._x = x
 
     def set_complex_spectrum(self, complex_spectrum, x, start_bin=None, stop_bin=None):
-        Spectrum.set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bine=None)
+        Spectrum.set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None)
         self._x = x
 
     def get_amplitude(self, k):

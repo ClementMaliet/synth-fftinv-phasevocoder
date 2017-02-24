@@ -32,7 +32,7 @@ phases = np.array([np.angle(sfft[int(round(a * nfft))]) for a in parameter._freq
 
 
 # Synthesis
-# parameter._phases = phases
+parameter._phases = phases
 synth = StationarySynthesizer(window_size, window_type, zero_padding_factor, 100, 100, parameter)
 synth.set_next_frame(parameter)
 s = synth.get_next_frame()

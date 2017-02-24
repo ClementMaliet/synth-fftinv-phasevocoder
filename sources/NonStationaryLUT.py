@@ -24,6 +24,7 @@ class NonStationaryLUT(LobeGenerator):
         self._number_acr = number_acr
         self._number_fcr = number_fcr
         self._number_points = number_acr*number_fcr
+        self._lut = {}
         self._gen_lobe()
 
     def _gen_uniform_lut(self):
@@ -36,7 +37,7 @@ class NonStationaryLUT(LobeGenerator):
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
                 lobe = self._gen_lobes_legacy(i, j, acr, fcr, t, n)
-                LUT[i, j] = lobe
+                self._lut["({0}, {1})".format(acr[i], fcr[j])] = lobe
 
     def _gen_non_uniform_lut(self):
         pass
@@ -102,17 +103,17 @@ class NonStationaryLUT(LobeGenerator):
             self._gen_non_uniform_lut()
 
 
-    def get_lobe(self, i, j, N_lobe):
-
-        lobe_freq = np.zeros[N_lobe, 1]
-        lobe_mag = np.zeros[N_lobe, 1]
-        lobe_phase = np.zeros[N_lobe, 1]
-
-        for v in range(: N_lobe - 1):
-            lobe_freq[v, 1] = griddata(self.LUT, self.LUT, self.abscissa[v - 1,:], self.acr, self.fcr)
-            lobe_mag[v, 1] = griddata(self.LUT, self.LUT, self.amplitude[v - 1,:], self.acr, self.fcr)
-            lobe_phase[v, 1] = griddata(self.LUT, self.LUT, self.phase[v - 1,:], self.acr, self.fcr)
-
-        return lobe_freq
-        return lobe_mag
-        return lobe_phase
+    # def get_lobe(self, i, j, N_lobe):
+    #
+    #     lobe_freq = np.zeros[N_lobe, 1]
+    #     lobe_mag = np.zeros[N_lobe, 1]
+    #     lobe_phase = np.zeros[N_lobe, 1]
+    #
+    #     for v in range(N_lobe - 1):
+    #         lobe_freq[v, 1] = griddata(self.LUT, self.LUT, self.abscissa[v - 1,:], self.acr, self.fcr)
+    #         lobe_mag[v, 1] = griddata(self.LUT, self.LUT, self.amplitude[v - 1,:], self.acr, self.fcr)
+    #         lobe_phase[v, 1] = griddata(self.LUT, self.LUT, self.phase[v - 1,:], self.acr, self.fcr)
+    #
+    #     return lobe_freq
+    #     return lobe_mag
+    #     return lobe_phase
