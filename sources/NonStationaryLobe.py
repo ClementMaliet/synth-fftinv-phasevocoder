@@ -57,5 +57,6 @@ class NonStationaryLobe(Spectrum):
         else:
             return self._phase[k]
 
-    def get_abscissa(self, k):
-        return self._x[k]
+    def get_abscissa(self):
+        print "abscisse ="
+        return self._x

@@ -13,12 +13,17 @@ from NonStationaryLobe import *
 
 
 class NonStationaryLUT(LobeGenerator):
-    def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, fs=None):
+    def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, nfft, fs=None):
         if fs is None:
             self._fs = 44100
         else:
             self._fs = fs
-        LobeGenerator.__init__(self, window_type, window_size)
+        LobeGenerator.__init__(self, window_type, window_size, nfft)
+        self._abscissa = []
+        self._amplitude = []
+        self._phase = []
+        self._acr = []
+        self._fcr = []
         self._regular_grid = regular_grid
         self._domain = [acr_domain, fcr_domain]
         self._number_acr = number_acr
@@ -27,17 +32,26 @@ class NonStationaryLUT(LobeGenerator):
         self._lut = {}
         self._gen_lobe()
 
+
     def _gen_uniform_lut(self):
-        acr = np.linspace(self._domain[0][0], self._domain[0][1], self._number_acr)
-        fcr = np.linspace(self._domain[1][0], self._domain[1][1], self._number_fcr)
-        self._sample_grid = [(a, b) for a in acr for b in fcr]
+        self._acr = np.linspace(self._domain[0][0], self._domain[0][1], self._number_acr)
+        self._fcr = np.linspace(self._domain[1][0], self._domain[1][1], self._number_fcr)
+        self._sample_grid = [(a, b) for a in self._acr for b in self._fcr]
         n = np.array(range(self._window_size))
         t = (1/self._fs)*n
 
+
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
+<<<<<<< Updated upstream
                 lobe = self._gen_lobes_legacy(i, j, acr, fcr, t, n)
                 self._lut["({0}, {1})".format(acr[i], fcr[j])] = lobe
+=======
+
+                lobe = self._gen_lobes_legacy(i, j, self._acr, self._fcr, t, n)
+                self._lut["({0}, {1})".format(self._acr[i], self._fcr[j])] = lobe
+
+>>>>>>> Stashed changes
 
     def _gen_non_uniform_lut(self):
         pass
@@ -53,8 +67,8 @@ class NonStationaryLUT(LobeGenerator):
 
         # Correct phase
         sw = np.zeros(self._nfft)
-        sw[:(self._window_size - 1) / 2] = s[(self._window_size - 1) / 2:]
-        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2]
+        sw[:(self._window_size - 1) / 2] = s[(self._window_size + 1) / 2:]
+        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2 - 1]
 
         # Compute the fft
         fft_s = np.fft.fft(sw, self._nfft)
@@ -89,11 +103,11 @@ class NonStationaryLUT(LobeGenerator):
 
         # Store the relevant lobe
         f_interp = interp1d(range(self._nfft), mod_fft_s)
-        amplitude = f_interp(x)
-        f_interp = interp1d(lobe_index, np.unwrap(np.angle(fft_s[lobe_index])))
-        phase = f_interp(x)
-        abscissa= ((x - 1) / self._nfft) - 0.0227  # f0/fs = 0.0227
-        lobe = NonStationaryLobe(amplitude, phase, abscissa)
+        self._amplitude = f_interp(x)
+        f_interp = interp1d(lobe_index, np.unwrap(np.angle(fft_s[lobe_index])), fill_value = "extrapolate")
+        self._phase = f_interp(x)
+        self._abscissa= ((x - 1) / self._nfft) - 0.0227  # f0/fs = 0.0227
+        lobe = NonStationaryLobe(self._amplitude, self._phase, self._abscissa)
         return lobe
 
     def _gen_lobe(self):
@@ -103,6 +117,7 @@ class NonStationaryLUT(LobeGenerator):
             self._gen_non_uniform_lut()
 
 
+<<<<<<< Updated upstream
     # def get_lobe(self, i, j, N_lobe):
     #
     #     lobe_freq = np.zeros[N_lobe, 1]
@@ -117,3 +132,18 @@ class NonStationaryLUT(LobeGenerator):
     #     return lobe_freq
     #     return lobe_mag
     #     return lobe_phase
+=======
+    def get_lobe(self, N_lobe):
+
+        lobe_freq = np.zeros([N_lobe, 1])
+        lobe_mag = np.zeros([N_lobe, 1])
+        lobe_phase = np.zeros([N_lobe, 1])
+
+        for v in range(0, N_lobe - 1):
+            lobe_freq[v, 1] = griddata((self._acr, self._fcr), self._abscissa[v, :], (self._acr, self._fcr))
+            lobe_mag[v, 1] = griddata(self._acr, self._fcr, self._amplitude[v, :], self._acr, self._fcr)
+            lobe_phase[v, 1] = griddata(self._acr, self._fcr, self._phase[v, :], self._acr, self._fcr)
+
+            return lobe_freq, lobe_mag, lobe_phase
+
+>>>>>>> Stashed changes
