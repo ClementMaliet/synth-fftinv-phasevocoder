@@ -22,10 +22,9 @@ class InconsistentHopSizeError(PhaseVocoderError):
 
 
 class PhaseVocoder(object):
-
     __metaclass__ = ABCMeta
     """The abstract class PhaseVocoder is used to get a phase-vocoder spectrum."""
-    def __init__(self, analysis_hop, synthesis_hop, current_analysis_spectrum,regions):
+    def __init__(self, analysis_hop, synthesis_hop, current_analysis_spectrum):
         if analysis_hop >= current_analysis_spectrum.get_nfft() or \
                 synthesis_hop >= current_analysis_spectrum.get_nfft():
             raise InconsistentHopSizeError('Synthesis and/or Analysis Hop provided have inconsistent size')
@@ -38,8 +37,7 @@ class PhaseVocoder(object):
             self._past_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
             self._current_analysis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
             self.current_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
-            #self._region = regions if regions is not None else np.array([0, current_analysis_spectrum.get_number_sinuses()+1])
-            #self._peak_indices = peak_indices if peak_indices is not None else np.arange(current_analysis_spectrum.get_number_sinuses()+1])
+
     def _set_current_analysis_spectrum(self, new_spectrum):
         print "Set phase vocoder"
         self._past_analysis_spectrum = self._current_analysis_spectrum
@@ -47,35 +45,6 @@ class PhaseVocoder(object):
         self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())
         self._current_analysis_spectrum = new_spectrum
     current_analysis_spectrum = property(fset=_set_current_analysis_spectrum)
-
-    @classmethod
-    def get_regions(self,spectrum):
-        # set the min amplitude of a peak
-        min_amp = 1
-        amplitudes = spectrum._get_full_amplitude()
-        if amplitudes.max > min_amp:
-            self._peak_indices = amplitudes.find_peaks_cwt()
-
-            # to attache a sample to a peak we detect the minimum between each peak
-            self._region[0] = 0
-            previous_peak = self._peak_indices(0)
-            for k in range(len(self._peak_indices) - 1):
-                if (len(np.amin(amplitudes[previous_peak:self._peak_indices(k + 1)]))) == 1:
-                    self._region[k + 1] = np.amin(amplitudes[previous_peak:self._peak_indices(k + 1)])
-
-                else:
-                    zeros = np.amin(amplitudes[previous_peak:self._peak_indices(k + 1)])
-                    self._region[k + 1] = np.floor(len(zeros / 2))
-                previous_peak = self._peak_indices(k + 1)
-
-            self._region[len(self._peak_indices) + 1] = len(amplitudes)
-        # if max of amplitude is too short, we consider the whole frame as a regions of interest
-
-        else:
-            self._peak_indices = amplitudes.max
-            self._region[0] = 0
-            self._region[1] = len(amplitudes)
-        return self._peak_indices
 
     @abstractmethod
     def get_pv_spectrum(self):
@@ -101,8 +70,7 @@ class StationaryPhaseVocoder(PhaseVocoder):
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
             past_analysis_phase = self._past_analysis_spectrum.get_phase(k)
             nfft = self._past_analysis_spectrum.get_nfft()
-            param_regions = self._current_analysis_spectrum.get_regions()
-            print param_regions
+
             # Get the phase difference
             delta_phi = phase - past_analysis_phase
 
@@ -130,8 +98,8 @@ class NonStationaryPhaseVocoderScalePhaseLocking(PhaseVocoder):
     def get_pv_spectrum(self):
         """Phase vocoder algorithm : Scale Phase-Locking"""
 
-        for k in xrange(self.current_synthesis_spectrum.get_nfft()):
-            #todo : find corresponding peak 
+        for k in xrange(self.current_synthesis_spectrum.get_nfft()): #todo : peak finder + peak trajectory
+            # todo : get_regions()
 
         # k1 is the current peak, k0 is the past peak
 

@@ -254,7 +254,8 @@ class Parameters(object):
             self._frequencies = frequencies
             self._phases = phases
             self._number_sinuses = len(amplitudes)
-
+            self._regions = regions if regions is not None else np.array([0, self._number_sinuses])
+            self._peak_indices = peak_indices if peak_indices is not None else np.arange(self._number_sinuses)
 
     @classmethod
     def void_parameters(cls, number_sinuses):
@@ -290,7 +291,27 @@ class Parameters(object):
     def get_number_sinuses(self):
         return self._number_sinuses
 
+    def get_regions(self):
+        # set the min amplitude of a peak
+        min_amp = 1
+        if self._amplitudes.max > min_amp:
+            self._peak_indices = self._amplitudes.find_peaks_cwt()
 
+            # to attache a sample to a peak we detect the minimum between each peak
+            self._regions[0] = 0
+            previous_peak = self._peak_indices(0)
+            for k in range(len(self._peak_indices) - 1):
+                self._regions[k+1] = np.amin(self._amplitudes[previous_peak:self._peak_indices(k+1)])
+                previous_peak =  self._peak_indices(k+1)
+
+            self._regions[len( self._peak_indices)+1] = len(self._amplitudes)
+        # if max of amplitude is too short, we consider the whole frame as a regions of interest
+
+        else:
+            self._peak_indices = self._amplitudes.max
+            self._regions[0] = 0
+            self._regions[1] = len(self._amplitudes)
+        return self._peak_indices, self._regions
 
 
 class NonStationaryParameters(Parameters):
