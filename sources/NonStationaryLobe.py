@@ -18,7 +18,7 @@ class NonStationaryLobe(Spectrum):
         self._x = x
 
     @classmethod
-    def from_complex_spectrum(cls, complex_spectrum, x):
+    def from_complex_lobe(cls, complex_spectrum, x):
         if np.iscomplexobj(complex_spectrum) is False:
             raise InconsistentSpectrumError('Real spectrum cannot be converted to amplitude and phase')
         else:
@@ -27,36 +27,20 @@ class NonStationaryLobe(Spectrum):
             return cls(amplitude, phase, x)
 
     @classmethod
-    def void_spectrum(cls, nfft):
+    def void_lobe(cls, nfft):
         amplitude = np.zeros(nfft)
         phase = np.zeros(nfft)
         x = np.zeros(nfft)
         return cls(amplitude, phase, x)
 
-    def set_spectrum(self, amplitude, phase, x, start_bin=None, stop_bin=None):
+    def set_lobe(self, amplitude, phase, x, start_bin=None, stop_bin=None):
         Spectrum.set_spectrum(self, amplitude, phase, start_bin=None, stop_bin=None)
         self._x = x
 
-    def set_complex_spectrum(self, complex_spectrum, x, start_bin=None, stop_bin=None):
+    def set_complex_lobe(self, complex_spectrum, x, start_bin=None, stop_bin=None):
         Spectrum.set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None)
         self._x = x
 
-    def get_amplitude(self, k):
-        if k < 0:
-            raise BoundSpectrumError("Index negative !")
-        elif k > self._nfft - 1:
-            raise BoundSpectrumError("Index out of spectrum range")
-        else:
-            return self._amplitude[k]
+    def get_abscissa(self, k):
 
-    def get_phase(self, k):
-        if k < 0:
-            raise BoundSpectrumError("Index negative !")
-        elif k > self._nfft - 1:
-            raise BoundSpectrumError("Index out of spectrum range")
-        else:
-            return self._phase[k]
-
-    def get_abscissa(self):
-        print "abscisse ="
-        return self._x
+        return self._x[k]
