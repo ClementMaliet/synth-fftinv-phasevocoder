@@ -12,7 +12,7 @@ window_type = "hanning"
 zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 
-parameter = Parameters(np.array([1]), np.array([0.16]), np.array([3.]))
+parameter = Parameters(np.array([1]), np.array([0.08]), np.array([3.]))
 
 # Analysis
 w = signal.get_window(window_type, window_size)
@@ -33,7 +33,7 @@ sw_gt[:(window_size - 1) / 2] = frame[((window_size + 1) / 2):]
 sw_gt[nfft - (window_size - 1) / 2 - 1:] = frame[:(window_size + 1) / 2]
 
 sfft = np.fft.fft(sw_gt, nfft)
-phases = np.array([np.angle(sfft[int(round(a * nfft))]) for a in parameter._frequencies])
+phases = np.array([np.angle(sfft[int(round(a * nfft))]) - 2*np.pi*a*analysis_hop for a in parameter._frequencies])
 
 
 # Synthesis
@@ -43,15 +43,14 @@ synth.set_next_frame(parameter)
 s = synth.get_next_frame()
 
 # Comparison
-omega = np.arange(nfft) / float(nfft) - 0.5
-sfft = np.fft.fftshift(sfft)
+omega = np.arange(nfft) / float(nfft)
 
 plt.figure()
 plt.title("Synthetized spectrum")
 plt.subplot(2,1,1)
-plt.plot(omega, 10*np.log10(np.fft.fftshift(synth._current_spectrum._amplitude)**2), omega, 10*np.log10(np.absolute(sfft)**2))
+plt.plot(omega, 10*np.log10(synth.current_spectrum.amplitude**2), omega, 10*np.log10(np.absolute(sfft)**2))
 plt.subplot(2,1,2)
-plt.plot(omega, np.fft.fftshift(synth._current_spectrum._phase), omega, 2*np.unwrap(0.5*np.angle(sfft)))
+plt.plot(omega, np.mod(synth.current_spectrum.phase, 2*np.pi) - np.pi, omega, np.angle(sfft))
 plt.figure()
 plt.title("Synthetised and original frame")
 plt.plot(range(window_size), s, range(window_size), frame)
@@ -74,7 +73,7 @@ sw_gt[nfft - (window_size - 1) / 2 - 1:] = frame[:(window_size + 1) / 2]
 
 sfft = np.fft.fft(sw_gt, nfft)
 
-phases = np.array([synth._current_spectrum._phase[int(round(a * nfft))] for a in parameter._frequencies])
+phases = np.array([synth.current_spectrum.phase[int(round(a * nfft))] for a in parameter._frequencies])
 
 # Synthesis
 parameter._phases = phases
@@ -82,15 +81,13 @@ synth.set_next_frame(parameter)
 s = synth.get_next_frame()
 
 # Comparison
-omega = np.arange(nfft) / float(nfft) - 0.5
-sfft = np.fft.fftshift(sfft)
 
 plt.figure()
 plt.title("Synthetized spectrum")
 plt.subplot(2,1,1)
-plt.plot(omega, 10*np.log10(np.fft.fftshift(synth._current_spectrum._amplitude)**2), omega, 10*np.log10(np.absolute(sfft)**2))
+plt.plot(omega, 10*np.log10(synth.current_spectrum.amplitude**2), omega, 10*np.log10(np.absolute(sfft)**2))
 plt.subplot(2,1,2)
-plt.plot(omega, np.fft.fftshift(synth._current_spectrum._phase), omega, 2*np.unwrap(0.5*np.angle(sfft)))
+plt.plot(omega, np.mod(synth.current_spectrum.phase, 2*np.pi) - np.pi, omega, np.angle(sfft))
 plt.figure()
 plt.title("Synthetised and original frame")
 plt.plot(range(window_size), s, range(window_size), frame)

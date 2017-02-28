@@ -110,7 +110,6 @@ class NonStationaryPhaseVocoderScalePhaseLocking(PhaseVocoder):
         # k1 is the current peak, k0 is the past peak
 
             amplitude = self._current_analysis_spectrum.get_amplitude(k)
-            phase = self._current_analysis_spectrum.get_phase(k)
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
             past_analysis_phase_k0 = self._past_analysis_spectrum.get_phase(k)
             nfft = self._past_analysis_spectrum.get_nfft()
