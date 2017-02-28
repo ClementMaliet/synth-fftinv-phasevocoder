@@ -1,3 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT-1
+# Clément CAZORLA, Vincent CHRUN, Bastien FUNDARO, Clément MALIET
+
 from sources.Synthesizer import *
 from scipy import signal
 import matplotlib.pyplot as plt
@@ -10,10 +16,11 @@ window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 el
 window_type = "hanning"
 zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
-analysis_hop = 505
-synthesis_hop = 505
+analysis_hop = 305
+synthesis_hop = 305
 
-parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
+# parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
+parameter = Parameters(np.array([1]), np.array([0.05]), np.array([3.]))
 
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
@@ -30,44 +37,48 @@ synth = StationarySynthesizer(window_size, window_type, zero_padding_factor, ana
 s_gt = np.zeros(int(round(sine_duration*fs)))
 for i in xrange(parameter.get_number_sinuses()):
     s_gt += parameter.get_amplitude(i)*np.exp(2*np.pi*1j*parameter.get_frequency(i) *
-                                              np.array(range(int(round(sine_duration*fs)))) +
+                                              np.arange(int(round(sine_duration*fs))) +
                                               parameter.get_phase(i)*1j).real
 
+# We compute the true initial phase to take into account the windowing effect on phase
+frame = np.zeros(window_size)
+frame[:window_size] = s_gt[:window_size]
+frame *= w
+
+sw_gt = np.zeros(nfft)
+sw_gt[:(window_size - 1) / 2] = frame[((window_size + 1) / 2):]
+sw_gt[nfft - (window_size - 1) / 2 - 1:] = frame[:(window_size + 1) / 2]
+
+sfft = np.fft.fft(sw_gt, nfft)
+phases = np.array([np.angle(sfft[int(round(a * nfft))]) for a in parameter._frequencies])
+parameter._phases = phases
+
 for i in xrange(number_frames):
-    vector_frames[i, :] = s_gt[i*analysis_hop:i*analysis_hop + window_size]
-    vector_frames[i, :] *= w
-
-    sw_gt = np.zeros(nfft)
-    sw_gt[:(window_size - 1) / 2] = vector_frames[i, ((window_size + 1) / 2):]
-    sw_gt[nfft - (window_size - 1) / 2 - 1:] = vector_frames[i, :(window_size + 1) / 2]
-
-    sfft = np.fft.fft(sw_gt, nfft)
-    phases = np.array([np.angle(sfft[int(round(a * nfft))]) for a in parameter._frequencies])
-
-    # Synthesis
-    parameter._phases = phases
     synth.set_next_frame(parameter)
     s = synth.get_next_frame()
     vector_frames[i, :] = s
+
+    phases = np.array([synth._current_spectrum._phase[int(round(a * nfft))] for a in parameter._frequencies])
+    parameter._phases = phases  # We feed the phase advance back to the synthesizer
 
 # Define an empty vector to receive result
 vector_time = np.zeros(number_frames * synthesis_hop - synthesis_hop + window_size)
 s_gt_env = np.zeros(number_frames * synthesis_hop - synthesis_hop + window_size)
 
-# Loop for each frame and overlap-add todo : UNFINISHED overlap add, look at matlab code below in commentary
+# Loop for each frame and overlap-add
 time_index = 0
 for i in xrange(number_frames):
-    vector_time[time_index:time_index + window_size] += vector_frames[i, :]
-    s_gt_env[time_index:time_index + window_size] += w
+    vector_time[time_index:time_index + window_size] += vector_frames[i, :]*np.sum(w)
+    s_gt_env[time_index:time_index + window_size] += w*np.sum(w)
     time_index += synthesis_hop
-
-
 
 # Comparison
 plt.title("Synthetised and original frame")
-plt.plot(range(len(vector_time)), vector_time, range(len(vector_time)), s_gt_env*s_gt[:len(vector_time)], '--')
+plt.plot(range(len(vector_time)), vector_time, label="Synthesized")
+plt.plot(range(len(vector_time)), s_gt_env*s_gt[:len(vector_time)], '--', label="Original")
 plt.xlabel("Echantillons")
 plt.ylabel("Signal")
+plt.legend()
 print "RMSE = " + str((1./len(vector_time))*np.sqrt(np.sum((vector_time-s_gt[:len(vector_time)])**2)))
 
 plt.show()

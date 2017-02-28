@@ -40,10 +40,16 @@ class PhaseVocoder(object):
 
     def _set_current_analysis_spectrum(self, new_spectrum):
         print "Set phase vocoder"
+        # Assumed correct scheme
         self._past_analysis_spectrum = self._current_analysis_spectrum
         self._past_synthesis_spectrum = self.current_synthesis_spectrum
         self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())
         self._current_analysis_spectrum = new_spectrum
+        # Test scheme
+        # self._past_analysis_spectrum = self._current_analysis_spectrum
+        # self._past_synthesis_spectrum = new_spectrum
+        # self._current_analysis_spectrum = self.current_synthesis_spectrum
+        # self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())
     current_analysis_spectrum = property(fset=_set_current_analysis_spectrum)
 
     @abstractmethod
@@ -64,7 +70,7 @@ class StationaryPhaseVocoder(PhaseVocoder):
         """Phase vocoder algorithm"""
 
         for k in xrange(self.current_synthesis_spectrum.get_nfft()):
-            amplitude = self._current_analysis_spectrum.get_amplitude(k)  # \
+            amplitude = self._past_synthesis_spectrum.get_amplitude(k)  # \
                 # if self._current_analysis_spectrum.get_amplitude(k) > 1e-12 else 1e-12
             phase = self._current_analysis_spectrum.get_phase(k)
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
