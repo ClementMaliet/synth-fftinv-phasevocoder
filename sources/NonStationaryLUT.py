@@ -14,15 +14,23 @@ from NonStationaryLobe import *
 
 class NonStationaryLUT(LobeGenerator):
     def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, nfft,
-                 fs=None, method=None):
+                 fs=None, method_a=None, method_p=None, method_f=None):
         if fs is None:
             self._fs = 44100
         else:
             self._fs = fs
-        if method is None:
-            self._method = "linear"
+        if method_a is None:
+            self._method_a = "linear"
         else:
-            self._method = method
+            self._method_a = method_a
+        if method_p is None:
+            self._method_p = "linear"
+        else:
+            self._method_p = method_p
+        if method_f is None:
+            self._method_f = "linear"
+        else:
+            self._method_f = method_f
         LobeGenerator.__init__(self, window_type, window_size, nfft)
         self._abscisse = []
         self._ordonnee = []
@@ -111,28 +119,32 @@ class NonStationaryLUT(LobeGenerator):
             self._gen_uniform_lut()
         else:
             self._gen_non_uniform_lut()
-        self._f = [interp2d(self._abscisse, self._ordonnee, [lobe.get_amplitude(k) for lobe in self._lut], self._method)
+        self._f = [interp2d(self._abscisse, self._ordonnee, [lobe.get_amplitude(k) for lobe in self._lut], self._method_a)
                    for k in range(9)]
-        self._g = [interp2d(self._abscisse, self._ordonnee, [lobe.get_phase(k) for lobe in self._lut], self._method)
+        self._g = [interp2d(self._abscisse, self._ordonnee, [lobe.get_phase(k) for lobe in self._lut], self._method_p)
                    for k in range(9)]
-        self._h = [interp2d(self._abscisse, self._ordonnee, [lobe.get_abscissa(k) for lobe in self._lut], self._method)
+        self._h = [interp2d(self._abscisse, self._ordonnee, [lobe.get_abscissa(k) for lobe in self._lut], self._method_f)
                    for k in range(9)]
 
     def get_lobe(self):
         return self._interpolated_lobe
 
 
-    def interpolate_lobe(self, acr, fcr, method=None):
-        if method != self._method:
+    def interpolate_lobe(self, acr, fcr, method_a=None, method_p=None, method_f = None):
+        if method_a != self._method_a:
 
-            self._method = method
+            self._method_a = method_a
             self._f = [
-                interp2d(self._abscisse, self._ordonnee, [lobe.get_amplitude(k) for lobe in self._lut], self._method)
+                interp2d(self._abscisse, self._ordonnee, [lobe.get_amplitude(k) for lobe in self._lut], self._method_a)
                 for k in range(9)]
-            self._g = [interp2d(self._abscisse, self._ordonnee, [lobe.get_phase(k) for lobe in self._lut], self._method)
+
+        if method_p != self._method_p:
+            self._g = [interp2d(self._abscisse, self._ordonnee, [lobe.get_phase(k) for lobe in self._lut], self._method_p)
                        for k in range(9)]
+
+        if method_f != self._method_f:
             self._h = [
-                interp2d(self._abscisse, self._ordonnee, [lobe.get_abscissa(k) for lobe in self._lut], self._method)
+                interp2d(self._abscisse, self._ordonnee, [lobe.get_abscissa(k) for lobe in self._lut], self._method_f )
                 for k in range(9)]
 
         lobe_mag = np.array([fk(acr, fcr) for fk in self._f])
