@@ -42,5 +42,8 @@ class NonStationaryLobe(Spectrum):
         self._x = x
 
     def get_abscissa(self, k):
-
         return self._x[k]
+
+    def _get_full_abscissa(self):
+        return self._x
+    x = property(fget=_get_full_abscissa)
