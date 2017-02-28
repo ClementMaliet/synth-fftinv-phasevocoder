@@ -213,6 +213,10 @@ class Spectrum(object):
         return self._amplitude
     amplitude = property(fget=_get_full_amplitude)
 
+    def _get_full_phase(self):
+        return self._phase
+    phase = property(fget=_get_full_phase)
+
 
 class ParametersError(Exception):
     """Base class for exception regarding the spectrum class"""
