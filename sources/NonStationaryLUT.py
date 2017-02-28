@@ -6,38 +6,48 @@
 
 
 from scipy.interpolate import interp1d
-from scipy.interpolate import griddata
+from scipy.interpolate import interp2d
 from data_structure import *
 from LobeGenerator import LobeGenerator
 from NonStationaryLobe import *
 
 
 class NonStationaryLUT(LobeGenerator):
-    def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, fs=None):
+    def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, nfft,
+                 fs=None, method=None):
         if fs is None:
             self._fs = 44100
         else:
             self._fs = fs
-        LobeGenerator.__init__(self, window_type, window_size)
+        if method is None:
+            self._method = "linear"
+        else:
+            self._method = method
+        LobeGenerator.__init__(self, window_type, window_size, nfft)
+        self._abscisse = []
+        self._ordonnee = []
+        self._interpolated_lobe = NonStationaryLobe.void_lobe(9)
         self._regular_grid = regular_grid
         self._domain = [acr_domain, fcr_domain]
         self._number_acr = number_acr
         self._number_fcr = number_fcr
         self._number_points = number_acr*number_fcr
-        self._lut = {}
+        self._lut = []
         self._gen_lobe()
+
 
     def _gen_uniform_lut(self):
         acr = np.linspace(self._domain[0][0], self._domain[0][1], self._number_acr)
         fcr = np.linspace(self._domain[1][0], self._domain[1][1], self._number_fcr)
-        self._sample_grid = [(a, b) for a in acr for b in fcr]
         n = np.array(range(self._window_size))
         t = (1/self._fs)*n
 
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
                 lobe = self._gen_lobes_legacy(i, j, acr, fcr, t, n)
-                self._lut["({0}, {1})".format(acr[i], fcr[j])] = lobe
+                self._abscisse.append(acr[i])
+                self._ordonnee.append(fcr[j])
+                self._lut.append(lobe)
 
     def _gen_non_uniform_lut(self):
         pass
@@ -53,8 +63,8 @@ class NonStationaryLUT(LobeGenerator):
 
         # Correct phase
         sw = np.zeros(self._nfft)
-        sw[:(self._window_size - 1) / 2] = s[(self._window_size - 1) / 2:]
-        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2]
+        sw[:(self._window_size - 1) / 2] = s[(self._window_size + 1) / 2:]
+        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2 - 1]
 
         # Compute the fft
         fft_s = np.fft.fft(sw, self._nfft)
@@ -90,10 +100,10 @@ class NonStationaryLUT(LobeGenerator):
         # Store the relevant lobe
         f_interp = interp1d(range(self._nfft), mod_fft_s)
         amplitude = f_interp(x)
-        f_interp = interp1d(lobe_index, np.unwrap(np.angle(fft_s[lobe_index])))
+        f_interp = interp1d(lobe_index, np.unwrap(np.angle(fft_s[lobe_index])), fill_value = "extrapolate")
         phase = f_interp(x)
-        abscissa= ((x - 1) / self._nfft) - 0.0227  # f0/fs = 0.0227
-        lobe = NonStationaryLobe(amplitude, phase, abscissa)
+        abscisse = ((x - 1) / self._nfft) - 0.0227  # f0/fs = 0.0227
+        lobe = NonStationaryLobe(amplitude, phase, abscisse)
         return lobe
 
     def _gen_lobe(self):
@@ -101,19 +111,34 @@ class NonStationaryLUT(LobeGenerator):
             self._gen_uniform_lut()
         else:
             self._gen_non_uniform_lut()
+        self._f = [interp2d(self._abscisse, self._ordonnee, [lobe.get_amplitude(k) for lobe in self._lut], self._method)
+                   for k in range(9)]
+        self._g = [interp2d(self._abscisse, self._ordonnee, [lobe.get_phase(k) for lobe in self._lut], self._method)
+                   for k in range(9)]
+        self._h = [interp2d(self._abscisse, self._ordonnee, [lobe.get_abscissa(k) for lobe in self._lut], self._method)
+                   for k in range(9)]
+
+    def get_lobe(self):
+        return self._interpolated_lobe
 
 
-    # def get_lobe(self, i, j, N_lobe):
-    #
-    #     lobe_freq = np.zeros[N_lobe, 1]
-    #     lobe_mag = np.zeros[N_lobe, 1]
-    #     lobe_phase = np.zeros[N_lobe, 1]
-    #
-    #     for v in range(N_lobe - 1):
-    #         lobe_freq[v, 1] = griddata(self.LUT, self.LUT, self.abscissa[v - 1,:], self.acr, self.fcr)
-    #         lobe_mag[v, 1] = griddata(self.LUT, self.LUT, self.amplitude[v - 1,:], self.acr, self.fcr)
-    #         lobe_phase[v, 1] = griddata(self.LUT, self.LUT, self.phase[v - 1,:], self.acr, self.fcr)
-    #
-    #     return lobe_freq
-    #     return lobe_mag
-    #     return lobe_phase
+    def interpolate_lobe(self, acr, fcr, method=None):
+        if method != self._method:
+
+            self._method = method
+            self._f = [
+                interp2d(self._abscisse, self._ordonnee, [lobe.get_amplitude(k) for lobe in self._lut], self._method)
+                for k in range(9)]
+            self._g = [interp2d(self._abscisse, self._ordonnee, [lobe.get_phase(k) for lobe in self._lut], self._method)
+                       for k in range(9)]
+            self._h = [
+                interp2d(self._abscisse, self._ordonnee, [lobe.get_abscissa(k) for lobe in self._lut], self._method)
+                for k in range(9)]
+
+        lobe_mag = np.array([fk(acr, fcr) for fk in self._f])
+        lobe_phase = np.array([gk(acr, fcr) for gk in self._g])
+        lobe_frequency = np.array([hk(acr, fcr) for hk in self._h])
+
+        self._interpolated_lobe = NonStationaryLobe(lobe_mag, lobe_phase, lobe_frequency)
+
+
