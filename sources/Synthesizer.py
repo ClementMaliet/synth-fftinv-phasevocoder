@@ -98,6 +98,13 @@ class Synthesizer(object):
         self._current_parameters = current_parameters
     current_parameters = property(fset=_set_current_parameters)
 
+    def _get_current_spectrum(self):
+        return self._current_spectrum
+
+    def _set_current_spectrum(self, new_spectrum):
+        raise RuntimeError("Non authorised operation attempted, nothing happened")
+
+    current_spectrum = property(fget=_get_current_spectrum, fset=_set_current_spectrum)
 
 class StationarySynthesizer(Synthesizer):
     def __init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
@@ -105,7 +112,7 @@ class StationarySynthesizer(Synthesizer):
         Synthesizer.__init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
                              current_parameters, fs)
         self._spectrum_generator = StationarySpectrumGenerator(self._window_type, self._window_size,
-                                                               self._current_parameters, self._nfft)
+                                                               self._current_parameters, self._nfft, analysis_hop)
         self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
 
     def get_next_frame(self):

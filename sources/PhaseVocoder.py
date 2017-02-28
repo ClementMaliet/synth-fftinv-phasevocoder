@@ -22,7 +22,6 @@ class InconsistentHopSizeError(PhaseVocoderError):
 
 
 class PhaseVocoder(object):
-
     __metaclass__ = ABCMeta
     """The abstract class PhaseVocoder is used to get a phase-vocoder spectrum."""
     def __init__(self, analysis_hop, synthesis_hop, current_analysis_spectrum):
@@ -38,15 +37,21 @@ class PhaseVocoder(object):
             self._past_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
             self._current_analysis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
             self.current_synthesis_spectrum = Spectrum.void_spectrum(current_analysis_spectrum.get_nfft())
-            #self._region = regions if regions is not None else np.array([0, current_analysis_spectrum.get_number_sinuses()+1])
-            #self._peak_indices = peak_indices if peak_indices is not None else np.arange(current_analysis_spectrum.get_number_sinuses()+1])
+
     def _set_current_analysis_spectrum(self, new_spectrum):
         print "Set phase vocoder"
+        # Assumed correct scheme
         self._past_analysis_spectrum = self._current_analysis_spectrum
         self._past_synthesis_spectrum = self.current_synthesis_spectrum
         self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())
         self._current_analysis_spectrum = new_spectrum
+        # Test scheme
+        # self._past_analysis_spectrum = self._current_analysis_spectrum
+        # self._past_synthesis_spectrum = new_spectrum
+        # self._current_analysis_spectrum = self.current_synthesis_spectrum
+        # self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())
     current_analysis_spectrum = property(fset=_set_current_analysis_spectrum)
+
 
     @classmethod
     def get_regions(self,amp):
@@ -126,17 +131,17 @@ class NonStationaryPhaseVocoderScalePhaseLocking(PhaseVocoder):
     def get_pv_spectrum(self):
         """Phase vocoder algorithm : Scale Phase-Locking"""
 
+
         for k in xrange(self.current_synthesis_spectrum.get_nfft()):
             #todo : find corresponding peak
 
         # k1 is the current peak, k0 is the past peak
 
             amplitude = self._current_analysis_spectrum.get_amplitude(k)
-            phase = self._current_analysis_spectrum.get_phase(k)
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
             past_analysis_phase_k0 = self._past_analysis_spectrum.get_phase(k)
             nfft = self._past_analysis_spectrum.get_nfft()
-
+            phase = self._current_analysis_spectrum.get_phase(k)
             # Get the phase difference
             delta_phi = phase - past_analysis_phase_k0
 

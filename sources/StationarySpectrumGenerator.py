@@ -12,14 +12,14 @@ from scipy.interpolate import interp1d
 
 
 class StationarySpectrumGenerator(SpectrumGenerator):
-    def __init__(self, window_type, window_size, parameters, nfft):
-        SpectrumGenerator.__init__(self, window_size, parameters, nfft)
+    def __init__(self, window_type, window_size, parameters, nfft, analysis_hop):
+        SpectrumGenerator.__init__(self, window_size, parameters, nfft, analysis_hop)
         self._lobe_generator = StationaryLobe(window_type, window_size, nfft)
 
     def _add_lobe(self, k):
         lobe = self._lobe_generator.get_lobe()
         amplitude = self._parameters.get_amplitude(k) / 2.
-        phase = self._parameters.get_phase(k)
+        phase = self._parameters.get_phase(k) + 2*np.pi*self._parameters.get_frequency(k)*self._analysis_hop
         nfft = self._spectrum.get_nfft()
         frequency = self._parameters.get_frequency(k) * nfft
         spectrum = Spectrum.void_spectrum(nfft)
