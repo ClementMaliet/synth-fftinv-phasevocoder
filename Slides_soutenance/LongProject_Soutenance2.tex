@@ -26,6 +26,8 @@
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{helvet}
+\usepackage{wrapfig}
+\graphicspath{ {Feathergraphics/} }
 
 %-------------------------------------------------------
 % DEFFINING AND REDEFINING COMMANDS
@@ -58,7 +60,7 @@
 \institute[ENSEEIHT]
 {
 
-	     \includegraphics[scale = 0.15]{Feathergraphics/agn7.png}
+	     \includegraphics[scale = 0.15]{agn7.png}
 	\centering\\
   
   %there must be an empty line above this line - otherwise some unwanted space is added between the university and the country (I do not know why;( )
@@ -92,9 +94,38 @@
 \subsection{The company}
 \begin{frame}{Introduction}{The company}
 %-------------------------------------------------------
+	\begin{figure}
+   	 \centering
+  	 \includegraphics[scale=0.12]{ag.png}
+	 \end{figure}
+  \begin{itemize}
+  \item<1-> Localization: Toulouse, Paris
+  \item<1-> Activity: Audio plug-in (VSTs and RTAS)
+  \item<1-> Main customers: Film and Video Game Industry (Sony, Ubisoft)
+  \item<1-> 10 employees
+	\begin{figure}
+	\includegraphics[scale=0.12]{AudioFire_screen.png}
+	\caption{Audiofire: audio plug-in that recreates fire sound}
+	\end{figure}
+  \end{itemize}
+\end{frame}
+
+%-------------------------------------------------------
+\subsection{Objective}
+\begin{frame}{Introduction}{Objective}
+%-------------------------------------------------------
+
 
   \begin{itemize}
-    \item<1-> Company presentation....
+          \item<1-> We are continuing the Audiogaming long project from 2015 (Emilie Abia, Lili Zheng, Quentin Biache)
+\begin{block}{}
+{\it Objective} : Synthesizing sounds from their spectrum with a $ FFT^{-1} $
+	\begin{figure}
+	\includegraphics[scale=0.4]{Analysis_Synthesis.png}
+	\caption{General approach for modifying a sound in the spectral domain}
+	\end{figure}
+\end{block}   
+	\item<1-> We have to implement a new method of additive synthesis $\Rightarrow$ computationally very fast
   \end{itemize}
 \end{frame}
 
@@ -104,17 +135,16 @@
 %-------------------------------------------------------
 
   \begin{itemize}
-    \item<1-> We are continuing the 2015 project ...
-  \end{itemize}
-\end{frame}
-
-%-------------------------------------------------------
-\subsection{Objectives}
-\begin{frame}{Introduction}{Objectives}
-%-------------------------------------------------------
-
-  \begin{itemize}
-    \item<1-> We need to ... with an already given "analysis" code/methods
+    \item<1-> 6 weeks only $\Rightarrow$ Focus on the synthesis method only.
+   \begin{block}{}
+	 Given codes in Python and Matlab from the 2015 project :
+   \begin{itemize}
+ 	\item<1-> Python : Analysis estimator of sinus parameters and sinus generation with those parameters (only stationary)
+ 	\item<1-> Matlab : Some reasearch on the Non-stationary synthesis with the LUT of lobes
+   \end{itemize}
+   \end{block}   
+	\item<1-> We made our own OOP codes in Python
+	\item<1-> We have taken the analysis estimator code to test our final synthesis
   \end{itemize}
 \end{frame}
 
@@ -123,17 +153,19 @@
 \begin{frame}{Introduction}{Work Environment}
 %-------------------------------------------------------
 
-  \begin{itemize}
-    \item<1-> We use Python...
-  \end{itemize}
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.4]{all_softwares.png}
+	\caption{ {\it PyCharm} as Python IDE , {\it Slack} to communicate,{\it GitHub} to stock the codes and have a versionning, {\it Freedcamp} to plan the project events }
+\end{figure}
 \end{frame}
 
 \begin{frame}{Introduction}{Project Management : Gantt Chart}
 %-------------------------------------------------------
 
-  \begin{itemize}
-    \item<1-> insert gantt chart
-  \end{itemize}
+\begin{figure}
+	\centerline{\includegraphics[scale=0.26]{Gantt.png}}
+\end{figure}
 \end{frame}
 
 
