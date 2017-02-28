@@ -70,7 +70,7 @@ class StationaryPhaseVocoder(PhaseVocoder):
         """Phase vocoder algorithm"""
 
         for k in xrange(self.current_synthesis_spectrum.get_nfft()):
-            amplitude = self._past_synthesis_spectrum.get_amplitude(k)  # \
+            amplitude = self._current_analysis_spectrum.get_amplitude(k)  # \
                 # if self._current_analysis_spectrum.get_amplitude(k) > 1e-12 else 1e-12
             phase = self._current_analysis_spectrum.get_phase(k)
             past_synth_phase = self._past_synthesis_spectrum.get_phase(k)
