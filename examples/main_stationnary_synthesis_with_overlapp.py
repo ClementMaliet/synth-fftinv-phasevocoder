@@ -16,8 +16,8 @@ window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 el
 window_type = "hanning"
 zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
-analysis_hop = 305
-synthesis_hop = 305
+analysis_hop = 505
+synthesis_hop = 505
 
 # parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
 parameter = Parameters(np.array([1.]), np.array([0.05]), np.array([3.]))
