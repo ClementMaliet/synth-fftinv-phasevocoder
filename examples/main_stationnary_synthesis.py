@@ -9,10 +9,10 @@ analysis_hop, synthesis_hop = 505, 505
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
 window_type = "hanning"
-zero_padding_factor = 0
+zero_padding_factor = 2
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 
-parameter = Parameters(np.array([1]), np.array([0.08]), np.array([3.]))
+parameter = Parameters(np.array([500.]), np.array([0.05]), np.array([3.]))
 
 # Analysis
 w = signal.get_window(window_type, window_size)
