@@ -23,12 +23,12 @@
 %-------------------------------------------------------
 
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{helvet}
 \usepackage{wrapfig}
 \graphicspath{ {Feathergraphics/} }
 \usepackage{graphicx}
+\usepackage[main=english, french]{babel}
 
 %-------------------------------------------------------
 % DEFFINING AND REDEFINING COMMANDS
@@ -53,8 +53,8 @@
       \textbf{Additive Synthesis with Inverse Fourier Transform for Non-Stationary Signals }
 }
 
-\author[Clément Cazorla - Vincent Chrun - Bastien Fundaro - Clément Maliet]
-{      Clément Cazorla - Vincent Chrun - Bastien Fundaro - Clément Maliet\\
+\author[Cl\'ement Cazorla - Vincent Chrun - Bastien Fundaro - Cl\'ement Maliet]
+{      Cl\'ement Cazorla - Vincent Chrun - Bastien Fundaro - Cl\'ement Maliet\\
       \underline{Audiogaming Supervisor} : Chunghsin Yeh\\
 }
 
@@ -170,15 +170,38 @@
 \end{frame}
 
 %-------------------------------------------------------
+\section{The analysis: The different steps}
+%-------------------------------------------------------
+\subsection{Step1}
+\begin{frame}{The analysis}{Step1}
+%-------------------------------------------------------
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.4]{slide1.png}}
+	\caption{\it Windowing step}
+\end{figure}
+\end{frame}
+%-------------------------------------------------------
+\subsection{Step2}
+\begin{frame}{The analysis}{Step2}
+%-------------------------------------------------------
+Peak detection and extraction of parameters by STPT (particular Short Time Fourier Transform):
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.5]{slide2.png}}
+	\caption{\it Windowing step}
+\end{figure}
+\end{frame}
+%-------------------------------------------------------
 \section{The additive synthesis}
 %-------------------------------------------------------
-\subsection{General approach}
+\subsection{General approach: The time domain}
 \begin{frame}{The additive synthesis}{General approach: The time domain}
 %-------------------------------------------------------
 \begin{block}{}
 The sound signal is represented as a sum of N sinusoids: \\
 \centerline{
-$ x(t) = \sum\limits_{k=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
+$ x(t) = \sum\limits_{n=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
 \begin{itemize}
 \item Very costly to implement
 \item Impossible to compute in real-time
@@ -192,7 +215,7 @@ $ x(t) = \sum\limits_{k=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
 \end{frame}
 
 %-------------------------------------------------------
-\subsection{General approach}
+\subsection{General approach: The frequency domain}
 \begin{frame}{The additive synthesis}{General approach: The frequency domain}
 %-------------------------------------------------------
 \begin{block}{}
@@ -211,7 +234,7 @@ We generate the sinusoids in frequency domain in order to reduce the computation
 \end{figure}
 \end{frame}
 %-------------------------------------------------------
-\subsection{General approach}
+\subsection{General approach: The frames}
 \begin{frame}{The additive synthesis}{The frames}
 %-------------------------------------------------------
 

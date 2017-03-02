@@ -5,14 +5,17 @@
 \beamer@subsectionintoc {1}{2}{Objective}{4}{0}{1}
 \beamer@subsectionintoc {1}{3}{Context of the Project}{5}{0}{1}
 \beamer@subsectionintoc {1}{4}{Work Environment and Project Management}{6}{0}{1}
-\beamer@sectionintoc {2}{The additive synthesis}{8}{0}{2}
-\beamer@subsectionintoc {2}{1}{General approach}{8}{0}{2}
-\beamer@subsectionintoc {2}{2}{General approach}{9}{0}{2}
-\beamer@subsectionintoc {2}{3}{General approach}{10}{0}{2}
-\beamer@sectionintoc {3}{Stationary Signals}{11}{0}{3}
-\beamer@subsectionintoc {3}{1}{hjh}{11}{0}{3}
-\beamer@subsectionintoc {3}{2}{Local and Global installation}{12}{0}{3}
-\beamer@subsectionintoc {3}{3}{Required Packages}{13}{0}{3}
-\beamer@sectionintoc {4}{User Interface}{14}{0}{4}
-\beamer@subsectionintoc {4}{1}{Loading the Theme and Theme Options}{14}{0}{4}
-\beamer@subsectionintoc {4}{2}{Feather image}{16}{0}{4}
+\beamer@sectionintoc {2}{The analysis: The different steps}{8}{0}{2}
+\beamer@subsectionintoc {2}{1}{Step1}{8}{0}{2}
+\beamer@subsectionintoc {2}{2}{Step2}{9}{0}{2}
+\beamer@sectionintoc {3}{The additive synthesis}{10}{0}{3}
+\beamer@subsectionintoc {3}{1}{General approach: The time domain}{10}{0}{3}
+\beamer@subsectionintoc {3}{2}{General approach: The frequency domain}{11}{0}{3}
+\beamer@subsectionintoc {3}{3}{General approach: The frames}{12}{0}{3}
+\beamer@sectionintoc {4}{Stationary Signals}{13}{0}{4}
+\beamer@subsectionintoc {4}{1}{hjh}{13}{0}{4}
+\beamer@subsectionintoc {4}{2}{Local and Global installation}{14}{0}{4}
+\beamer@subsectionintoc {4}{3}{Required Packages}{15}{0}{4}
+\beamer@sectionintoc {5}{User Interface}{16}{0}{5}
+\beamer@subsectionintoc {5}{1}{Loading the Theme and Theme Options}{16}{0}{5}
+\beamer@subsectionintoc {5}{2}{Feather image}{18}{0}{5}
