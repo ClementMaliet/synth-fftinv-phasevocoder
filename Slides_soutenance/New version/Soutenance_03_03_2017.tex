@@ -117,8 +117,8 @@
  	\item<1-> Matlab : Some reasearch on the Non-stationary synthesis with the LUT of lobes
    \end{itemize}
    \end{block}   
-	\item<1-> We made our own OOP codes in Python
-	\item<1-> We have taken the analysis estimator code to test our final synthesis
+	\item<1-> We made our own Object Oriented Programmation tree structure in Python
+	\item<1-> We remade all the codes to be coherent with the OOP tree structure
   \end{itemize}
 \end{frame}
 
@@ -134,11 +134,19 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{Introduction}{Project Management : Gantt Chart}
+\begin{frame}{Introduction}{Project Management : Gantt Chart (expected event)}
 %-------------------------------------------------------
 
 \begin{figure}
-	\centerline{\includegraphics[scale=0.26]{Gantt.png}}
+	\centerline{\includegraphics[scale=0.28]{Gantt.png}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Introduction}{Project Management : Gantt Chart now}
+%-------------------------------------------------------
+
+\begin{figure}
+	\centerline{\includegraphics[scale=0.28]{Gantt.png}}
 \end{figure}
 \end{frame}
 
@@ -146,42 +154,8 @@
 %-------------------------------------------------------
 \section{Method Overview}
 %-------------------------------------------------------
-\subsection{Windowing}
-\begin{frame}{Method Overview : Analysis}{Windowing}
-%-------------------------------------------------------
-\begin{figure}
-	\centerline
-	{\includegraphics[scale=0.4]{slide1.png}}
-	\caption{\it Windowing step}
-\end{figure}
-\end{frame}
-%-------------------------------------------------------
-\subsection{Peak Detection}
-\begin{frame}{Method Overview : Analysis}{Peak Detection}
-%-------------------------------------------------------
-Peak detection and extraction of parameters by STPT (particular Short Time Fourier Transform):
-\begin{figure}
-	\centerline
-	{\includegraphics[scale=0.5]{slide2.png}}
-	\caption{\it Peak detection}
-\end{figure}
-\end{frame}
-%-------------------------------------------------------
-\subsection{Result}
-\begin{frame}{Method Overview : Synthesis}{Result}
-%-------------------------------------------------------
-Additive synthesis according to the parameters from the analysis:
-\begin{figure}
-	\centerline
-	{\includegraphics[scale=0.5]{synthesisstep.png}}
-	\caption{\it Synthesized signal vs Original signal}
-\end{figure}
-\end{frame}
-%-------------------------------------------------------
-\section{The additive synthesis}
-%-------------------------------------------------------
-\subsection{General approach: The time domain}
-\begin{frame}{The additive synthesis}{General approach: The time domain}
+\subsection{Additive Synthesis (Time Domain)}
+\begin{frame}{Additive Synthesis}{Time Domain}
 %-------------------------------------------------------
 \begin{block}{}
 The sound signal is represented as a sum of N sinusoids: \\
@@ -200,15 +174,67 @@ $ x(t) = \sum\limits_{n=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
 \end{frame}
 
 %-------------------------------------------------------
-\subsection{General approach: The frequency domain}
-\begin{frame}{The additive synthesis}{General approach: The frequency domain}
+\subsection{Method Overview}
+\begin{frame}{Method Overview : Windowing}{Analysis}
+%-------------------------------------------------------
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.4]{slide1.png}}
+	\caption{\it Windowing step}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Method Overview : Peak detection in Frequency Domain}{Analysis}
+%-------------------------------------------------------
+Peak detection and extraction of parameters by STPT (particular Short Time Fourier Transform):
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.5]{slide2.png}}
+	\caption{\it Peak detection}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Method Overview : Result ( FFT$^{-1}$)}{Synthesis}
+%-------------------------------------------------------
+Additive synthesis with FFT$^{-1}$ according to the parameters from the analysis:
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.5]{synthesisstep.png}}
+	\caption{\it Synthesized frame vs Original frame}
+\end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%
+%-------------------------------------------------------
+\section{The additive synthesis in frequency domain}
+%-------------------------------------------------------
+\subsection{Stationary Case}
+\begin{frame}{Stationary Case}{Stationary sinusoidal model}
+%-------------------------------------------------------
+\begin{block}{}
+Mathematical model : \\
+
+\begin{equation}
+s(t) = a_0 exp[j(2 \pi f_0 t + \phi_0)]
+\end{equation}
+\end{block}
+\begin{itemize}
+\item 3 parameters: $a_0$ (amplitude), $f_0$ (frequency) and $\phi_0$ (phase).
+\item Simplest model but useful for certain kinds of signals.
+\item Each spectral bin represents a stationary sinusoid.
+\end{itemize}
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Stationary Case}{Lobe generation}
 %-------------------------------------------------------
 \begin{block}{}
 We generate the sinusoids in frequency domain in order to reduce the computation time : \\
 
 \begin{itemize}
 \item Window the signal to maximize the energy in the main lobe
-\item We only keep the main lobe for each sine (9 points)
+\item We only keep the main lobe for each sine (11 points)
 \item We assume that the parameters (amplitude, frequency, phase) are already given by the analysis
 \end{itemize}
 \end{block}
@@ -219,8 +245,41 @@ We generate the sinusoids in frequency domain in order to reduce the computation
 \end{figure}
 \end{frame}
 %-------------------------------------------------------
-\subsection{General approach: The frames}
-\begin{frame}{The additive synthesis}{The frames}
+\begin{frame}{Stationary Case}{Frames separation}
+%-------------------------------------------------------
+
+The sound signal is  a frame-by-frame signal: \\
+
+\begin{figure}
+
+	{\includegraphics[scale=0.3]{overlap2.png}}
+	\caption{\it Sum of small size Hanning windows}
+\end{figure}
+\begin{figure}
+	{\includegraphics[scale=0.25]{overlap1.png}}
+	\caption{\it Overlap and add}
+\end{figure}
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Stationary Case}{Phase coherence}
+%-------------------------------------------------------
+
+Phase coherence ???
+\end{frame}
+%-------------------------------------------------------
+\subsection{Casi-Stationary Case}
+\begin{frame}{Casi-Stationary Case}{What is changing}
+%-------------------------------------------------------
+
+\end{frame}
+%-------------------------------------------------------
+\subsection{Non-Stationary Case}
+\begin{frame}{Non-Stationary Case}{Very different approach}
+%-------------------------------------------------------
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Non-Stationary Case}{Look up table}
 %-------------------------------------------------------
 
 The sound signal is  a frame-by-frame signal: \\
@@ -238,191 +297,44 @@ The sound signal is  a frame-by-frame signal: \\
 
 
 %%%%%%%%%%%%%%%%%
-\section{Les blocs}
-
-\begin{frame}{Les blocs}
-
-\begin{block}{Bloc simple}
-\begin{itemize}
-\item Premier point
-\item Second point
-\item Troisième point
-\end{itemize}
-\end{block}
-
-\begin{exampleblock}{Bloc exemple}
-\begin{itemize}
-\item Premier point
-\item Second point
-\item Troisième point
-\end{itemize}
-\end{exampleblock}
-
-\begin{alertblock}{Bloc alert}
-\begin{itemize}
-\item Premier point
-\item Second point
-\item Troisième point
-\end{itemize}
-\end{alertblock}
-\end{frame}
-
-
-\section{Les bo\^ites}
-
-\begin{frame}{Les boites}
-
-\begin{columns}
-
-\begin{column}{0.5\textwidth}
-\boitejaune{
-Ceci est \\
-une boite jaune
-}
-
-\boiteorange{
-Ceci est \\
-une boite orange
-}
-
-\boitemarron{
-Ceci est \\
-une boite marron
-}
-\end{column}
-
-\begin{column}{0.5\textwidth}
-\boiteviolette{
-Ceci est \\
-une boite violette
-}
-
-\boitebleue{
-Ceci est \\
-une boite bleue
-}
-
-\boitegrise{
-Ceci est \\
-une boite grise
-}
-
-\end{column}
-
-\end{columns}
-
+%-------------------------------------------------------
+\section{Result}
+%-------------------------------------------------------
+\subsection{Stationary Case}
+\begin{frame}{Stationary Case}{Sine waves}
+%-------------------------------------------------------
 
 \end{frame}
-
-
-
-\section{Les listes}
-	\subsection{Liste à item}
-
-\begin{frame}{Titre de la frame}
-
-	\begin{itemize}
-		\item premier élément de liste,
-		\item deuxième élément de liste,
-		\item troisième élément de liste.
-	\end{itemize}
-\end{frame} 
-
-		\subsection{Liste énumérative} 
-\begin{frame}{Titre de la frame} 
-	\begin{enumerate}
-		\item élément de liste numéro 1,
-		\item élément de liste numéro 2,
-		\item élément de liste numéro 3.  
-	\end{enumerate}
-\end{frame}
-
-
-		\subsection{Liste descriptive} 
-\begin{frame}{Titre de la frame} 
-	\begin{description}
-		\item [Thème de présentation : ] ces thèmes sont en fait...
-		\item [Thème de couleur : ] gère tout ce qui est couleur...
-		\item [Thème de police : ] s'occupe de tout ce qui est police, gras...
-		\item [Thème interne : ] s'occupe de l'apparence des éléments...
-	\end{description}
-\end{frame}
-
-
-
-\section{Le texte}
-
-\begin{frame}{Titre de la frame} 
-
-Voici du texte normal
-
-\alert{Voici du texte \texttt{alert}}
-
-\exemple{Voici du texte \texttt{exemple}}
-
-\emph{Voici du texte \texttt{emphase}}
+%-------------------------------------------------------
+\begin{frame}{Stationary Case}{Triangular waves}
+%-------------------------------------------------------
 
 \end{frame}
-
-
-\section{Les tableaux}
-
-\begin{frame}{Tableaux}
-
-% merci: http://tex.stackexchange.com/questions/112343/beautiful-table-samples
-
-\begin{tcolorbox}[tabjaune,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt]
-Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-\end{tcolorbox}
-
-\begin{tcolorbox}[tabvert,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt, title=Mon tableau des prix]
-Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-\end{tcolorbox}
+%-------------------------------------------------------
+\subsection{Casi-Stationary Case}
+\begin{frame}{The additive synthesis}{Changed Sine waves}
+%-------------------------------------------------------
 
 \end{frame}
-
-
-\begin{frame}{Tableaux}
-
-% merci: http://tex.stackexchange.com/questions/112343/beautiful-table-samples
-
-\begin{tcolorbox}[tabgris,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt]
-Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-\end{tcolorbox}
-
-\begin{tcolorbox}[taborange,tabularx={X||Y|Y|Y|Y||Y}, boxrule=0.5pt, title=Mon tableau des prix]
-Couleur & Prix 1  & Prix 2  & Prix 3   & Prix 4   & Prix 5 \\\hline\hline
-Rouge   & 10.00   & 20.00   &  30.00   &  40.00   & 100.00 \\\hline
-Vert    & 20.00   & 30.00   &  40.00   &  50.00   & 140.00 \\\hline
-Bleu    & 30.00   & 40.00   &  50.00   &  60.00   & 180.00 \\\hline\hline
-Orange  & 60.00   & 90.00   & 120.00   & 150.00   & 420.00
-\end{tcolorbox}
-
+%-------------------------------------------------------
+\subsection{Non-Stationary Case}
+\begin{frame}{The additive synthesis}{Chirps}
+%-------------------------------------------------------
 \end{frame}
 
+%%%%%%%%%%%%%%%%%
+%-------------------------------------------------------
+\section{Conclusion}
+%-------------------------------------------------------
+\subsection{Conclusion}
+\begin{frame}{Conclusion}{}
+%-------------------------------------------------------
 
-
-\section{Les images}
-
-\begin{frame}{Titre de la frame} 
-
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{images/architecturebretonne_wikipedia.jpg}
-\caption{Éléments d'architecture bretonne typique du Sud de la France. (\href{http://commons.wikimedia.org/wiki/File:Colmar_-_Alsace.jpg}{Wikipédia.fr} CC-By-Sa)}
-\end{figure}
+\end{frame}
+%-------------------------------------------------------
+\subsection{References}
+\begin{frame}{References}{}
+%-------------------------------------------------------
 
 \end{frame}
 
