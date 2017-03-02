@@ -28,6 +28,7 @@
 \usepackage{helvet}
 \usepackage{wrapfig}
 \graphicspath{ {Feathergraphics/} }
+\usepackage{graphicx}
 
 %-------------------------------------------------------
 % DEFFINING AND REDEFINING COMMANDS
@@ -168,11 +169,68 @@
 \end{figure}
 \end{frame}
 
+%-------------------------------------------------------
+\section{The additive synthesis}
+%-------------------------------------------------------
+\subsection{General approach}
+\begin{frame}{The additive synthesis}{General approach: The time domain}
+%-------------------------------------------------------
+\begin{block}{}
+The sound signal is represented as a sum of N sinusoids: \\
+\centerline{
+$ x(t) = \sum\limits_{k=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
+\begin{itemize}
+\item Very costly to implement
+\item Impossible to compute in real-time
+\end{itemize}
+\end{block}
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.25]{additif.png}}
+	\caption{\it The additive synthesis}
+\end{figure}
+\end{frame}
 
+%-------------------------------------------------------
+\subsection{General approach}
+\begin{frame}{The additive synthesis}{General approach: The frequency domain}
+%-------------------------------------------------------
+\begin{block}{}
+We generate the sinusoids in frequency domain in order to reduce the computation time : \\
+
+\begin{itemize}
+\item Window the signal to maximize the energy in the main lobe
+\item We only keep the main lobe for each sine (9 points)
+\item We assume that the parameters (amplitude, frequency, phase) are already given by the analysis
+\end{itemize}
+\end{block}
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.75]{lobe.png}}
+	\caption{\it Windowed sine lobe}
+\end{figure}
+\end{frame}
+%-------------------------------------------------------
+\subsection{General approach}
+\begin{frame}{The additive synthesis}{The frames}
+%-------------------------------------------------------
+
+The sound signal is  a frame-by-frame signal: \\
+
+\begin{figure}
+
+	{\includegraphics[scale=0.3]{overlap2.png}}
+	\caption{\it Sum of small size Hanning windows}
+\end{figure}
+\begin{figure}
+	{\includegraphics[scale=0.25]{overlap1.png}}
+	\caption{\it Overlap and add}
+\end{figure}
+\end{frame}
 %-------------------------------------------------------
 \section{Stationary Signals}
 %-------------------------------------------------------
-\subsection{Source files}
+\subsection{hjh}
 \begin{frame}{Stationary Signals}{Source files}
 %-------------------------------------------------------
 
