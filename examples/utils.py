@@ -73,3 +73,25 @@ class ParametersBuilder(object):
 
     def get_parameter(self, k):
         return self._parameters_table[k]
+
+
+def gen_triangle_parameters(amplitude, frequency, phase, n_harmonics):
+    amplitudes = np.zeros(n_harmonics)
+    phases = np.ones(n_harmonics)*phase
+    for k in range(int(np.floor((n_harmonics-1)/2.))):
+        amplitudes[2*k] = amplitude*(8/np.pi**2)*(1/float((2*k+1)**2))
+        phases[2*k] *= (-1)**(k+1)
+    parameter = Parameters(amplitudes, np.array([frequency]) * np.arange(1, n_harmonics+1),
+                           phases)
+    return parameter
+
+
+def gen_sawtooth_parameters(amplitude, frequency, phase, n_harmonics):
+    amplitudes = np.zeros(n_harmonics)
+    phases = np.ones(n_harmonics)*phase
+    for k in range(n_harmonics):
+        amplitudes[k] = ((2 * amplitude) / np.pi) * (1 / float(k + 1))
+        phases[k] *= (-1)**k
+    parameter = Parameters(amplitudes, np.array([frequency]) * np.arange(1, n_harmonics + 1),
+                           phases)
+    return parameter

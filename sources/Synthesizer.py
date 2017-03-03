@@ -67,7 +67,6 @@ class Synthesizer(object):
         pass
 
     def set_next_frame(self, next_parameters):
-        print "Set next frame"
         self._past_parameters = self._current_parameters
         self._past_spectrum = self._current_spectrum
         self._current_spectrum = Spectrum.void_spectrum(self._nfft)
@@ -113,12 +112,12 @@ class StationarySynthesizer(Synthesizer):
                              current_parameters, fs)
         self._spectrum_generator = StationarySpectrumGenerator(self._window_type, self._window_size,
                                                                self._current_parameters, self._nfft, analysis_hop)
-        self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
+        # self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
 
     def get_next_frame(self):
         self._current_spectrum = self._spectrum_generator.get_spectrum()
-        self._phase_vocoder.current_analysis_spectrum = self._current_spectrum
-        self._current_spectrum = self._phase_vocoder.get_pv_spectrum()
+        # self._phase_vocoder.current_analysis_spectrum = self._current_spectrum
+        # self._current_spectrum = self._phase_vocoder.get_pv_spectrum()
         temporal_frame = self.inverse_fft(self._current_spectrum)
         return temporal_frame
 

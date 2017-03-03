@@ -7,21 +7,28 @@
 from sources.Synthesizer import *
 from scipy import signal
 import matplotlib.pyplot as plt
+from utils import gen_triangle_parameters
 
 fs = 44100
-sine_duration = 100e-3  # s
+sine_duration = 46e-3  # s
 window_length = 23e-3  # s
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
 window_type = "hanning"
 zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
-analysis_hop = 505
-synthesis_hop = 505
+analysis_hop = 205
+synthesis_hop = 205
 
 # parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
-parameter = Parameters(np.array([1.]), np.array([0.05]), np.array([3.]))
+# parameter = Parameters(np.exp(-1*np.arange(5)), np.array([0.05])*np.arange(1, 6), np.array([3.]*5))
+amp = 3.
+freq = 0.005
+phi = 3.
+n_harmonic = 100
 
+# parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
+parameter = gen_triangle_parameters(amp, freq, phi, n_harmonic)
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
 
@@ -57,9 +64,9 @@ for i in xrange(number_frames):
     synth.set_next_frame(parameter)
     s = synth.get_next_frame()
     vector_frames[i, :] = s
-
-    phases = np.array([synth.current_spectrum.phase[int(round(a * nfft))] for a in parameter._frequencies])
-    parameter._phases = phases  # We feed the phase advance back to the synthesizer
+    parameter._phases += np.array([2 * np.pi * analysis_hop * a for a in parameter._frequencies])
+    # phases = np.array([synth.current_spectrum.phase[int(round(a * nfft))] for a in parameter._frequencies])
+    # parameter._phases = phases  # We feed the phase advance back to the synthesizer
 
 
 # Define an empty vector to receive result
@@ -81,7 +88,7 @@ plt.xlabel("Echantillons")
 plt.ylabel("Signal")
 plt.legend()
 print "RMSE = " + str((1./len(vector_time))*np.sqrt(np.sum((vector_time[:min(len(s_gt), len(vector_time))] -
-                                                            s_gt[:min(len(s_gt), len(vector_time))])**2)))
+                                                            s_gt_env*s_gt[:min(len(s_gt), len(vector_time))])**2)))
 
 plt.show()
 

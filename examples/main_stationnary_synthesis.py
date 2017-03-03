@@ -1,6 +1,7 @@
 from sources.Synthesizer import *
 from scipy import signal
 import matplotlib.pyplot as plt
+from utils import *
 
 fs = 44100
 window_length = 23e-3
@@ -9,10 +10,12 @@ analysis_hop, synthesis_hop = 505, 505
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
 window_type = "hanning"
-zero_padding_factor = 2
+zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 
-parameter = Parameters(np.array([500.]), np.array([0.05]), np.array([3.]))
+# parameter = Parameters(np.array([500.]), np.array([0.05]), np.array([3.]))
+# parameter = Parameters(np.exp(-0.2*np.arange(20)), np.array([0.012])*np.arange(1, 21), np.array([3.]*20))
+parameter = gen_sawtooth_parameters(3., 0.005, 0, 10)
 
 # Analysis
 w = signal.get_window(window_type, window_size)

@@ -16,8 +16,7 @@ class StationarySpectrumGenerator(SpectrumGenerator):
         SpectrumGenerator.__init__(self, window_size, parameters, nfft, analysis_hop)
         self._lobe_generator = StationaryLobe(window_type, window_size, nfft)
 
-    def _add_lobe(self, k):
-        lobe = self._lobe_generator.get_lobe()
+    def _add_lobe(self, k, lobe):
         amplitude = self._parameters.get_amplitude(k) / 2.
         phase = self._parameters.get_phase(k) + 2*np.pi*self._parameters.get_frequency(k)*self._analysis_hop
         nfft = self._spectrum.get_nfft()
@@ -31,10 +30,9 @@ class StationarySpectrumGenerator(SpectrumGenerator):
 
         #    avoid frequencies out of range
         if (frequency > 0) or (frequency < h_n - 2):
-
             #   spectrum bins to fill
             freqs = (np.arange(lobe.get_nfft()) - lobe.get_nfft()/2)*self._lobe_generator.step + frequency
-            f = interp1d(freqs, lobe.amplitude, "cubic")
+            f = interp1d(freqs, lobe.amplitude, "linear")
             b = np.arange(np.int_(np.ceil(np.min(freqs))), np.int_(np.floor(np.max(freqs))))
             lobe_amplitudes = f(b)
             normal = np.nonzero(np.logical_and(b >= 0, b <= h_n - 1))[0]
