@@ -280,14 +280,23 @@ The Phase coherence is not a problem in the Stationary case :
 $ \Rightarrow$ We calculate its influence on the first frame and assume the same influence on the other frame.
 
 \item We then multiply the generated lobe by $\frac{A}{2}$ and set the lobe phase to $\tilde{\phi} + 2\pi \hat{f} R_a$   
-\item In the purely stationary case, the expected phase shift is the theoretical phase shift.
+\item In the purely stationary case, the expected phase shift is the theoretical phase shift :
+
+\begin{equation}
+\begin{cases}
+\tilde{\phi}_i = \tilde{\phi}_{i-1} + 2\pi \hat{f} R_a \\
+\tilde{\phi}_0 = \tilde{\phi}
+\end{cases}
+\end{equation}
+
 \end{itemize}
 \end{block}
 
+
 \end{frame}
 %-------------------------------------------------------
-\subsection{Casi-Stationary Case}
-\begin{frame}{Casi-Stationary Case}{What is changing}
+\subsection{Quasi-Stationary Case}
+\begin{frame}{Quasi-Stationary Case}{What is changing}
 %-------------------------------------------------------
 
 \end{frame}
@@ -354,15 +363,17 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 
 \end{frame}
 %-------------------------------------------------------
-\subsection{Casi-Stationary Case}
-\begin{frame}{The additive synthesis}{Changed Sine waves}
-%-------------------------------------------------------
-
-\end{frame}
-%-------------------------------------------------------
 \subsection{Non-Stationary Case}
 \begin{frame}{The additive synthesis}{Chirps}
 %-------------------------------------------------------
+
+The idea is to try the method on some chirps signal. And then on real sounds, like instruments and voices.
+
+\begin{figure}
+{\includegraphics[scale=0.45]{chirps.png}}
+	\caption{\it Chirp signal to test}
+\end{figure}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%
@@ -372,7 +383,11 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 \subsection{Conclusion}
 \begin{frame}{Conclusion}{}
 %-------------------------------------------------------
-
+\begin{itemize}
+\item 6 weeks only
+\item Research subject $\Rightarrow$ Can it really works ?
+\item Lots of trouble when we try to understand the phase coherence problem
+\end{itemize}
 \end{frame}
 %-------------------------------------------------------
 \subsection{References}
