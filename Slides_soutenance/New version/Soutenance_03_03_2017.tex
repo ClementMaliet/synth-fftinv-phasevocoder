@@ -230,6 +230,7 @@ s(t) = a_0 exp[j(2 \pi f_0 t + \phi_0)]
 \item 3 parameters: $a_0$ (amplitude), $f_0$ (frequency) and $\phi_0$ (phase).
 \item Simplest model but useful for certain kinds of signals.
 \item Each spectral bin represents a stationary sinusoid.
+\item $\Rightarrow$ generate a synthetic spectrum with the desired parameters\\ $\Rightarrow$ generate a main lobe derived from the Fourier transform of the normalized window $w$ supposedly\footnote{Because no actual analysis happened} used during analysis \\ $\Rightarrow$ place it at the right position on the spectrum.
 \end{itemize}
 
 \end{frame}
@@ -237,17 +238,18 @@ s(t) = a_0 exp[j(2 \pi f_0 t + \phi_0)]
 \begin{frame}{Stationary Case}{Lobe generation}
 %-------------------------------------------------------
 \begin{block}{}
-We generate the sinusoids in frequency domain in order to reduce the computation time : \\
+We generate the sinusoids in frequency domain : \\
 
 \begin{itemize}
 \item Window the signal to maximize the energy in the main lobe
 \item We only keep the main lobe for each sine (11 points)
 \item We assume that the parameters (amplitude, frequency, phase) are already given by the analysis
+\item We interpolate the relevant bins value if by any chance the wanted frequency $\hat{f}$ is not exactly on a bin, that is to say if $\hat{f} \notin \{\frac{2 k \pi}{N} \}_{k=0...N-1}$
 \end{itemize}
 \end{block}
 \begin{figure}
 	\centerline
-	{\includegraphics[scale=0.75]{lobe.png}}
+	{\includegraphics[scale=0.45]{lobe.png}}
 	\caption{\it Windowed sine lobe}
 \end{figure}
 \end{frame}
@@ -256,10 +258,10 @@ We generate the sinusoids in frequency domain in order to reduce the computation
 %-------------------------------------------------------
 
 The sound signal is  a frame-by-frame signal: \\
-
+The analysis hop size will be called $R_a$ and the synthesis hop size $R_s$ (moving step of the frame)
 \begin{figure}
 
-	{\includegraphics[scale=0.3]{overlap2.png}}
+	{\includegraphics[scale=0.25]{overlap2.png}}
 	\caption{\it Sum of small size Hanning windows}
 \end{figure}
 \begin{figure}
@@ -268,10 +270,20 @@ The sound signal is  a frame-by-frame signal: \\
 \end{figure}
 \end{frame}
 %-------------------------------------------------------
-\begin{frame}{Stationary Case}{Phase coherence}
+\begin{frame}{Stationary Case}{Phase Coherence}
 %-------------------------------------------------------
 
-Phase coherence ???
+\begin{block}{Phase coherence}
+The Phase coherence is not a problem in the Stationary case :
+\begin{itemize}
+\item We don't know the window effect on the phase : ${f_{w, \hat{f}}(\phi) : \phi \mapsto \tilde{\phi}}$  \\
+$ \Rightarrow$ We calculate its influence on the first frame and assume the same influence on the other frame.
+
+\item We then multiply the generated lobe by $\frac{A}{2}$ and set the lobe phase to $\tilde{\phi} + 2\pi \hat{f} R_a$   
+\item In the purely stationary case, the expected phase shift is the theoretical phase shift.
+\end{itemize}
+\end{block}
+
 \end{frame}
 %-------------------------------------------------------
 \subsection{Casi-Stationary Case}
@@ -304,10 +316,13 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 
 
 \end{frame}
-%-------------------------------------------------------
-\begin{frame}{Non-Stationary Case}{Phase Vocoder}
-%-------------------------------------------------------
 
+%-------------------------------------------------------
+\begin{frame}{Non-Stationary Case}{Phase Vocoder : Scaled-Phase Locking}
+%-------------------------------------------------------
+\begin{itemize}
+\item The idea is
+\end{itemize}
 
 \end{frame}
 
