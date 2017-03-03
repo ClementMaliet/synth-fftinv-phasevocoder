@@ -298,6 +298,19 @@ $ \Rightarrow$ We calculate its influence on the first frame and assume the same
 \subsection{Quasi-Stationary Case}
 \begin{frame}{Quasi-Stationary Case}{What is changing}
 %-------------------------------------------------------
+\centering{In this case, the phase changing is different from the stationary case:}
+\\
+\centering{We have to calculate the instantaneous frequency for the kth bin:}
+
+\centering
+$\hat{\omega}_{k} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}$\\
+Where:\\
+\centering
+$\Delta\Phi_{k}^{u} = \angle X(t_{a}^{u}, \Omega_{k}) - \angle X(t_{a}^{u-1}, \Omega_{k}) - R_{a}\Omega_{k}$\\
+Hence,\\
+\centering
+$\angle Y(t_{s}^{u}, \Omega_{k}) = \angle Y(t_{s}^{u-1}, \Omega_{k}) + R_{s}\hat{\omega}_{k}(t_{a}^{u})$\\
+We replace the output signal phase by this one\\
 
 \end{frame}
 %-------------------------------------------------------
@@ -322,7 +335,7 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 %-------------------------------------------------------
 \begin{frame}{Non-Stationary Case}{Look up table}
 %-------------------------------------------------------
-
+%code pour mettre les images côte à côte
 \begin{figure}
    \begin{minipage}[c]{.46\linewidth}
       \includegraphics[scale=0.3]{grid.png}
@@ -334,15 +347,19 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
    \end{minipage}
 \end{figure}
 
-
-
 \end{frame}
 
 %-------------------------------------------------------
 \begin{frame}{Non-Stationary Case}{Phase Vocoder : Scaled-Phase Locking}
 %-------------------------------------------------------
 \begin{itemize}
-\item The idea is
+\item The idea is the same as for the stationary case, except that we have to deal with the phase locking:
+\begin{figure}
+      \includegraphics[scale=0.5]{phaselocking.png}
+      \caption{\it Phase-locking scheme}
+
+\end{figure}
+Moreover, we do not know for now how to manage the peaks that appear and disappear
 \end{itemize}
 
 \end{frame}
