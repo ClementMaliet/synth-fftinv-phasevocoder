@@ -9,6 +9,13 @@
 \graphicspath{ {images/} }
 %\usepackage[main=english, french]{babel}
 
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Part \thesection}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -277,22 +284,31 @@ Phase coherence ???
 \begin{frame}{Non-Stationary Case}{Very different approach}
 %-------------------------------------------------------
 
+\begin{block}{}
+Mathematical model : \\
+
+\begin{equation}
+s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
+\end{equation}
+\end{block}
+\begin{itemize}
+\item 5 parameters: \\ $(\lambda_0 + \mu_0 t)$ (overall amplitude)\\ $f_0$ (frequency)\\ $\phi_0$ (phase) \\ $ \mu_0$ (amplitude change rate (ACR))\\ $\psi_0$ (frequency change rate (FCR))
+\item The analysis part give us all those parameters
+\item To manage the influence of the ACR and the FCR on the lobe $\Rightarrow$ Interpolation of Look-up table of already saved lobes with different (ACR,FCR).
+\end{itemize}
+
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Non-Stationary Case}{Look up table}
 %-------------------------------------------------------
 
-The sound signal is  a frame-by-frame signal: \\
 
-\begin{figure}
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Non-Stationary Case}{Phase Vocoder}
+%-------------------------------------------------------
 
-	{\includegraphics[scale=0.3]{overlap2.png}}
-	\caption{\it Sum of small size Hanning windows}
-\end{figure}
-\begin{figure}
-	{\includegraphics[scale=0.25]{overlap1.png}}
-	\caption{\it Overlap and add}
-\end{figure}
+
 \end{frame}
 
 
