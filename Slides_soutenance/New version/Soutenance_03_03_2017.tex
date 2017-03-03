@@ -153,7 +153,7 @@
 %-------------------------------------------------------
 
 \begin{figure}
-	\centerline{\includegraphics[scale=0.28]{Gantt.png}}
+	\centerline{\includegraphics[scale=0.28]{Gantt2.png}}
 \end{figure}
 \end{frame}
 
@@ -298,19 +298,47 @@ $ \Rightarrow$ We calculate its influence on the first frame and assume the same
 \subsection{Quasi-Stationary Case}
 \begin{frame}{Quasi-Stationary Case}{What is changing}
 %-------------------------------------------------------
-\centering{In this case, the phase changing is different from the stationary case:}
-\\
-\centering{We have to calculate the instantaneous frequency for the kth bin:}
+\begin{itemize}
+\item In a Quasi-stationary case, the sine wave can change a little bit in frequency. \\
+ Main problem $\Rightarrow$ Phase coherence !
+\item We need to implement a a method to correct the phase : Phase Vocoder !
+\end{itemize}
 
+\begin{figure}
+{\includegraphics[scale=0.45]{pvoverview.png}}
+	\caption{\it Phase Vocoder overview}
+\end{figure}
+
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Quasi-Stationary Case}{What is changing}
+%-------------------------------------------------------
+\begin{itemize}
+\item In a Quasi-stationary case, the sine wave can change a little bit in frequency. \\
+ Main problem $\Rightarrow$ Phase coherence !
+\item We need to implement a a method to correct the phase : Phase Vocoder !
+\end{itemize}
+
+\begin{block}{Phase Vocoder}
+In this case, the phase changing is different from the stationary case.
+We have to calculate the instantaneous frequency for the kth bin:
+\begin{equation}
+\hat{\omega}_{k} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}
+\end{equation}
 \centering
-$\hat{\omega}_{k} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}$\\
-Where:\\
+Where:
+\begin{equation}
+\Delta\Phi_{k}^{u} = \angle X(t_{a}^{u}, \Omega_{k}) - \angle X(t_{a}^{u-1}, \Omega_{k}) - R_{a}\Omega_{k}
+\end{equation}
 \centering
-$\Delta\Phi_{k}^{u} = \angle X(t_{a}^{u}, \Omega_{k}) - \angle X(t_{a}^{u-1}, \Omega_{k}) - R_{a}\Omega_{k}$\\
-Hence,\\
-\centering
-$\angle Y(t_{s}^{u}, \Omega_{k}) = \angle Y(t_{s}^{u-1}, \Omega_{k}) + R_{s}\hat{\omega}_{k}(t_{a}^{u})$\\
-We replace the output signal phase by this one\\
+Hence,
+\begin{equation}
+\angle Y(t_{s}^{u}, \Omega_{k}) = \angle Y(t_{s}^{u-1}, \Omega_{k}) + R_{s}\hat{\omega}_{k}(t_{a}^{u})
+\end{equation}
+
+We replace the output signal phase by this one.
+\end{block}
 
 \end{frame}
 %-------------------------------------------------------
@@ -335,7 +363,7 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 %-------------------------------------------------------
 \begin{frame}{Non-Stationary Case}{Look up table}
 %-------------------------------------------------------
-%code pour mettre les images côte à côte
+%code pour mettre les images cï¿½te ï¿½ cï¿½te
 \begin{figure}
    \begin{minipage}[c]{.46\linewidth}
       \includegraphics[scale=0.3]{grid.png}
@@ -381,7 +409,7 @@ Moreover, we do not know for now how to manage the peaks that appear and disappe
 \end{frame}
 %-------------------------------------------------------
 \subsection{Non-Stationary Case}
-\begin{frame}{The additive synthesis}{Chirps}
+\begin{frame}{Non-Stationary Case}{Chirps}
 %-------------------------------------------------------
 
 The idea is to try the method on some chirps signal. And then on real sounds, like instruments and voices.
