@@ -7,6 +7,7 @@
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \graphicspath{ {images/} }
+\usepackage{ragged2e}
 %\usepackage[main=english, french]{babel}
 
 \AtBeginSection[]
@@ -219,8 +220,7 @@ Additive synthesis with FFT$^{-1}$ according to the parameters from the analysis
 \subsection{Stationary Case}
 \begin{frame}{Stationary Case}{Stationary sinusoidal model}
 %-------------------------------------------------------
-\begin{block}{}
-Mathematical model : \\
+\begin{block}{Mathematical model  :}
 
 \begin{equation}
 s(t) = a_0 exp[j(2 \pi f_0 t + \phi_0)]
@@ -343,11 +343,10 @@ We replace the output signal phase by this one.
 \end{frame}
 %-------------------------------------------------------
 \subsection{Non-Stationary Case}
-\begin{frame}{Non-Stationary Case}{Very different approach}
+\begin{frame}{Non-Stationary Case}{A different approach}
 %-------------------------------------------------------
 
-\begin{block}{}
-Mathematical model : \\
+\begin{block}{Mathematical model  :}
 
 \begin{equation}
 s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
@@ -363,7 +362,6 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 %-------------------------------------------------------
 \begin{frame}{Non-Stationary Case}{Look up table}
 %-------------------------------------------------------
-%code pour mettre les images c�te � c�te
 \begin{figure}
    \begin{minipage}[c]{.46\linewidth}
       \includegraphics[scale=0.3]{grid.png}
@@ -381,13 +379,53 @@ s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
 \begin{frame}{Non-Stationary Case}{Phase Vocoder : Scaled-Phase Locking}
 %-------------------------------------------------------
 \begin{itemize}
-\item The idea is the same as for the stationary case, except that we have to deal with the phase locking:
+\item We can use the phase vocoder to correct the phase, but the main problem is sine waves that switch from a frequency bin to another bin. The phase might change a lot from one frame to another.
+\item $\Rightarrow$ We use a refined version of the phase vocoder : Scaled-Phase Locking \\
+ $\Rightarrow$ It takes into account the frequency trajectory of each lobes.
+\begin{figure}
+      \includegraphics[scale=0.4]{peaktrajectory.png}
+      \caption{\it Peak coherence from a frame to another}
+\end{figure}
+\end{itemize}
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Non-Stationary Case}{Phase Vocoder : Scaled-Phase Locking}
+%-------------------------------------------------------
+\begin{block}{ Scaled-Phase Locking}
+We find each region corresponding to each peaks, and then we use the phase vocoder algorithm for each region :\\
+$k_0$ is the precedent frequency bin for the peak - $k_1$ is the current frame peak bin :
+\begin{equation}
+\hat{\omega}_{k_1} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}
+\end{equation}
+\centering
+Where:
+\begin{equation}
+\Delta\Phi_{k_1}^{u} = \angle X(t_{a}^{u}, \Omega_{k_1}) - \angle X(t_{a}^{u-1}, \Omega_{k_0}) - R_{a}\Omega_{k_1}
+\end{equation}
+\centering
+Hence,
+\begin{equation}
+\angle Y(t_{s}^{u}, \Omega_{k_1}) = \angle Y(t_{s}^{u-1}, \Omega_{k_0}) + R_{s}\hat{\omega}_{k_1}(t_{a}^{u})
+\end{equation}
+\centering 
+Then for each bin in the region :
+\begin{equation}
+\angle Y(t_{s}^{u}, \Omega_{k}) = \angle Y(t_{s}^{u}, \Omega_{k_1}) + \beta [ \angle X(t_{a}^{u}, \Omega_{k}) - \angle X(t_{a}^{u}, \Omega_{k_1}) ]
+\end{equation}
+\end{block}
+
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Non-Stationary Case}{Scaled-Phase Locking Problem}
+%-------------------------------------------------------
+\begin{itemize}
+\item Moreover, we do not know for now how to manage the peaks that appear and disappear
 \begin{figure}
       \includegraphics[scale=0.5]{phaselocking.png}
-      \caption{\it Phase-locking scheme}
-
+      \caption{\it Phase-locking problem}
 \end{figure}
-Moreover, we do not know for now how to manage the peaks that appear and disappear
 \end{itemize}
 
 \end{frame}
@@ -398,14 +436,43 @@ Moreover, we do not know for now how to manage the peaks that appear and disappe
 \section{Result}
 %-------------------------------------------------------
 \subsection{Stationary Case}
-\begin{frame}{Stationary Case}{Sine waves}
+\begin{frame}{Stationary Case}{Protocol}
 %-------------------------------------------------------
-
+\begin{itemize}
+\item A one second triangular signal consisting in 84 frames
+\item We first vary the number of harmonics and compare the time of execution
+\item In a second time, for a 10 harmonics signal, we vary the frequency and investigate the reconstruction error.
+\end{itemize}
 \end{frame}
 %-------------------------------------------------------
-\begin{frame}{Stationary Case}{Triangular waves}
+\begin{frame}{Stationary Case}{Triangular wave synthesis}
 %-------------------------------------------------------
-
+\begin{figure}
+      \includegraphics[scale=0.15]{triangle.png}
+      \caption{\it original vs. synthesized triangular wave}
+\end{figure}
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Stationary Case}{Time and Relative-Time}
+%-------------------------------------------------------
+\begin{figure}
+   \begin{minipage}[c]{.46\linewidth}
+      \includegraphics[scale=0.4]{time.pdf}
+      \caption{\it Time of execution}
+   \end{minipage} \hfill
+   \begin{minipage}[c]{.46\linewidth}
+      \includegraphics[scale=0.4]{relativetime.pdf}
+      \caption{\it Relative Time of Execution}
+   \end{minipage}
+\end{figure}
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Stationary Case}{RMSE}
+%-------------------------------------------------------
+\begin{figure}
+      \includegraphics[scale=0.4]{rmse.pdf}
+      \caption{\it RMSE (original vs. synthesized triangular wave}
+\end{figure}
 \end{frame}
 %-------------------------------------------------------
 \subsection{Non-Stationary Case}
@@ -418,7 +485,7 @@ The idea is to try the method on some chirps signal. And then on real sounds, li
 {\includegraphics[scale=0.45]{chirps.png}}
 	\caption{\it Chirp signal to test}
 \end{figure}
-
+We can measure the error of the lobe interpolation with the Look-Up Table. (Not done)
 \end{frame}
 
 %%%%%%%%%%%%%%%%%
@@ -430,14 +497,43 @@ The idea is to try the method on some chirps signal. And then on real sounds, li
 %-------------------------------------------------------
 \begin{itemize}
 \item 6 weeks only
+\medskip
 \item Research subject $\Rightarrow$ Can it really works ?
+\medskip
 \item Lots of trouble when we try to understand the phase coherence problem
+\medskip
 \end{itemize}
+\centering
+\medskip
+\medskip
+\medskip
+\medskip
+\medskip
+\Large Do you have any question?
 \end{frame}
 %-------------------------------------------------------
 \subsection{References}
 \begin{frame}{References}{}
 %-------------------------------------------------------
+\begin{itemize}
+\justifying
+	\item Jeremy G. Wells, Damian T. Murphy \og High accuracy frame-by-frame
+	non-stationary modelling,\fg , Audio Lab, Intelligent Systems Group,
+	Department of Electronics, University of York, YO10 5DD, UK,
+	September 2006.
+	
+	\item Jeremy J. Wells, \og Methods dor separation of amplitude and fequency
+	modulation in Fourier transformed signals\fg, AudioLab, Department of
+	Electronics, September 2010.
+	
+	\item D. Brandon Lloyd, Ninkunj Raghuvanshi, Naga K. Govindaraju, \og Sound
+	synthesis for impact sounds in videogames\fg, eXtrem computing group,
+	Microsoft research, 2011.
+	
+	\item Thorsten Karrer, Eric Lee, Jan Borchers, \og A phase vocoder for real-time
+	time-stretching\fg, Media computing group.
+
+\end{itemize}
 
 \end{frame}
 
