@@ -12,7 +12,7 @@ from LobeGenerator import LobeGenerator
 from NonStationaryLobe import *
 
 
-class NonStationaryLUT(LobeGenerator):
+class NonStationaryLobeGenerator(LobeGenerator):
     def __init__(self, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, window_type, window_size, nfft,
                  fs=None, method_a=None, method_p=None, method_f=None):
         if fs is None:

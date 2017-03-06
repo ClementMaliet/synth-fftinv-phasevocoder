@@ -5,6 +5,9 @@
 \usepackage{listings}
 \usepackage{arydshln}
 \usepackage{amsmath}
+\usepackage{cases}  
+\usepackage{cite}
+\usepackage{graphicx}
 %opening
 \title{Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT$^{-1}$}
 \author{Cl\'ement Cazorla, Vincent Chrun, Bastien Fundaro, Cl\'ement Maliet \\ENSEEIHT - 3EN TSI 2016-2017}
@@ -185,10 +188,108 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 \subsection{NonStationarySynthesizer}
 \section{Spectrum generation module}\label{sec:spectrum-generation-module}
 \subsection{SpectrumGenerator}\label{sec:spectrumgenerator}
-\subsection{StaionarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		SpectrumGenerator & \\
+		\hline
+		\hline
+		\_parameters : np.array & \\
+		\_nfft : np.float & \\
+		\_spectrum : np.array & \\
+		\_window\_size : np.float & \\
+		\_analysis\_hop : np.float & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
+		\_add\_lobe(self, k, lobe) & \\
+		\_set\_window\_size(self, window\_size) & \\
+		\_set\_window\_type(self, window\_type) & \\
+		\_get\_parameters(self, new\_parameters) & \\
+		\_get\_spectrum(self) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+
+ 
+The aim of this class is to generate a synthetic spectrum from known parameters (amplitudes, phases, frequencies). This class is divided into two subclasses that generate stationary and non-stationary spectrums.\\
+
+\subsection{StationarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		StationarySpectrumGenerator (SpectrumGenerator) & \\
+		\hline
+		\hline
+		\_parameters : np.array & \\
+		\_nfft : np.float & \\
+		\_spectrum : np.array & \\
+		\_window\_size : np.float & \\
+		\_analysis\_hop : np.float & \\
+		\_lobe\_generator : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
+		\_add\_lobe(self, k, lobe) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+
 \subsection{NonStationarySpectrumGenerator}\label{sec:nonstationaryspectrumgenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationarySpectrumGenerator (SpectrumGenerator) & \\
+		\hline
+		\hline
+		\_parameters : np.array & \\
+		\_nfft : np.float & \\
+		\_spectrum : np.array & \\
+		\_window\_size : np.float & \\
+		\_analysis\_hop : np.float & \\
+		\_lobe\_generator : np.array & \\
+		\_regular\_lut : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
+		\_add\_lobe(self, k) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+This class has not been made yet, but the goal is the same as for the StationarySpectrumGenerator.
+
 \subsection{StationnaryLobe}\label{sec:stationnarylobe}
 \subsection{NonStationaryLUT}\label{sec:nonstationarylut}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationaryLut(LobeGenerator) & \\
+		\hline
+		\hline
+		\_abscisse : np.array & \\
+		\_ordonnee : np.array & \\
+		\_interpolated\_lobe : np.array & \\
+		\_regular\_grid : np.array & \\
+		\_domain : np.array & \\
+		\_number\_acr : np.float & \\
+		\_number\_fcr : np.float & \\
+		\_number\_points : np.float & \\
+		\_LUT : np.array & \\
+		\_gen\_lobe : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, regular\_grid, acr\_domain, fcr\_domain, number\_acr, number\_fcr, window\_type,\\ window\_size, nfft, fs=None, method\_a=None, method\_p=None, method\_f=None) &\\
+		\_gen\_uniform\_lut(self) & \\
+		\_gen\_non\_uniform\_lut(self) & \\
+		\_gen\_lobes\_legacy(self, i, j, acr, fcr, t, n) & \\
+		\_gen\_lobe(self) & \\
+		\_get\_lobe(self) & \\
+		\_interpolate\_lobe(self, acr, fcr, method\_a=None, method\_p=None, method\_f = None)) & \\
+		\hline
+\end{tabular}} \medskip\newline
+\\
+
+The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must chose the kind of interpolation he or she wants to use for magnitude, phase and frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.
+
 \section{Phase Vocoder module}\label{sec:phase-vocoder-module}
 \subsection{PhaseVocoder}\label{sec:phasevocoder}
 \subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
@@ -198,6 +299,6 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 \section*{Conclusion}
 
 \newpage
-\bibliographystyle{ieee}
-\bibliography{biblio}
+\bibliographystyle{ieeetran}
+\bibliography{biblioProjetLong}
 \end{document}

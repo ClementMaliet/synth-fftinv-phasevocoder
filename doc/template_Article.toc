@@ -1,34 +1,45 @@
 \select@language {english}
-\contentsline {part}{I\hspace {1em}Theoretical framework}{3}
-\contentsline {section}{\numberline {1}Sound synthesis}{3}
-\contentsline {subsection}{\numberline {1.1}Frequency domain}{3}
-\contentsline {subsection}{\numberline {1.2}Sinusoidal model}{3}
-\contentsline {subsection}{\numberline {1.3}Phase Vocoder}{3}
-\contentsline {section}{\numberline {2}Theoretical synthesis with phase vocoder and FFT$^{-1}$}{3}
-\contentsline {subsection}{\numberline {2.1}Stationary case}{3}
-\contentsline {subsection}{\numberline {2.2}Non-stationary case}{3}
-\contentsline {part}{II\hspace {1em}Code structure and conventions}{4}
-\contentsline {section}{\numberline {3}Conventions}{4}
-\contentsline {subsection}{\numberline {3.1}Naming conventions}{4}
-\contentsline {subsection}{\numberline {3.2}Spectrum and sinusoids parameters classes}{5}
-\contentsline {subsubsection}{\numberline {3.2.1}Spectrum}{5}
-\contentsline {subsubsection}{\numberline {3.2.2}Parameters}{6}
-\contentsline {subsubsection}{\numberline {3.2.3}NonStationaryParameters}{6}
-\contentsline {section}{\numberline {4}Code structure}{7}
-\contentsline {subsection}{\numberline {4.1}General structure}{7}
-\contentsline {subsection}{\numberline {4.2}Class structure}{7}
-\contentsline {part}{III\hspace {1em}Documentation}{8}
-\contentsline {section}{\numberline {5}Core module}{8}
-\contentsline {subsection}{\numberline {5.1}Synthesizer}{8}
-\contentsline {subsection}{\numberline {5.2}StationarySynthesizer}{8}
-\contentsline {subsection}{\numberline {5.3}NonStationarySynthesizer}{8}
-\contentsline {section}{\numberline {6}Spectrum generation module}{8}
-\contentsline {subsection}{\numberline {6.1}SpectrumGenerator}{8}
-\contentsline {subsection}{\numberline {6.2}StaionarySpectrumGenerator}{8}
-\contentsline {subsection}{\numberline {6.3}NonStationarySpectrumGenerator}{8}
-\contentsline {subsection}{\numberline {6.4}StationnaryLobe}{8}
-\contentsline {subsection}{\numberline {6.5}NonStationaryLUT}{8}
-\contentsline {section}{\numberline {7}Phase Vocoder module}{8}
-\contentsline {subsection}{\numberline {7.1}PhaseVocoder}{8}
-\contentsline {subsection}{\numberline {7.2}StationaryPhaseVocoder}{8}
-\contentsline {subsection}{\numberline {7.3}NonStationaryPhaseVocoder}{8}
+\contentsline {part}{I\hspace {1em}Introduction}{4}
+\contentsline {section}{\numberline {1}The company}{4}
+\contentsline {section}{\numberline {2}Objective}{4}
+\contentsline {section}{\numberline {3}Context of the project}{4}
+\contentsline {section}{\numberline {4}Work environment and project management}{4}
+\contentsline {part}{II\hspace {1em}Method Overview}{5}
+\contentsline {section}{\numberline {5}Additive Synthesis (Time Domain)}{5}
+\contentsline {section}{\numberline {6}Method Overview}{5}
+\contentsline {part}{III\hspace {1em}The additive synthesis in frequency domain}{6}
+\contentsline {section}{\numberline {7}Stationary Case}{6}
+\contentsline {section}{\numberline {8}Quasi-Stationary Case}{6}
+\contentsline {subsection}{\numberline {8.1}Theory}{6}
+\contentsline {subsection}{\numberline {8.2}phase vocoder}{6}
+\contentsline {section}{\numberline {9}Non-Stationary Case}{6}
+\contentsline {subsection}{\numberline {9.1}Theory}{6}
+\contentsline {subsection}{\numberline {9.2}phase vocoder}{6}
+\contentsline {part}{IV\hspace {1em}Result}{7}
+\contentsline {section}{\numberline {10}Sationary Case}{7}
+\contentsline {section}{\numberline {11}Non-Stationary Case}{7}
+\contentsline {part}{V\hspace {1em}Code structure and conventions}{8}
+\contentsline {section}{\numberline {12}Conventions}{8}
+\contentsline {subsection}{\numberline {12.1}Naming conventions}{8}
+\contentsline {subsection}{\numberline {12.2}Spectrum and sinusoids parameters classes}{9}
+\contentsline {subsubsection}{\numberline {12.2.1}Spectrum}{9}
+\contentsline {subsubsection}{\numberline {12.2.2}Parameters}{10}
+\contentsline {subsubsection}{\numberline {12.2.3}NonStationaryParameters}{10}
+\contentsline {section}{\numberline {13}Code structure}{11}
+\contentsline {subsection}{\numberline {13.1}General structure}{11}
+\contentsline {subsection}{\numberline {13.2}Class structure}{11}
+\contentsline {part}{VI\hspace {1em}Documentation}{12}
+\contentsline {section}{\numberline {14}Core module}{12}
+\contentsline {subsection}{\numberline {14.1}Synthesizer}{12}
+\contentsline {subsection}{\numberline {14.2}StationarySynthesizer}{12}
+\contentsline {subsection}{\numberline {14.3}NonStationarySynthesizer}{12}
+\contentsline {section}{\numberline {15}Spectrum generation module}{12}
+\contentsline {subsection}{\numberline {15.1}SpectrumGenerator}{12}
+\contentsline {subsection}{\numberline {15.2}StationarySpectrumGenerator}{12}
+\contentsline {subsection}{\numberline {15.3}NonStationarySpectrumGenerator}{13}
+\contentsline {subsection}{\numberline {15.4}StationnaryLobe}{13}
+\contentsline {subsection}{\numberline {15.5}NonStationaryLUT}{13}
+\contentsline {section}{\numberline {16}Phase Vocoder module}{14}
+\contentsline {subsection}{\numberline {16.1}PhaseVocoder}{14}
+\contentsline {subsection}{\numberline {16.2}StationaryPhaseVocoder}{14}
+\contentsline {subsection}{\numberline {16.3}NonStationaryPhaseVocoder}{14}
