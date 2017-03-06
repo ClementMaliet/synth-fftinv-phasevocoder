@@ -257,13 +257,54 @@ The aim of this class is to generate a synthetic spectrum from known parameters 
 \end{tabular}} \medskip\newline
 
 This class has not been made yet, but the goal is the same as for the StationarySpectrumGenerator.
+\subsection{LobeGenerator}\label{sec:lobegenerator}
 
-\subsection{StationnaryLobe}\label{sec:stationnarylobe}
-\subsection{NonStationaryLUT}\label{sec:nonstationarylut}
 \texttt{%
 	\begin{tabular}{|lc|}
 		\hline
-		NonStationaryLut(LobeGenerator) & \\
+		LobeGenerator & \\
+		\hline
+		\hline
+		\_window\_type : np.float & \\
+		\_window\_size : np.float & \\
+		\_nfft : np.float & \\
+		\_window : np.array &\\
+		\_lobe : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_type, window\_size, nfft) &\\
+		\_set\_window\_size(self, window\_size) & \\
+		\_set\_window\_type(self, window\_type) & \\
+		\_gen\_lobe(self) & \\
+		\_get\_lobe & \\
+		\hline
+\end{tabular}} \medskip\newline
+This class generates a 11 points main lobe.
+
+\subsubsection{StationnaryLobeGenerator}\label{sec:stationnarylobegenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		StationaryLobeGenerator(LobeGenerator) & \\
+		\hline
+		\hline
+		\_window\_type : np.float & \\
+		\_window\_size : np.float & \\
+		\_nfft : np.float & \\
+		\_window : np.array &\\
+		\_lobe : np.array & \\
+		\_gen\_lobe : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_type, window\_size, nfft) &\\
+		\_gen\_lobe(self) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+\subsubsection{NonStationaryLobeGenerator}\label{sec:nonstationarylobegenerator}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationaryLobeGenerator(LobeGenerator) & \\
 		\hline
 		\hline
 		\_abscisse : np.array & \\
