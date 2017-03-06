@@ -12,7 +12,7 @@ import numpy as np
 from next2pow import next2pow
 
 
-class StationaryLobe(LobeGenerator):
+class StationaryLobeGenerator(LobeGenerator):
     def __init__(self, window_type, window_size, nfft):
         LobeGenerator.__init__(self, window_type, window_size, nfft)
         self._gen_lobe()

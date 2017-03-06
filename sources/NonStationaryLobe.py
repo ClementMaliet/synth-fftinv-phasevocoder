@@ -34,16 +34,16 @@ class NonStationaryLobe(Spectrum):
         return cls(amplitude, phase, x)
 
     def set_lobe(self, amplitude, phase, x, start_bin=None, stop_bin=None):
-        Spectrum.set_spectrum(self, amplitude, phase, start_bin=None, stop_bin=None)
+        Spectrum.set_spectrum(self, amplitude, phase, start_bin, stop_bin)
         self._x = x
 
     def set_complex_lobe(self, complex_spectrum, x, start_bin=None, stop_bin=None):
-        Spectrum.set_complex_spectrum(self, complex_spectrum, start_bin=None, stop_bin=None)
+        Spectrum.set_complex_spectrum(self, complex_spectrum, start_bin, stop_bin)
         self._x = x
 
-    def get_abscissa(self, k):
+    def get_x(self, k):
         return self._x[k]
 
-    def _get_full_abscissa(self):
+    def _get_full_x(self):
         return self._x
-    x = property(fget=_get_full_abscissa)
+    x = property(fget=_get_full_x)

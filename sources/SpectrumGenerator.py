@@ -11,7 +11,7 @@ from LobeGenerator import LobeGenerator
 
 
 class SpectrumGeneratorError(Exception):
-    """Base class for exception regarding the spectrum class"""
+    """Base class for exception regarding the spectrum generator class"""
     pass
 
 

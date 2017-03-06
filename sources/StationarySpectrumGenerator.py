@@ -7,14 +7,19 @@
 # Import :
 
 from SpectrumGenerator import *
-from StationaryLobe import *
+from StationaryLobeGenerator import *
 from scipy.interpolate import interp1d
+
+
+class StationarySpectrumGeneratorError(SpectrumGeneratorError):
+    """Base class for exception regarding the stationary spectrum generator class"""
+    pass
 
 
 class StationarySpectrumGenerator(SpectrumGenerator):
     def __init__(self, window_type, window_size, parameters, nfft, analysis_hop):
         SpectrumGenerator.__init__(self, window_size, parameters, nfft, analysis_hop)
-        self._lobe_generator = StationaryLobe(window_type, window_size, nfft)
+        self._lobe_generator = StationaryLobeGenerator(window_type, window_size, nfft)
 
     def _add_lobe(self, k, lobe):
         amplitude = self._parameters.get_amplitude(k) / 2.

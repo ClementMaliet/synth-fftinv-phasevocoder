@@ -1,5 +1,5 @@
 from sources.SpectrumGenerator import SpectrumGenerator
-from sources.StationaryLobe import *
+from sources.StationaryLobeGenerator import *
 from sources.PhaseVocoder import *
 from scipy import signal
 import matplotlib.pyplot as plt
@@ -10,7 +10,7 @@ window_size = 1025
 window_type = 'hamming'
 nfft = 8192
 
-s = StationaryLobe(window_type, window_size, nfft)
+s = StationaryLobeGenerator(window_type, window_size, nfft)
 
 parameters = Parameters(np.array([2, 3]), np.array([0.3, 0.4]), np.array([50, 40]))
 
