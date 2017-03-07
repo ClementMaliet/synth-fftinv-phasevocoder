@@ -490,9 +490,36 @@ The aim is to generate a LUT with a uniform or a non-uniform grid, and to genera
 		get\_pv\_spectrum(self, k) & \\
 		\hline
 \end{tabular}} \medskip\newline
-This module is not used by the mains yet. Please look up section \ref{sec:phase-vocoder} page \pageref{sec:phase-vocoder} to know what this module do. The PhaseVocoder file gathers both the Stationary Phase Vocoder and the Non-Stationary Phase
+ \textbf {This module is not used !}\\
+The PhaseVocoder file gathers both the Stationary Phase Vocoder and the Non-Stationary Phase.
 \subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		StationaryPhaseVocoder & \\
+		\hline
+		\hline
+		get\_pv\_spectrum(self) & \\
+		\hline
+\end{tabular}} \medskip\newline
+The Phase Vocoder algorithm is located here. It will correct the phase at each frequency bin k (remember that this module is not used at the end). To do so it proceed in 5 steps :\\
+-Get the phase difference,\\
+-Remove the expected phase difference,\\
+-Map the phase shift to [-pi; pi] range,\\
+-Get the true frequency,\\
+-And finally get the final phase.\\
+For the details, please refer to paper\cite{karrer2006phavorit} where the algorithm is well detailed.
 \subsection{NonStationaryPhaseVocoder}\label{sec:nonstationaryphasevocoder}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationaryPhaseVocoder & \\
+		\hline
+		\hline
+		get\_pv\_spectrum(self) & \\
+		\hline
+\end{tabular}} \medskip\newline
+\textbf {This module is not complete !} The detailed algorithm called Scaled-Phase Locking is also described in the paper \cite{karrer2006phavorit}. The idea is to correct the phase on the peaks bin and then apply this correction on each bin of the region containing the peak. To do so, a peak trajectory detection is needed to know between two frames if the peak is the same one on the other frame, because it could have changed his frequency bins due to the non-stationary case. We also need to get the region (bins near the peak bin). And then we apply on this peak the phase vocoder and the corrected phase shift is applied on all bins of the region corresponding to this peak. A Matlab implementation can be found in \cite {grunwald2010pv}.
 
 \newpage
 \section*{Conclusion}
