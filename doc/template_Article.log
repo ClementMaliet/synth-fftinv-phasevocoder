@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.10)  7 MAR 2017 17:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.10)  7 MAR 2017 18:03
 entering extended mode
 **./template_Article.tex
 (template_Article.tex
@@ -402,20 +402,25 @@ Overfull \hbox (7.9964pt too wide) in paragraph at lines 74--75
 <images/additif.png, id=40, 448.5558pt x 425.4294pt>
 File: images/additif.png Graphic file (type png)
  <use images/additif.png>
-Package pdftex.def Info: images/additif.png used on input line 87.
+Package pdftex.def Info: images/additif.png used on input line 89.
 (pdftex.def)             Requested size: 224.27734pt x 212.71417pt.
+
+Overfull \hbox (155.02333pt too wide) in paragraph at lines 83--91
+\OT1/cmr/m/n/10 resid-ual con-tri-bu-tion is not neg-li-gi-ble com-pared to the
+ par-tials [1, 2] ER-RORS!!!!!!!!!!!!!!!!111111111111!1!1!1!!!!!!!!!!!!!!! 
+ []
 
 [7 <./images/additif.png>]
 <images/slide1.png, id=50, 623.32875pt x 427.5975pt>
 File: images/slide1.png Graphic file (type png)
  <use images/slide1.png>
-Package pdftex.def Info: images/slide1.png used on input line 100.
+Package pdftex.def Info: images/slide1.png used on input line 102.
 (pdftex.def)             Requested size: 311.6636pt x 213.79822pt.
 
 <images/slide2.png, id=51, 402.50375pt x 312.16624pt>
 File: images/slide2.png Graphic file (type png)
  <use images/slide2.png>
-Package pdftex.def Info: images/slide2.png used on input line 110.
+Package pdftex.def Info: images/slide2.png used on input line 112.
 (pdftex.def)             Requested size: 281.7507pt x 218.51488pt.
 
 [8 <./images/slide1.png>]
@@ -423,14 +428,14 @@ Package pdftex.def Info: images/slide2.png used on input line 110.
 File: images/synthesisstep.png Graphic file (type png)
 
 <use images/synthesisstep.png>
-Package pdftex.def Info: images/synthesisstep.png used on input line 118.
+Package pdftex.def Info: images/synthesisstep.png used on input line 120.
 (pdftex.def)             Requested size: 290.18214pt x 221.32535pt.
 
 <images/coherentphase.png, id=57, 1365.1pt x 714.67pt>
 File: images/coherentphase.png Graphic file (type png)
 
 <use images/coherentphase.png>
-Package pdftex.def Info: images/coherentphase.png used on input line 125.
+Package pdftex.def Info: images/coherentphase.png used on input line 127.
 (pdftex.def)             Requested size: 273.01517pt x 142.93146pt.
  [9 <./images/slide2.png> <./images/synthesisstep.png>] [10 <./images/coherentp
 hase.png>]
@@ -443,7 +448,7 @@ Package epstopdf Info: Source file: <images/Interpolation.eps>
 (epstopdf)                    size: 5163 bytes
 (epstopdf)             Command: <epstopdf --outfile=images/Interpolation-eps-co
 nverted-to.pdf images/Interpolation.eps>
-(epstopdf)             \includegraphics on input line 145.
+(epstopdf)             \includegraphics on input line 147.
 Package epstopdf Info: Output file is already uptodate.
 
 <images/Interpolation-eps-converted-to.pdf, id=70, 540.0175pt x 384.43625pt>
@@ -451,132 +456,132 @@ File: images/Interpolation-eps-converted-to.pdf Graphic file (type pdf)
 
 <use images/Interpolation-eps-converted-to.pdf>
 Package pdftex.def Info: images/Interpolation-eps-converted-to.pdf used on inpu
-t line 145.
+t line 147.
 (pdftex.def)             Requested size: 216.00316pt x 153.77177pt.
  [11 <./images/Interpolation-eps-converted-to.pdf>] [12] [13]
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 176.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 178.
 
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 176.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 178.
 
-Overfull \hbox (2.20235pt too wide) in paragraph at lines 190--191
+Overfull \hbox (2.20235pt too wide) in paragraph at lines 192--193
 []\OT1/cmr/m/it/10 Methods \OT1/cmr/m/n/10 and \OT1/cmr/m/it/10 func-tions \OT1
 /cmr/m/n/10 should be named in \OT1/cmtt/m/n/10 lower[]case[]with[]underscores 
 
  []
 
 
-Overfull \hbox (5.95776pt too wide) in paragraph at lines 191--192
+Overfull \hbox (5.95776pt too wide) in paragraph at lines 193--194
 []\OT1/cmr/m/it/10 Attributes \OT1/cmr/m/n/10 and \OT1/cmr/m/it/10 vari-ables \
 OT1/cmr/m/n/10 should be names in \OT1/cmtt/m/n/10 lower[]case[]with[]underscor
 es 
  []
 
 [14] [15] [16]
-Overfull \hbox (0.44807pt too wide) in paragraph at lines 283--287
+Overfull \hbox (0.44807pt too wide) in paragraph at lines 285--289
 \OT1/cmr/m/n/10 Where we de-fine the \OT1/cmr/bx/n/10 Am-pli-tude Change Rate $
 \OML/cmm/m/it/10 $ \OT1/cmr/m/n/10 and the \OT1/cmr/bx/n/10 Fre-quency Change
  []
 
 [17]
-Overfull \hbox (59.51656pt too wide) in paragraph at lines 333--334
+Overfull \hbox (59.51656pt too wide) in paragraph at lines 335--336
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--334
+Underfull \hbox (badness 10000) in paragraph at lines 335--336
 
  []
 
 
-Overfull \hbox (59.51656pt too wide) in paragraph at lines 360--361
+Overfull \hbox (59.51656pt too wide) in paragraph at lines 362--363
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 360--361
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
 
  []
 
 [18]
-Overfull \hbox (59.51656pt too wide) in paragraph at lines 388--389
+Overfull \hbox (59.51656pt too wide) in paragraph at lines 390--391
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 388--389
+Underfull \hbox (badness 10000) in paragraph at lines 390--391
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--414
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
 
  []
 
 [19]
-Underfull \hbox (badness 10000) in paragraph at lines 417--418
+Underfull \hbox (badness 10000) in paragraph at lines 419--420
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 437--438
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 458--459
+Underfull \hbox (badness 10000) in paragraph at lines 460--461
 
  []
 
 [20]
-Underfull \hbox (badness 10000) in paragraph at lines 502--503
+Underfull \hbox (badness 10000) in paragraph at lines 504--505
 
  []
 
 
-Overfull \hbox (131.54591pt too wide) in paragraph at lines 530--532
+Overfull \hbox (131.54591pt too wide) in paragraph at lines 532--534
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 530--532
+Underfull \hbox (badness 10000) in paragraph at lines 532--534
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 530--532
+Underfull \hbox (badness 10000) in paragraph at lines 532--534
 
  []
 
 [21]
-Overfull \hbox (39.98674pt too wide) in paragraph at lines 554--557
+Overfull \hbox (39.98674pt too wide) in paragraph at lines 556--559
 []
  []
 
 [22] [23] [24]
-Underfull \hbox (badness 10000) in paragraph at lines 601--607
+Underfull \hbox (badness 10000) in paragraph at lines 603--609
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 612--614
+Underfull \hbox (badness 10000) in paragraph at lines 614--616
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 615--620
+Underfull \hbox (badness 10000) in paragraph at lines 617--622
 
  []
 
 [25]
-LaTeX Font Info:    Try loading font information for U+dsrom on input line 643.
+LaTeX Font Info:    Try loading font information for U+dsrom on input line 645.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\doublestroke\udsrom.fd"
 File: Udsrom.fd 1995/08/01 v0.1 Double stroke roman font definitions
@@ -586,10 +591,10 @@ f"
 File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 )) [28] (template_Article.aux) ) 
 Here is how much of TeX's memory you used:
- 6584 strings out of 493333
- 90910 string characters out of 3139162
- 186700 words of memory out of 3000000
- 9996 multiletter control sequences out of 15000+200000
+ 6583 strings out of 493333
+ 90891 string characters out of 3139162
+ 186693 words of memory out of 3000000
+ 9995 multiletter control sequences out of 15000+200000
  11930 words of font info for 45 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,21n,41p,1131b,1423s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -615,7 +620,7 @@ cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pf
 b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti8.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Program Fil
 es/MiKTeX 2.9/fonts/type1/public/doublestroke/dsrom10.pfb>
-Output written on template_Article.pdf (28 pages, 1721278 bytes).
+Output written on template_Article.pdf (28 pages, 1717878 bytes).
 PDF statistics:
  213 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

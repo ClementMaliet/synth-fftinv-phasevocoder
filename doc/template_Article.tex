@@ -77,10 +77,12 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 \newpage
 \part{General analysis/synthesis approach}\label{part:general-approach}
 \section{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
-In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a sum of time varying sinusoids, which are called partials \cite{quatieri2002audio}:
-\begin{equation}\label{additiveSynthesis}
-x(t) = \sum\limits_{n=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})
+In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a sum of time varying sinusoids, which are called partials \cite{quatieri2002audio} added to a residual, that is, a stochastic process equivalent to a noise:
+\begin{equation}
+s(t) = \sum_{i=1}^{K}\alpha_i(t) \sin(2\pi f_i(t) t + \phi_{i}) + e(t)
 \end{equation}
+Where the amplitude $\alpha_i(t)$ and the frequency $f_i(t)$ are smooth slowly varying functions.\\
+Although in most cases, that is speech or musical instruments synthesis, the residual contribution is not negligible compared to the partials \cite{quatieri2002audio, rodet1992spectral} ERRORS!!!!!!!!!!!!!!!!111111111111!1!1!1!!!!!!!!!!!!!!!\\
 This is motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.
 \begin{figure}[H]
 	\centerline
@@ -118,7 +120,7 @@ Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the ori
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
 	\caption{\it Synthesized frame vs Original frame}
 \end{figure}
-\subsection{Phase Coherence}\label{phase-coherence}
+\section{Phase Coherence}\label{phase-coherence}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
 \begin{figure} [H]
 	\centering
@@ -162,7 +164,7 @@ Where $\hat{\phi_{i}}$ denote the window-corrected phase, $2\pi \tilde{f_i} R_a$
 \subsection{phase vocoder}\label{phase-vocoder-stationary}
 
 \newpage
-\part{Result}
+\part{Results}
 \section{Stationary Case}\label{sec:stationary-results}
 \section{Non-Stationary Case}\label{non-stationary-results}
 
