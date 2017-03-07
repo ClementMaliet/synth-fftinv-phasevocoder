@@ -26,15 +26,33 @@ The present document is to serve as both a technical report and a documentation 
 
 
 \newpage
-\part{Theoretical framework}\label{sec:theoretical-framework}
-\section{Sound synthesis}\label{sec:sound-synthesis}
-\subsection{Frequency domain}\label{sec:frequency-domain}
-\subsection{Sinusoidal model}\label{sec:sinusoidal-model}
-\subsection{Phase Vocoder}\label{sec:phase-vocoder}
-\section{Theoretical synthesis with phase vocoder and FFT$^{-1}$}\label{sec:theoretical-synthesis-with-phase-vocoder-and-fft-1}
-\subsection{Stationary case}\label{sec:stationary-case}
-\subsection{Non-stationary case}\label{sec:non-stationary-case}
+\part{Introduction}\label{sec:introduction}
 
+\section{The company}\label{sec:the-company}
+\section{Objective}\label{sec:objective}
+\section{Context of the project}\label{sec:context-of-the-project}
+\section{Work environment and project management}\label{sec:work-environment-and-project-management}
+
+\newpage
+\part{Method Overview}\label{part:method-overview}
+\section{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
+\section{Method Overview}\label{sec:method-overview}
+
+\newpage
+\part{The additive synthesis in frequency domain}
+
+\section{Stationary Case}\label{stationary-case}
+\section{Quasi-Stationary Case}\label{quasi-stationary-case}
+\subsection{Theory}\label{theory-quasi-stat}
+\subsection{phase vocoder}\label{phase-vocoder-quasi-stationary}
+\section{Non-Stationary Case}\label{non-stationary-case}
+\subsection{Theory}\label{theory-non-stat}
+\subsection{phase vocoder}\label{phase-vocoder-stationary}
+
+\newpage
+\part{Result}
+\section{Sationary Case}\label{sec:sationary-results}
+\section{Non-Stationary Case}\label{non-stationary-results}
 
 \newpage
 \part{Code structure and conventions}\label{sec:code-structure-and-conventions}
@@ -171,10 +189,147 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 \subsection{NonStationarySynthesizer}
 \section{Spectrum generation module}\label{sec:spectrum-generation-module}
 \subsection{SpectrumGenerator}\label{sec:spectrumgenerator}
-\subsection{StaionarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		SpectrumGenerator & \\
+		\hline
+		\hline
+		\_parameters : np.array & \\
+		\_nfft : np.float & \\
+		\_spectrum : np.array & \\
+		\_window\_size : np.float & \\
+		\_analysis\_hop : np.float & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
+		\_add\_lobe(self, k, lobe) & \\
+		\_set\_window\_size(self, window\_size) & \\
+		\_set\_window\_type(self, window\_type) & \\
+		\_get\_parameters(self, new\_parameters) & \\
+		\_get\_spectrum(self) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+
+ 
+The aim of this class is to generate a synthetic spectrum from known parameters (amplitudes, phases, frequencies). This class is divided into two subclasses that generate stationary and non-stationary spectrums.\\
+
+\subsection{StationarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		StationarySpectrumGenerator (SpectrumGenerator) & \\
+		\hline
+		\hline
+		\_parameters : np.array & \\
+		\_nfft : np.float & \\
+		\_spectrum : np.array & \\
+		\_window\_size : np.float & \\
+		\_analysis\_hop : np.float & \\
+		\_lobe\_generator : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
+		\_add\_lobe(self, k, lobe) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+
 \subsection{NonStationarySpectrumGenerator}\label{sec:nonstationaryspectrumgenerator}
-\subsection{StationnaryLobe}\label{sec:stationnarylobe}
-\subsection{NonStationaryLobeGenerator}\label{sec:nonstationarylut}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationarySpectrumGenerator (SpectrumGenerator) & \\
+		\hline
+		\hline
+		\_parameters : np.array & \\
+		\_nfft : np.float & \\
+		\_spectrum : np.array & \\
+		\_window\_size : np.float & \\
+		\_analysis\_hop : np.float & \\
+		\_lobe\_generator : np.array & \\
+		\_regular\_lut : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
+		\_add\_lobe(self, k) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+This class has not been made yet, but the goal is the same as for the StationarySpectrumGenerator.
+\subsection{LobeGenerator}\label{sec:lobegenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		LobeGenerator & \\
+		\hline
+		\hline
+		\_window\_type : np.float & \\
+		\_window\_size : np.float & \\
+		\_nfft : np.float & \\
+		\_window : np.array &\\
+		\_lobe : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_type, window\_size, nfft) &\\
+		\_set\_window\_size(self, window\_size) & \\
+		\_set\_window\_type(self, window\_type) & \\
+		\_gen\_lobe(self) & \\
+		\_get\_lobe & \\
+		\hline
+\end{tabular}} \medskip\newline
+This class generates a 11 points main lobe.
+
+\subsubsection{StationnaryLobeGenerator}\label{sec:stationnarylobegenerator}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		StationaryLobeGenerator(LobeGenerator) & \\
+		\hline
+		\hline
+		\_window\_type : np.float & \\
+		\_window\_size : np.float & \\
+		\_nfft : np.float & \\
+		\_window : np.array &\\
+		\_lobe : np.array & \\
+		\_gen\_lobe : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, window\_type, window\_size, nfft) &\\
+		\_gen\_lobe(self) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+\subsubsection{NonStationaryLobeGenerator}\label{sec:nonstationarylobegenerator}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationaryLobeGenerator(LobeGenerator) & \\
+		\hline
+		\hline
+		\_abscisse : np.array & \\
+		\_ordonnee : np.array & \\
+		\_interpolated\_lobe : np.array & \\
+		\_regular\_grid : np.array & \\
+		\_domain : np.array & \\
+		\_number\_acr : np.float & \\
+		\_number\_fcr : np.float & \\
+		\_number\_points : np.float & \\
+		\_LUT : np.array & \\
+		\_gen\_lobe : np.array & \\
+		\hdashline
+		\_\_init\_\_(self, regular\_grid, acr\_domain, fcr\_domain, number\_acr, number\_fcr, window\_type,\\ window\_size, nfft, fs=None, method\_a=None, method\_p=None, method\_f=None) &\\
+		\_gen\_uniform\_lut(self) & \\
+		\_gen\_non\_uniform\_lut(self) & \\
+		\_gen\_lobes\_legacy(self, i, j, acr, fcr, t, n) & \\
+		\_gen\_lobe(self) & \\
+		\_get\_lobe(self) & \\
+		\_interpolate\_lobe(self, acr, fcr, method\_a=None, method\_p=None, method\_f = None)) & \\
+		\hline
+\end{tabular}} \medskip\newline
+\\
+
+The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must chose the kind of interpolation he or she wants to use for magnitude, phase and frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.
 \section{Phase Vocoder module}\label{sec:phase-vocoder-module}
 \subsection{PhaseVocoder}\label{sec:phasevocoder}
 \subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
@@ -208,7 +363,7 @@ s(n) = \alpha \cos(2\pi\tilde{f} n + \phi)
 \end{equation}
 knowing only $\alpha$, $\tilde{f}$ and $\phi$.\\
 
-We will also, to ease the process, assume that we know the application\footnote{And this this is a very strong hypothesis in the sense that it will never be true, but this is not the core issue at stake here.} ${f_{w, \tilde{f}}(\phi) : \phi \mapsto \tilde{\phi}}$ which takes into account the effect of windowing on the phase of the frame spectrum's phase\footnote{For more details on the theory, please read part \ref{sec:theoretical-framework} page \pageref{sec:theoretical-framework}}.\\ \\
+We will also, to ease the process, assume that we know the application\footnote{And this this is a very strong hypothesis in the sense that it will never be true, but this is not the core issue at stake here.} ${f_{w, \tilde{f}}(\phi) : \phi \mapsto \tilde{\phi}}$ which takes into account the effect of windowing on the phase of the frame spectrum's phase\footnote{For more details on the theory, please read part \ref{part:method-overview} page \pageref{part:method-overview}}.\\ \\
 The first step is then to generate a synthetic spectrum with the desired parameters. To do this we only generate a main lobe derived from the Fourier transform of the normalized window $w$ supposedly\footnote{Because no actual analysis happened} used during analysis, and place it at the right position on the spectrum. This involves to interpolate the relevant bins value if by any chance the wanted frequency $\tilde{f}$ is not exactly on a bin, that is to say if $\tilde{f} \notin \{\frac{2 k \pi}{N} \}_{k=0...N-1}$. We then multiply the generated lobe by $\frac{A}{2}$ and set the lobe phase to $\tilde{\phi} + 2\pi \tilde{f} R_a$    \footnote{This is because we wish to generate frame spaced by $R_a$ so we have to compensate the \emph{expected} phase shift by hand. In fact, in the purely stationary case, the expected phase shift is the theoretical phase shift.}. We then wished to use the phase vocoder to advance the phase (compute the needed phase shift). To get the temporal frame, we theoretically only have to compute the inverse Fourier transform of the generated spectrum.\\
 In order to use the Phase Vocoder we assumed the generated spectrum to be equivalent to the analysis spectrum $X(t_a^u)$ and the antecedently phase corrected spectrum to be equivalent to the past synthesis spectrum $Y(t_a^{u-1})$.\\
 At the first iteration :
@@ -226,7 +381,7 @@ Then after \ref{eq2} and \ref{eq3} we obtain :
 \end{split}
 \end{equation*}
 If $R_s = R_a$ we have a perfect reconstruction of the time synthesized overlap-add test signal. However, in that case, the Phase Vocoder is perfectly irrelevant to the synthesis, indeed, since we have no \emph{actual} analysis phase, we only need to modify $R_a$ to change the length of the final signal.\\
-At the following iteration, we have to update the phase of the generated spectrum to $\tilde{\phi} + 2\times2\pi \tilde{f} R_a$ instead of $\tilde{\phi} + 2\pi \tilde{f} R_a$ (as computed in \ref{phaseAdvanceStat}), recursively, we can define the phase of the lobe the ith generated spectrum as :
+At the following iteration, we have to update the phase of the generated spectrum to $\tilde{\phi} + 2\times2\pi \tilde{f} R_a$ instead of $\tilde{\phi} + 2\pi \tilde{f} R_a$ (as computed in (\ref{phaseAdvanceStat})), recursively, we can define the phase of the lobe the ith generated spectrum as :
 \begin{equation}
 \begin{cases}
 \tilde{\phi}_i = \tilde{\phi}_{i-1} + 2\pi \tilde{f} R_a \\
@@ -242,7 +397,7 @@ Note that the initial phase $\phi$ is constant from one frame to the other \emph
 We can assume that under the right conditions the method developed in subsection \ref{puresynth} above still holds, if we update the parameters $\tilde{f}$ and $\alpha$ in the spectrum generation.
 \subsection{Theoretical phases advance}
 For stationary signals expressed as in (\ref{statSignal}) the phase advance from one frame to the other is elementary to compute :
-\begin{equation}
+\begin{equation}\label{phaseAdvanceStat}
 \begin{split}
 \Delta \Phi_{f}^{t_a} & = \Phi_{f}^{t_a + H_a} - \Phi_{f}^{t_a}\\
 & = 2\pi f (t_a + H_a) - 2\pi f t_a\\
