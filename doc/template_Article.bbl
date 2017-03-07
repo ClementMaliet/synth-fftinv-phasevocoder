@@ -22,7 +22,7 @@
 \BIBdecl
 
 \bibitem{pep8}
-N.~C. Guido~van Rossum, Barry~Warsaw, ``Style guide for python code,'' Aug.
+G.~Van~Rossum, B.~Warsaw, and N.~Coghlan, ``Style guide for python code,'' Aug.
   2013.
 
 \end{thebibliography}

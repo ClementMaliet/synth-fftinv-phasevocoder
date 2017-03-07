@@ -6,3 +6,6 @@
 *.log
 *.gz
 *.toc
+*.aux
+*.log
+*.gz

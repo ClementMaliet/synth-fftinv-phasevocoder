@@ -175,7 +175,7 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 	\item[\_acrs] stores the $\mu_i$
 	\item[\_fcrs] stores the $\psi_i$
 \end{description}
-\footnotetext[1]{Please look up section \ref{sec:sinusoidal-model} page \pageref{sec:sinusoidal-model} for more details}
+\footnotetext[1]{Please look up section \ref{non-stationary-case} page \pageref{non-stationary-case} for more details}
 \section{Code structure}\label{sec:code-structure}
 \subsection{General structure}\label{sec:general-structure}
 \subsection{Class structure}\label{sec:class-structure}
@@ -400,13 +400,24 @@ For stationary signals expressed as in (\ref{statSignal}) the phase advance from
 \begin{equation}\label{phaseAdvanceStat}
 \begin{split}
 \Delta \Phi_{f}^{t_a} & = \Phi_{f}^{t_a + H_a} - \Phi_{f}^{t_a}\\
-& = 2\pi f (t_a + H_a) - 2\pi f t_a\\
+& = 2\pi f (t_a + H_a) + \phi - 2\pi f t_a - \phi\\
 & = 2\pi f H_a = 2\pi \tilde{f} R_a
 \end{split}
 \end{equation}
+Where $H_a$ is the hop-size in seconds that is $H_a = \frac{R_a}{f_s}$.\\
 For non stationary signal expressed as :
 \begin{equation}
 s(n) = (\alpha + \mu \cdot t_a) \sin(2\pi f t_a + \frac{\psi}{2} t_a^2 + \phi)
+\end{equation}
+The phase advance is computed in the same way :
+\begin{equation}
+\begin{split}
+\Delta \Phi_{f}^{t_a} & = \Phi_{f}^{t_a + H_a} - \Phi_{f}^{t_a}\\
+& = 2\pi f (t_a + H_a) + \frac{\psi}{2} (t_a + H_a)^2 + \phi - (2\pi f t_a + \frac{\psi}{2} t_a^2 + \phi)\\
+& = 2\pi f H_a + \frac{\psi}{2}(t_a^2 + 2 t_a H_a + H_a^2) - \frac{\psi}{2} t_a^2\\
+& = 2\pi f H_a + \frac{\psi}{2}(2 t_a H_a + H_a^2)\\
+& = 2\pi (f + \frac{\psi}{2\pi}t_a)H_a + \frac{\psi}{2}H_a^2
+\end{split}
 \end{equation}
 \newpage
 \bibliographystyle{ieeetran}
