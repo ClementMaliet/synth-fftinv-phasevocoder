@@ -8,6 +8,7 @@
 \usepackage{cases}  
 \usepackage{cite}
 \usepackage{graphicx}
+\usepackage{dsfont}
 %opening
 \title{Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT$^{-1}$}
 \author{Cl\'ement Cazorla, Vincent Chrun, Bastien Fundaro, Cl\'ement Maliet \\ENSEEIHT - 3EN TSI 2016-2017}
@@ -122,13 +123,13 @@ Addition and multiplication attempts between other data type will result in a \t
 The Parameters class is more of a structure than a class and only contains the stationary sinusoidal model parameters and their respective accessors. It also stores the number of sinuses and checks that the given data are consistent upon instantiation.\\
 In the stationary sinusoidal model the signal $s(t)$ is defined as follow\footnotemark[1] :
 \begin{equation*}
-	s(n) = \sum_{i=1}^{N_{sinus}} \alpha_i \sin(2\pi \bar{f_i} n+ \phi_i)
+	s(n) = \sum_{i=1}^{N_{sinus}} \alpha_i \sin(2\pi \tilde{f_i} n+ \phi_i)
 \end{equation*}
-with $\bar{f_i} = \frac{f_i}{f_s}$ the normalised frequency.\\
+with $\tilde{f_i} = \frac{f_i}{f_s}$ the normalised frequency.\\
 We then store the parameters as follows :
 \begin{description}
 	\item[\_amplitudes] stores the $\alpha_i$
-	\item[\_frequencies] stores the $\bar{f_i}$
+	\item[\_frequencies] stores the $\tilde{f_i}$
 	\item[\_phases] stores the $\phi_i$
 \end{description}
 \subsubsection{NonStationaryParameters}
@@ -148,7 +149,7 @@ We then store the parameters as follows :
 \end{tabular}} \medskip\newline
 The stationary sinusoidal model can be extended to the first order development to better model fast amplitude and frequency change over time. The signal $s(t)$ can then be expressed as a sum of linearly varying chirps\footnotemark[1] :
 \begin{equation*}
-	s(n) = \sum_{i=1}^{N_sinus} (\alpha_i + \mu_i \cdot nT_s) \sin(2\pi \bar{f_i} n + \frac{\psi_i}{2} (nT_s)^2 + \phi_i)
+	s(n) = \sum_{i=1}^{N_sinus} (\alpha_i + \mu_i \cdot nT_s) \sin(2\pi \tilde{f_i} n + \frac{\psi_i}{2} (nT_s)^2 + \phi_i)
 \end{equation*}
 Where we define the \textbf{Amplitude Change Rate} $\mu$ and the \textbf{Frequency Change Rate} $\psi$. \\
 Thus we inherit the \texttt{Parameters} class to add the two additional parameters as follow :
@@ -173,7 +174,7 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 \subsection{StaionarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
 \subsection{NonStationarySpectrumGenerator}\label{sec:nonstationaryspectrumgenerator}
 \subsection{StationnaryLobe}\label{sec:stationnarylobe}
-\subsection{NonStationaryLUT}\label{sec:nonstationarylut}
+\subsection{NonStationaryLobeGenerator}\label{sec:nonstationarylut}
 \section{Phase Vocoder module}\label{sec:phase-vocoder-module}
 \subsection{PhaseVocoder}\label{sec:phasevocoder}
 \subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
@@ -181,7 +182,77 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 
 \newpage
 \section*{Conclusion}
+\appendix
+\section{Phase advance and propagation along the signal}
+\subsection{On the first attempt at Phase Vocoder use}
+In the stationary case, the Phase Vocoder is expressed in 3 equations as follow :
+\begin{equation}\label{eq1}
+\Delta \Phi_{k}^{u} = \angle X(t_a^u, \Omega_k) - \angle X(t_a^{u-1}, \Omega_k) - R_a \Omega_k
+\end{equation}
+\begin{equation}\label{eq2}
+\hat{\omega_k}(t_a^u) = \Omega_k + \frac{\Delta_p \Phi_{k}^u}{R_a}
+\end{equation}
+\begin{equation}\label{eq3}
+\angle Y(t_s^u, \Omega_k) = \angle Y(t_s^{u-1}, \Omega_k) + R_s \hat{\omega_k}(t_a^u)
+\end{equation}
+What (\ref{eq1}) means is that we look for the true phase shift (the analysis phase shift) during the frame $u$ and $u-1$ which is $\angle X(t_a^u, \Omega_k) - \angle X(t_a^{u-1}, \Omega_k)$ and we compute the error in phase shift, that is to say the difference between the \emph{true} phase shift and the \emph{expected} phase shift.\\
+In (\ref{eq2}) we use the error in phase shift to compute the deviation in frequency $\frac{\Delta_p \Phi_{k}^u}{R_a}$ from the expected frequency $\Omega_k$ and thus compute the \emph{true} frequency at which the bin was excited between $t_a^{u-1}$ and $t_a^{u}$.\\
+Finally (\ref{eq3}) assume the correct synthesis phase shift will be $R_s\hat{\omega_k}(t_a^u)$ that is the true frequency times the synthesis hop.\\
+\\
+The issue with such an approach in our case is that we dropped the analysis. We want to use the Phase Vocoder to \emph{create} phase shifts in our spectra, but the Phase Vocoder is in fact nothing but a fancy way to copy existing phase shifts while taking into account a different hop during analysis and synthesis. I will try and break down the issues I have into two cases.
+\subsubsection{"Pure" synthesis}\label{puresynth}
+We wish to synthesize a stationary or a sum of stationary sinusoid from scratch. For simplicity's sake and without loss of generality we will take the one sinusoid case.
+That is to say that we want, without prior knowledge to generate $s(n)$ such as :
+\begin{equation}\label{statSignal}
+s(n) = \alpha \cos(2\pi\tilde{f} n + \phi)
+\end{equation}
+knowing only $\alpha$, $\tilde{f}$ and $\phi$.\\
 
+We will also, to ease the process, assume that we know the application\footnote{And this this is a very strong hypothesis in the sense that it will never be true, but this is not the core issue at stake here.} ${f_{w, \tilde{f}}(\phi) : \phi \mapsto \tilde{\phi}}$ which takes into account the effect of windowing on the phase of the frame spectrum's phase\footnote{For more details on the theory, please read part \ref{sec:theoretical-framework} page \pageref{sec:theoretical-framework}}.\\ \\
+The first step is then to generate a synthetic spectrum with the desired parameters. To do this we only generate a main lobe derived from the Fourier transform of the normalized window $w$ supposedly\footnote{Because no actual analysis happened} used during analysis, and place it at the right position on the spectrum. This involves to interpolate the relevant bins value if by any chance the wanted frequency $\tilde{f}$ is not exactly on a bin, that is to say if $\tilde{f} \notin \{\frac{2 k \pi}{N} \}_{k=0...N-1}$. We then multiply the generated lobe by $\frac{A}{2}$ and set the lobe phase to $\tilde{\phi} + 2\pi \tilde{f} R_a$    \footnote{This is because we wish to generate frame spaced by $R_a$ so we have to compensate the \emph{expected} phase shift by hand. In fact, in the purely stationary case, the expected phase shift is the theoretical phase shift.}. We then wished to use the phase vocoder to advance the phase (compute the needed phase shift). To get the temporal frame, we theoretically only have to compute the inverse Fourier transform of the generated spectrum.\\
+In order to use the Phase Vocoder we assumed the generated spectrum to be equivalent to the analysis spectrum $X(t_a^u)$ and the antecedently phase corrected spectrum to be equivalent to the past synthesis spectrum $Y(t_a^{u-1})$.\\
+At the first iteration :
+\begin{itemize}
+	\item $X(t_a^{u-1})$ is void because by hypothesis, nothing happened before.
+	\item $X(t_a^u)$ is the freshly generated spectrum
+	\item $Y(t_a^{u-1})$ is also void for the same reasons
+\end{itemize}
+Equation \ref{eq1} gives, for $k \in {1...N-1} \text{ s.t } X(t_a^{u}, \Omega_k) \text{ is a bin of the lobe}$ a phase shift error of $\tilde{\phi}$.\\
+Then after \ref{eq2} and \ref{eq3} we obtain :
+\begin{equation*}
+\begin{split}
+\angle Y(t_s^u, \Omega_k) & = \angle Y(t_s^{u-1}, \Omega_k) + R_s \hat{\omega_k}(t_a^u)\\
+& = \angle Y(t_s^{u-1}, \Omega_k) + \frac{R_s}{R_a}\tilde{\phi} + R_s\Omega_k
+\end{split}
+\end{equation*}
+If $R_s = R_a$ we have a perfect reconstruction of the time synthesized overlap-add test signal. However, in that case, the Phase Vocoder is perfectly irrelevant to the synthesis, indeed, since we have no \emph{actual} analysis phase, we only need to modify $R_a$ to change the length of the final signal.\\
+At the following iteration, we have to update the phase of the generated spectrum to $\tilde{\phi} + 2\times2\pi \tilde{f} R_a$ instead of $\tilde{\phi} + 2\pi \tilde{f} R_a$ (as computed in \ref{phaseAdvanceStat}), recursively, we can define the phase of the lobe the ith generated spectrum as :
+\begin{equation}
+\begin{cases}
+\tilde{\phi}_i = \tilde{\phi}_{i-1} + 2\pi \tilde{f} R_a \\
+\tilde{\phi}_0 = \tilde{\phi}
+\end{cases}
+\end{equation}
+\subsubsection{"Parametered" synthesis}
+In this case, we will not synthesize a truly stationary signal but we assume that the signal is quasi-stationary, which is to say that given a small enough analysis window, it can be considered stationary within that frame.
+\begin{equation}
+s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \alpha \cos(2\pi\tilde{f} n + \phi)
+\end{equation}
+Note that the initial phase $\phi$ is constant from one frame to the other \emph{by definition}, indeed, a change of phase is equivalent to a sweep in frequency. Also this is more of a constrain of stability on frequency than it is on amplitude because of the nature of the overlap-add process.\\
+We can assume that under the right conditions the method developed in subsection \ref{puresynth} above still holds, if we update the parameters $\tilde{f}$ and $\alpha$ in the spectrum generation.
+\subsection{Theoretical phases advance}
+For stationary signals expressed as in (\ref{statSignal}) the phase advance from one frame to the other is elementary to compute :
+\begin{equation}
+\begin{split}
+\Delta \Phi_{f}^{t_a} & = \Phi_{f}^{t_a + H_a} - \Phi_{f}^{t_a}\\
+& = 2\pi f (t_a + H_a) - 2\pi f t_a\\
+& = 2\pi f H_a = 2\pi \tilde{f} R_a
+\end{split}
+\end{equation}
+For non stationary signal expressed as :
+\begin{equation}
+s(n) = (\alpha + \mu \cdot t_a) \sin(2\pi f t_a + \frac{\psi}{2} t_a^2 + \phi)
+\end{equation}
 \newpage
 \bibliographystyle{ieeetran}
 \bibliography{biblioProjetLong}
