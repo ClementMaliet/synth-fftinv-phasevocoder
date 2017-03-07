@@ -75,15 +75,13 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 \end{figure}
 
 \newpage
-\part{Method Overview}\label{part:method-overview}
+\part{General analysis/synthesis approach}\label{part:general-approach}
 \section{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
-
-The sound signal is represented as a sum of N sinusoids: \\
-\centerline{
-$ x(t) = \sum\limits_{n=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
-\\
-Indeed, we can consider that the noise can be neglected compared to the periodic par of the signal which is assumed to be a linear combination of sinusoids. Besides, we consider that the sinusoids are stationary, that is to say that the parameters are assumed to be stationary over time.
-
+In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a sum of time varying sinusoids, which are called partials \cite{quatieri2002audio}:
+\begin{equation}\label{additiveSynthesis}
+x(t) = \sum\limits_{n=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})
+\end{equation}
+This is motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.
 \begin{figure}[H]
 	\centerline
 	{\includegraphics[scale=0.5]{additif.png}}
@@ -92,7 +90,7 @@ Indeed, we can consider that the noise can be neglected compared to the periodic
 \medskip
 The problem of this method is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.
 
-\section{Method Overview}\label{sec:method-overview}
+\section{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
 First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance:
@@ -120,20 +118,42 @@ Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the ori
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
 	\caption{\it Synthesized frame vs Original frame}
 \end{figure}
-
-\newpage
-\part{The additive synthesis in frequency domain}
-
-\section{Stationary Case}
-\subsection{Phase Coherence}\label{stationary-case}
+\subsection{Phase Coherence}\label{phase-coherence}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
-	\begin{figure} [H]
+\begin{figure} [H]
 	\centering
 	\includegraphics[scale = 0.2]{coherentphase.png}
 	\caption {Coherent phase (above) vs. Incoherent phase (below) between frames}
-	\end{figure}
- When we listen to a signal which phase is incoherent between frames (vertical jump) it will sound as "pops".  This is something very unpleasant to listen to. We need to do something to make sure there is no discontinuity. Thus, correcting the phase is absolutely necessary. \\
-In the stationary case, it is something easy to do. Knowing the exact frequency and for each frame, we advance the phase of $2\pi \tilde{f} R_a$. To see details of the theoretical phase advance for the stationary case, please refer to the appendix (\ref{theoretical_phase_advance}).
+\end{figure}
+When we listen to a signal which phase is incoherent between frames (vertical jump) it will sound as "pops".  This is something very unpleasant to listen to. We need to do something to make sure there is no discontinuity. Thus, correcting the phase is absolutely necessary. \\
+In the stationary case, it is something easy to do. Knowing the exact frequency and for each frame, we advance the phase of $2\pi \tilde{f} R_a$  \footnote{To see details of the theoretical phase advance for the stationary case, please refer to the appendix \ref{theoretical_phase_advance} page \pageref{theoretical_phase_advance}.}.
+\newpage
+\part{Sinusoidal model synthesis in the frequency domain}
+
+\section{Stationary Case}
+Most stationary signals can be decomposed in a sum of partials with seldom loss in perception :
+\begin{equation}
+s(n) = \sum_{i=1}^{K}\alpha_i \sin(2\pi \tilde{f_i} n + \phi_{i})
+\end{equation}
+If all three parameters $\alpha_i$, $\tilde{f_i}$ and $\phi_{i}$ are known for each partial, perfect reconstruction is thus possible.\\
+It is first needed to compute the Fourier transform of a given frame. Let $w_{t_a}(n)$ be an analysis window starting at $t_a = kR_a$ where $R_a$ is called the \emph{hop size}. The resulting spectral frame is:
+\begin{equation}
+S_{t_a}(m) = \text{DFT}[s](m) \ast W_{t_a}(m)
+\end{equation}
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.4]{Interpolation.eps}
+	\caption{Interpolation of stored lobe values onto the FFT bins.}
+	\label{interpBin}
+\end{figure}
+Where $W_{t_a}(m)$ is the DFT of the window $w_{t_a}$. Under the right assumptions on the window phase\footnote{Which involves circular shift to cancel the phase shift \cite{arfib2002time}.}, the spectrum consists in main and secondary lobes (which originates directly from $W_{t_a}(m)$) convolved at the sinus amplitude, phase and frequency.\\
+However since most of the energy is concentrated in the main lobe\footnote{At the condition that $w_{t_a}$ is not rectangular.}, one can omit the side lobes with little to no error, ever more so since most of the error is made on the edges of the temporal frame where the amplitude is small. In the stationary case, every main lobes are identical in shape, this means that one can synthesise a spectrum by copying a precomputed lobes onto the relevant bins of the FFT. This makes the process computationally light since only 9 points of the main lobes are sufficient \cite{rodet1992spectral}, although our method used 11 for further precision.\\
+Interpolation is necessary to fill the bins because the sinusoid frequency bin $\hat{f_i}$ is unlikely to fall on an integer bin number ($\hat{f_i} = \tilde{f_i}\times N$ with $N$ the fft size) as illustrated in figure \ref{interpBin}, this step allows for a good precision in frequency without the need for zero-padding the spectrum, thus increasing performance.\\
+The phase is set at a common value for every bins of the lobe, on the rational that they all represents the contribution of the same sinusoid. Note that the phase used is the original phase $\phi_{i}$ corrected from the windowing effects and advanced by the time passed, to ensure phase coherence as explained in section \ref{phase-coherence}, that is to say that:
+\begin{equation}
+\phi_{lobe} = \hat{\phi_{i}} + k\times 2\pi \tilde{f_i} R_a
+\end{equation}
+Where $\hat{\phi_{i}}$ denote the window-corrected phase, $2\pi \tilde{f_i} R_a$ the phase advance for a single hop at frequency $\tilde{f_i}$ and $k$ s.t $t_a = k\times R_a$.
 \section{Quasi-Stationary Case}\label{quasi-stationary-case}
 \subsection{Theory}\label{theory-quasi-stat}
 \subsection{phase vocoder}\label{phase-vocoder-quasi-stationary}
@@ -547,10 +567,10 @@ The PhaseVocoder file gathers both the Stationary Phase Vocoder and the Non-Stat
 The Phase Vocoder algorithm is located here. It will correct the phase at each frequency bin k (remember that this module is not used at the end). To do so it proceed in 5 steps :\\
 -Get the phase difference,\\
 -Remove the expected phase difference,\\
--Map the phase shift to [-pi; pi] range,\\
+-Map the phase shift to $[-\pi, \pi]$ range,\\
 -Get the true frequency,\\
 -And finally get the final phase.\\
-For the details, please refer to paper\cite{karrer2006phavorit} where the algorithm is well detailed.
+For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer2001time} and annex .
 \subsection{NonStationaryPhaseVocoder}\label{sec:nonstationaryphasevocoder}
 \texttt{%
 	\begin{tabular}{|lc|}
@@ -592,7 +612,7 @@ s(n) = \alpha \cos(2\pi\tilde{f} n + \phi)
 \end{equation}
 knowing only $\alpha$, $\tilde{f}$ and $\phi$.\\
 
-We will also, to ease the process, assume that we know the application\footnote{And this this is a very strong hypothesis in the sense that it will never be true, but this is not the core issue at stake here.} ${f_{w, \tilde{f}}(\phi) : \phi \mapsto \tilde{\phi}}$ which takes into account the effect of windowing on the phase of the frame spectrum's phase\footnote{For more details on the theory, please read part \ref{part:method-overview} page \pageref{part:method-overview}}.\\ \\
+We will also, to ease the process, assume that we know the application\footnote{And this this is a very strong hypothesis in the sense that it will never be true, but this is not the core issue at stake here.} ${f_{w, \tilde{f}}(\phi) : \phi \mapsto \tilde{\phi}}$ which takes into account the effect of windowing on the phase of the frame spectrum's phase\footnote{For more details on the theory, please read part \ref{part:general-approach} page \pageref{part:general-approach}}.\\ \\
 The first step is then to generate a synthetic spectrum with the desired parameters. To do this we only generate a main lobe derived from the Fourier transform of the normalized window $w$ supposedly\footnote{Because no actual analysis happened} used during analysis, and place it at the right position on the spectrum. This involves to interpolate the relevant bins value if by any chance the wanted frequency $\tilde{f}$ is not exactly on a bin, that is to say if $\tilde{f} \notin \{\frac{2 k \pi}{N} \}_{k=0...N-1}$. We then multiply the generated lobe by $\frac{A}{2}$ and set the lobe phase to $\tilde{\phi} + 2\pi \tilde{f} R_a$    \footnote{This is because we wish to generate frame spaced by $R_a$ so we have to compensate the \emph{expected} phase shift by hand. In fact, in the purely stationary case, the expected phase shift is the theoretical phase shift.}. We then wished to use the phase vocoder to advance the phase (compute the needed phase shift). To get the temporal frame, we theoretically only have to compute the inverse Fourier transform of the generated spectrum.\\
 In order to use the Phase Vocoder we assumed the generated spectrum to be equivalent to the analysis spectrum $X(t_a^u)$ and the antecedently phase corrected spectrum to be equivalent to the past synthesis spectrum $Y(t_a^{u-1})$.\\
 At the first iteration :
