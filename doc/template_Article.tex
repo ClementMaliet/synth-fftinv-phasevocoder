@@ -77,7 +77,49 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 \newpage
 \part{Method Overview}\label{part:method-overview}
 \section{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
+
+The sound signal is represented as a sum of N sinusoids: \\
+\centerline{
+$ x(t) = \sum\limits_{n=1}^N a_{n} sin(2 \pi f_{n} t + \phi_{n})$}
+\\
+Indeed, we can consider that the noise can be neglected compared to the periodic par of the signal which is assumed to be a linear combination of sinusoids. Besides, we consider that the sinusoids are stationary, that is to say that the parameters are assumed to be stationary over time.
+
+\begin{figure}[H]
+	\centerline
+	{\includegraphics[scale=0.5]{additif.png}}
+	\caption{\it The additive synthesis}
+\end{figure} 
+\medskip
+The problem of this method is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.
+
 \section{Method Overview}\label{sec:method-overview}
+
+The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
+First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance:
+
+\begin{figure}
+	\centerline
+	{\includegraphics[scale=0.5]{slide1.png}}
+	\caption{\it Windowing step}
+\end{figure}
+
+\medskip
+
+Then, we apply a STFT (Short Time Fourier Transform) to extract the coefficients.  We assume each peak represents a sinusoid, and we use a particular case of STFT called STPT, that detects peaks in the signal and that applies the STFT in the areas that are close to the peaks and sets the rest of the signal to zero. It is a simplest version of STFT, because we neglect the residual part of the signal by only considering the periodic part of the signal. This is less costly and works quite well, except in case of transitional signal because it is very difficult to model with a finite sum of sines. 
+
+\begin{figure} [H]
+	\centerline
+	{\includegraphics[scale=0.7]{slide2.png}}
+	\caption{\it Peaks detection}
+\end{figure}
+\medskip
+Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the original signal we applied the analysis to.
+
+\begin{figure}[H]
+	\centerline
+	{\includegraphics[scale=0.7]{synthesisstep.png}}
+	\caption{\it Synthesized frame vs Original frame}
+\end{figure}
 
 \newpage
 \part{The additive synthesis in frequency domain}
