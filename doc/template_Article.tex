@@ -9,6 +9,8 @@
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{dsfont}
+\usepackage{float}
+ \graphicspath{{images/}}
 %opening
 \title{Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT$^{-1}$}
 \author{Cl\'ement Cazorla, Vincent Chrun, Bastien Fundaro, Cl\'ement Maliet \\ENSEEIHT - 3EN TSI 2016-2017}
@@ -42,6 +44,15 @@ The present document is to serve as both a technical report and a documentation 
 \part{The additive synthesis in frequency domain}
 
 \section{Stationary Case}\label{stationary-case}
+\subsection{Phase Coherence}\label{stationary-case}
+The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
+	\begin{figure} [H]
+	\centering
+	\includegraphics[scale = 0.2]{coherentphase.png}
+	\caption {Coherent phase (above) vs. Incoherent phase (below) between frames}
+	\end{figure}
+ When we listen to a signal which phase is incoherent between frames (vertical jump) it will sound as "pops".  This is something very unpleasant to listen to. We need to do something to make sure there is no discontinuity. Thus, correcting the phase is absolutely necessary. \\
+In the stationary case, it is something easy to do. Knowing the exact frequency and for each frame, we advance the phase of $2\pi \tilde{f} R_a$. To see details of the theoretical phase advance for the stationary case, please refer to the appendix (\ref{theoretical_phase_advance}).
 \section{Quasi-Stationary Case}\label{quasi-stationary-case}
 \subsection{Theory}\label{theory-quasi-stat}
 \subsection{phase vocoder}\label{phase-vocoder-quasi-stationary}
@@ -332,11 +343,32 @@ This class generates a 11 points main lobe.
 The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must chose the kind of interpolation he or she wants to use for magnitude, phase and frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.
 \section{Phase Vocoder module}\label{sec:phase-vocoder-module}
 \subsection{PhaseVocoder}\label{sec:phasevocoder}
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		PhaseVocoder & \\
+		\hline
+		\hline
+		\_analysis\_hop : int & \\
+		\_synthesis\_hop : int & \\
+		\_omega : np.array  & \\
+		\_past\_analysis\_spectrum : spectrum & \\
+		\_past\_synthesis\_spectrum : spectrum & \\
+		\_current\_analysis\_spectrum : spectrum & \\
+		current\_synthesis\_spectrum : spectrum & \\
+		\hdashline
+		\_\_init\_\_(self, analysis\_hop, synthesis\_hop, current\_synthesis\_spectrum) & \\
+		get\_region(self, k) & \\
+		get\_pv\_spectrum(self, k) & \\
+		\hline
+\end{tabular}} \medskip\newline
+This module is not used by the mains yet. Please look up section \ref{sec:phase-vocoder} page \pageref{sec:phase-vocoder} to know what this module do. The PhaseVocoder file gathers both the Stationary Phase Vocoder and the Non-Stationary Phase
 \subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
 \subsection{NonStationaryPhaseVocoder}\label{sec:nonstationaryphasevocoder}
 
 \newpage
 \section*{Conclusion}
+\newpage
 \appendix
 \section{Phase advance and propagation along the signal}
 \subsection{On the first attempt at Phase Vocoder use}
@@ -395,7 +427,7 @@ s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \alpha \cos(2\pi\tilde{f} n + \
 \end{equation}
 Note that the initial phase $\phi$ is constant from one frame to the other \emph{by definition}, indeed, a change of phase is equivalent to a sweep in frequency. Also this is more of a constrain of stability on frequency than it is on amplitude because of the nature of the overlap-add process.\\
 We can assume that under the right conditions the method developed in subsection \ref{puresynth} above still holds, if we update the parameters $\tilde{f}$ and $\alpha$ in the spectrum generation.
-\subsection{Theoretical phases advance}
+\subsection{Theoretical phases advance}\label{theoretical_phase_advance}
 For stationary signals expressed as in (\ref{statSignal}) the phase advance from one frame to the other is elementary to compute :
 \begin{equation}\label{phaseAdvanceStat}
 \begin{split}
