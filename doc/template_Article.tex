@@ -23,6 +23,11 @@
 \begin{abstract}
 The present document is to serve as both a technical report and a documentation for the code produced during the long project. As such the first part will explain the theoretical framework and the state-of-the-art of the field. The second part will give some insight about the code structure and the conventions that were adopted and last but not least, the third part will serve as an actual documentation and details every class, methods and attributes.
 \end{abstract}
+
+	\begin{figure}
+		
+		\includegraphics[scale=0.28]{agn7.png}
+	\end{figure}
 \newpage
 \tableofcontents
 
@@ -31,9 +36,43 @@ The present document is to serve as both a technical report and a documentation 
 \part{Introduction}\label{sec:introduction}
 
 \section{The company}\label{sec:the-company}
+For this project we work with Audiogaming. Audiogaming is a start-up company which creates audio
+plug-in for movies and video games. They are base in Toulouse and Paris.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.19]{AudioFire_screen.png}
+	\caption{Audiofire: audio plug-in that recreates fire sound}
+\end{figure}
+
 \section{Objective}\label{sec:objective}
+
+The objective of the project is to use
+inverse Fourier transform to synthesize a sound. There are two
+parts in this process: the Analysis and the Synthesis.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.4]{Analysis_Synthesis.png}
+		\caption{General approach for modifying a sound in the spectral domain}
+	\end{figure}
+
+Our objectives were to focus on the synthesis. We supposed that the analysis part is done and that we know all the parameters. The work is divided into two parts : the stationary synthesis and the non-stationary synthesis. 
 \section{Context of the project}\label{sec:context-of-the-project}
+We had 6 weeks to do this work. As a beginning, we had the work of the previous group which worked on this project in 2015. They had done an analysis estimator of sinus parameters and sinus generation with those
+parameters (only stationary) in Python and some research on the Non-stationary synthesis with the LUT of lobes in Matlab.
+We imposed to ourself an Object Oriented Programming tree structure in Python, in that way the code will be easier to use by the client and the next group which will work on this project. This structure will be described in details in this report. 
 \section{Work environment and project management}\label{sec:work-environment-and-project-management}
+\subsection{Work environment}
+We used PyCharm to program in Python, Slack to communicate with our supervisor (ask questions, send some quick results, plan a meeting...). An other important tool was GitHub, we used it to share our codes and to work all at the same time in the same project. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.4]{all_softwares.png}
+		\caption{ {\it PyCharm} as Python IDE , {\it Slack} to communicate,{\it GitHub} to stock the codes and have a versionning, {\it Freedcamp} to plan the project events }
+	\end{figure}
+
+\subsection{Project management (Gantt chart)}
+\begin{figure}[H]
+	\includegraphics[scale=0.28]{Gantt.png}
+\end{figure}
 
 \newpage
 \part{Method Overview}\label{part:method-overview}
@@ -43,7 +82,7 @@ The present document is to serve as both a technical report and a documentation 
 \newpage
 \part{The additive synthesis in frequency domain}
 
-\section{Stationary Case}\label{stationary-case}
+\section{Stationary Case}
 \subsection{Phase Coherence}\label{stationary-case}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
 	\begin{figure} [H]
