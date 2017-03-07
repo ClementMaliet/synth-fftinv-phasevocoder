@@ -196,8 +196,97 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 \part{Documentation}\label{sec:documentation}
 \section{Core module}
 \subsection{Synthesizer}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		Synthesizer & \\
+		\hline
+		\hline
+		\_window\_size : float & \\
+		\_window\_type : float & \\
+		\_nfft : float  & \\
+		\_analysis\_hop : float & \\
+		\_synthesis\_hop : float & \\
+		\_current\_parameters : Parameters & \\
+		\_past\_parameters : Parameters & \\
+		\_fs : float & \\
+		\_past\_spectrum : Spectrum & \\
+		\_current\_spectrum : Spectrum & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor, analysis\_hop, 
+		\\ synthesis\_hop, current\_parameters, fs=None) & \\
+		\_\_del\_\_(cls) & \\
+		reset\_synthetizer (self, window\_size, window\_type, zero\_padding\_factor, \\
+		analysis\_hop, synthesis\_hop, current\_parameters, fs) & \\
+		get\_next\_frame(self) & \\
+		set\_next\_frame(self, next\_parameters) & \\
+		\_set\_window\_size(self, window\_size) & \\
+		\_set\_window\_type(self, window\_type) & \\
+		\_set\_analysis\_hop(self, analysis\_hop) & \\
+		\_set\_synthesis\_hop(self, synthesis\_hop) & \\
+		\_set\_current\_parameters(self, current\_parameters) & \\
+		\_get\_current\_spectrum(self) & \\
+		\_set\_current\_spectrum(self, new\_spectrum) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
 \subsection{StationarySynthesizer}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		StationarySynthesizer & \\
+		\hline
+		\hline
+		\_window\_size : float & \\
+		\_window\_type : float & \\
+		\_nfft : float  & \\
+		\_analysis\_hop : float & \\
+		\_synthesis\_hop : float & \\
+		\_current\_parameters : Parameters & \\
+		\_past\_parameters : Parameters & \\
+		\_fs : float & \\
+		\_past\_spectrum : Spectrum & \\
+		\_current\_spectrum : Spectrum & \\
+		\_spectrum\_generator : StationarySpectrumGenerator & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor, analysis\_hop, \\
+		 synthesis\_hop, current\_parameters, fs=None) & \\
+		get\_next\_frame(self) & \\
+		inverse\_fft(self, current\_spectrum) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+
 \subsection{NonStationarySynthesizer}
+
+\texttt{%
+	\begin{tabular}{|lc|}
+		\hline
+		NonStationarySynthesizer & \\
+		\hline
+		\hline
+		\_window\_size : float & \\
+		\_window\_type : float & \\
+		\_nfft : float  & \\
+		\_analysis\_hop : float & \\
+		\_synthesis\_hop : float & \\
+		\_current\_parameters : NonStationaryParameters & \\
+		\_past\_parameters : NonStationaryParameters & \\
+		\_fs : float & \\
+		\_past\_spectrum : Spectrum & \\
+		\_current\_spectrum : Spectrum & \\
+		\_spectrum\_generator : StationarySpectrumGenerator & \\
+		\hdashline
+		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor, analysis\_hop, \\
+		 synthesis\_hop, current\_parameters, fs=None) & \\
+		get\_next\_frame(self) & \\
+		inverse\_fft(self, current\_spectrum) & \\
+		\hline
+\end{tabular}} \medskip\newline
+
+
 \section{Spectrum generation module}\label{sec:spectrum-generation-module}
 \subsection{SpectrumGenerator}\label{sec:spectrumgenerator}
 
@@ -207,9 +296,9 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 		SpectrumGenerator & \\
 		\hline
 		\hline
-		\_parameters : np.array & \\
+		\_parameters : Parameters & \\
 		\_nfft : np.float & \\
-		\_spectrum : np.array & \\
+		\_spectrum : Spectrum & \\
 		\_window\_size : np.float & \\
 		\_analysis\_hop : np.float & \\
 		\hdashline
@@ -226,7 +315,7 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
  
 The aim of this class is to generate a synthetic spectrum from known parameters (amplitudes, phases, frequencies). This class is divided into two subclasses that generate stationary and non-stationary spectrums.\\
 
-\subsection{StationarySpectrumGenerator}\label{sec:staionaryspectrumgenerator}
+\subsection{StationarySpectrumGenerator}\label{sec:stationaryspectrumgenerator}
 
 \texttt{%
 	\begin{tabular}{|lc|}
@@ -234,12 +323,12 @@ The aim of this class is to generate a synthetic spectrum from known parameters 
 		StationarySpectrumGenerator (SpectrumGenerator) & \\
 		\hline
 		\hline
-		\_parameters : np.array & \\
+		\_parameters : Parameters & \\
 		\_nfft : np.float & \\
-		\_spectrum : np.array & \\
+		\_spectrum : Spectrum & \\
 		\_window\_size : np.float & \\
 		\_analysis\_hop : np.float & \\
-		\_lobe\_generator : np.array & \\
+		\_lobe\_generator : StationaryLobeGenerator & \\
 		\hdashline
 		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
 		\_add\_lobe(self, k, lobe) & \\
@@ -254,12 +343,12 @@ The aim of this class is to generate a synthetic spectrum from known parameters 
 		NonStationarySpectrumGenerator (SpectrumGenerator) & \\
 		\hline
 		\hline
-		\_parameters : np.array & \\
+		\_parameters : Parameters & \\
 		\_nfft : np.float & \\
-		\_spectrum : np.array & \\
+		\_spectrum : Spectrum & \\
 		\_window\_size : np.float & \\
 		\_analysis\_hop : np.float & \\
-		\_lobe\_generator : np.array & \\
+		\_lobe\_generator : NonSationaryLobeGenerator & \\
 		\_regular\_lut : np.array & \\
 		\hdashline
 		\_\_init\_\_(self, window\_size, parameters, nfft, analysis\_hop)&\\
@@ -280,7 +369,7 @@ This class has not been made yet, but the goal is the same as for the Stationary
 		\_window\_size : np.float & \\
 		\_nfft : np.float & \\
 		\_window : np.array &\\
-		\_lobe : np.array & \\
+		\_lobe : Spectrum & \\
 		\hdashline
 		\_\_init\_\_(self, window\_type, window\_size, nfft) &\\
 		\_set\_window\_size(self, window\_size) & \\
@@ -303,8 +392,8 @@ This class generates a 11 points main lobe.
 		\_window\_size : np.float & \\
 		\_nfft : np.float & \\
 		\_window : np.array &\\
-		\_lobe : np.array & \\
-		\_gen\_lobe : np.array & \\
+		\_lobe : Spectrum & \\
+		\_gen\_lobe : Spectrum & \\
 		\hdashline
 		\_\_init\_\_(self, window\_type, window\_size, nfft) &\\
 		\_gen\_lobe(self) & \\
@@ -327,7 +416,7 @@ This class generates a 11 points main lobe.
 		\_number\_fcr : np.float & \\
 		\_number\_points : np.float & \\
 		\_LUT : np.array & \\
-		\_gen\_lobe : np.array & \\
+		\_gen\_lobe : Spectrum & \\
 		\hdashline
 		\_\_init\_\_(self, regular\_grid, acr\_domain, fcr\_domain, number\_acr, number\_fcr, window\_type,\\ window\_size, nfft, fs=None, method\_a=None, method\_p=None, method\_f=None) &\\
 		\_gen\_uniform\_lut(self) & \\
@@ -352,10 +441,10 @@ The aim is to generate a LUT with a uniform or a non-uniform grid, and to genera
 		\_analysis\_hop : int & \\
 		\_synthesis\_hop : int & \\
 		\_omega : np.array  & \\
-		\_past\_analysis\_spectrum : spectrum & \\
-		\_past\_synthesis\_spectrum : spectrum & \\
-		\_current\_analysis\_spectrum : spectrum & \\
-		current\_synthesis\_spectrum : spectrum & \\
+		\_past\_analysis\_spectrum : Spectrum & \\
+		\_past\_synthesis\_spectrum : Spectrum & \\
+		\_current\_analysis\_spectrum : Spectrum & \\
+		current\_synthesis\_spectrum : Spectrum & \\
 		\hdashline
 		\_\_init\_\_(self, analysis\_hop, synthesis\_hop, current\_synthesis\_spectrum) & \\
 		get\_region(self, k) & \\
