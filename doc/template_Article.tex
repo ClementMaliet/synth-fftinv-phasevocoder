@@ -42,7 +42,7 @@ The present document is to serve as both a technical report and a documentation 
 \part{Introduction}\label{sec:introduction}
 
 \section{The company}\label{sec:the-company}
-For this project we work with Audiogaming. Audiogaming is a start-up company which creates audio
+\hspace{15pt}For this project we work with Audiogaming. Audiogaming is a start-up company which creates audio
 plug-in for movies and video games. They are base in Toulouse and Paris.
 \begin{figure}[H]
 	\centering
@@ -52,7 +52,7 @@ plug-in for movies and video games. They are base in Toulouse and Paris.
 
 \section{Objective}\label{sec:objective}
 
-The objective of the project is to use
+\hspace{15pt}The objective of the project is to use
 inverse Fourier transform to synthesize a sound. There are two
 parts in this process: the Analysis and the Synthesis.
 	\begin{figure}[H]
@@ -62,13 +62,14 @@ parts in this process: the Analysis and the Synthesis.
 	\end{figure}
 
 Our objectives were to focus on the synthesis. We supposed that the analysis part is done and that we know all the parameters. The work is divided into two parts : the stationary synthesis and the non-stationary synthesis. 
+
 \section{Context of the project}\label{sec:context-of-the-project}
-We had 6 weeks to do this work. As a beginning, we had the work of the previous group which worked on this project in 2015. They had done an analysis estimator of sinus parameters and sinus generation with those
+\hspace{15pt}We had 6 weeks to do this work. As a beginning, we had the work of the previous group which worked on this project in 2015. They had done an analysis estimator of sinus parameters and sinus generation with those
 parameters (only stationary) in Python and some research on the Non-stationary synthesis with the LUT of lobes in Matlab.
 We imposed to ourself an Object Oriented Programming tree structure in Python, in that way the code will be easier to use by the client and the next group which will work on this project. This structure will be described in details in this report. 
 \section{Work environment and project management}\label{sec:work-environment-and-project-management}
 \subsection{Work environment}
-We used PyCharm to program in Python, Slack to communicate with our supervisor (ask questions, send some quick results, plan a meeting...). An other important tool was GitHub, we used it to share our codes and to work all at the same time in the same project. 
+\hspace{15pt}We used PyCharm to program in Python, Slack to communicate with our supervisor (ask questions, send some quick results, plan a meeting...). An other important tool was GitHub, we used it to share our codes and to work all at the same time in the same project. 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.4]{all_softwares.png}
@@ -85,7 +86,7 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 \part{Sound synthesis in the frequency domain}
 \section{General analysis/synthesis approach}\label{part:general-approach}
 \subsection{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
-In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a finite sum of time varying sinusoids, which are called partials \cite{quatieri2002audio} added to a residual, that is, a stochastic process equivalent to a noise:
+\hspace{15pt}In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a finite sum of time varying sinusoids, which are called partials \cite{quatieri2002audio} added to a residual, that is, a stochastic process equivalent to a noise:
 \begin{equation}
 s(t) = \sum_{i=1}^{K}\alpha_i(t) \sin(2\pi f_i(t) t + \phi_{i}) + e(t)
 \end{equation}
@@ -93,7 +94,7 @@ Where the amplitude $\alpha_i(t)$ and the frequency $f_i(t)$ are smooth slowly v
 Although in most cases, that is speech or musical instruments synthesis, the residual contribution is not negligible compared to the partials \cite{quatieri2002audio, rodet1992spectral} one can, in a first time, set the residual term to zero\footnote{In fact, the sinusoidal plus residual model is a direct consequence of the source/filter model \cite{mcaulay1986speech}, the synthesis of the residual term is thus more or less equivalent to filtering a white noise, which is, in its naive resolution, simpler than the sinusoids synthesis. This is why we mainly focus on the sinusoidal synthesis despite the non negligible nature of the residual term.}.\\
 This synthesis method is also motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.\\
 \\
-However the main issue at stake is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.\\
+However the main issue at stake is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis. By doing so, we only stock \\
 
 \begin{figure}[H]
 	\centering
@@ -104,7 +105,7 @@ However the main issue at stake is that it is very costly to implement, so it is
 
 \subsection{General framework}\label{sec:general-framework}
 
-The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
+\hspace{15pt}The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
 First of all, we window the signal in order to maximize the energy in the main lobe, with Hanning, Blackman-Harris... window for instance (Figure \ref{windowing}):
 
 \begin{figure}[H]
@@ -144,7 +145,7 @@ The image below is a little sum up of the method:
 \newpage
 
 \subsection{Phase Coherence}\label{phase-coherence}
-The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
+\hspace{15pt}The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
 \begin{figure} [H]
 	\centering
 	\includegraphics[scale = 0.2]{coherentphase.png}
@@ -155,7 +156,7 @@ In the stationary case, it is something easy to do. Knowing the exact frequency 
 \section{Sinusoid synthesis in the frequency domain}
 
 \subsection{Stationary Case}
-Most stationary signals can be decomposed in a sum of partials with seldom loss in perception :
+\hspace{15pt}Most stationary signals can be decomposed in a sum of partials with seldom loss in perception :
 \begin{equation}
 s(n) = \sum_{i=1}^{K}\alpha_i \sin(2\pi \tilde{f_i} n + \phi_{i})
 \end{equation}
@@ -179,12 +180,12 @@ The phase is set at a common value for every bins of the lobe, on the rational t
 \end{equation}
 Where $\hat{\phi_{i}}$ denote the window-corrected phase, $2\pi \tilde{f_i} R_a$ the phase advance for a single hop at frequency $\tilde{f_i}$ and $k$ s.t $t_a = k\times R_a$.
 \subsection{Quasi-Stationary Case}\label{quasi-stationary-case}
-Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made so that the synthesis work.\\
+\hspace{15pt}Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made so that the synthesis work.\\
 The signal is a non stationary signal which can be approximately considered as stationary given a small enough window:
 \begin{equation}
 s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \sum_{i=1}^{K}\alpha_i^{u} \sin(2\pi \tilde{f_i^{u}} n + \phi_{i}^u)
 \end{equation}
-However, while the synthesised spectrum amplitude remain unchanged, the phase has to be corrected to take into account both the fact that the sinusoid initial phase $\phi_i$ has to be passed along the sinusoid track if its frequency where to change, and phase advance corrections due to the non-stationary nature of the signal. \\
+\hspace{15pt}However, while the synthesised spectrum amplitude remain unchanged, the phase has to be corrected to take into account both the fact that the sinusoid initial phase $\phi_i$ has to be passed along the sinusoid track if its frequency where to change, and phase advance corrections due to the non-stationary nature of the signal. \\
 Indeed, although we assume the signal to be stationary in a short frame, this mainly implies that the synthesised lobe corresponding to the sinusoid is identical to a stationary sinusoid lobe. However, because of the recursive nature of the synthesis phase, errors in phase advances due to either a loss of precision in frequency estimation\footnote{As one will see in the true non-stationary case, amplitude and phase shifts have significant influence one the lobe appearance} or applying stationary phase shift as seen in (\ref{statPhaseShift}), may lead to significant phase deviation after a few iteration. This may in turn leads to significant phase de-coherence in the case of a note onset, that is the appearing of a new sinusoid.\\
 One proposed method relies on a Phase Vocoder\footnote{See annex \ref{phase-vocoder-annex} page \pageref{phase-vocoder-annex} for more informations on Phase Vocoders.} to take into account and corrects unexpected phase shift due to non-stationarity in the pre-analysed reference signal. The phase is then set to the reference signal phase corrected for a possible difference in analysis and synthesis hop size. However, because we rely on the analysis phase to ensure correct phase propagation, the method loses the initial flexibility of a true sinusoidal model.\\
 Another possible approach is to pass the true theoretical phase advances along the track. Although it implies that one is able to track the sinusoid evolution (the complexity of which is substantial \cite{mcaulay1986speech, serra1989system, karrer2006phavorit}), this has the advantage of keeping a truly sinusoidal framework as in the stationary case.\\
@@ -242,7 +243,7 @@ We tested different kind of interpolation because the interpolation that gives t
 
 \section{Conventions}\label{sec:conventions}
 
-In this section we remind the reader of a few coding convention necessary to ensure a seamless work flow and a bug free program as much as possible.
+\hspace{15pt}In this section we remind the reader of a few coding convention necessary to ensure a seamless work flow and a bug free program as much as possible.
 Files should contains an entire module (as described in \ref{sec:general-structure}) not just a single class to limit the number of files and ease the bug tracking.
 Imports in files should be kept to a minimum and left in namespaces (do not use the \lstinline[columns=fixed,language=Python]|from module import *| syntax). It is preferable to import a whole module if more than three elements from the module are needed in the file, otherwise consider the \lstinline[columns=fixed,language=Python]|from module import element1, element2| syntax to avoid unnecessary memory flooding. If conflicts exists, notwithstanding the number of elements needed, the whole modules are to be loaded with a namespace.
 Namespaces may be abbreviated to the programmer's convenience however some abbreviation are to be universally respected :
@@ -270,8 +271,9 @@ Moreover during class declaration, the following principles should be adopted :
 	\item Non-public elements that should not be inherited or may cause conflicts during inheritance should use two leading underscore and make use of Python name-mangling.
 \end{enumerate}
 To seamlessly manipulate both \emph{stationary} and \emph{non stationary} models, class that are inherited in two versions are preceded with either \texttt{Stationary} are \texttt{NonStationary} respectively.
+
 \subsection{Spectrum and sinusoids parameters classes}\label{sec:spectrums-and-sinusoids-parameters}
-Because many spectra, main lobes and sinusoidal model parameters have to be traded between modules we created two classes, respectively \texttt{Spectrum} and \texttt{Parameters}. They mainly serve as containers, holding the data and returning them in a point wise fashion.
+\hspace{15pt}Because many spectra, main lobes and sinusoidal model parameters have to be traded between modules we created two classes, respectively \texttt{Spectrum} and \texttt{Parameters}. They mainly serve as containers, holding the data and returning them in a point wise fashion.
 This way we can prevent conflicts and errors that would come from a non-uniform data sharing protocol and as well ensure that every operation performed on either spectra or parameters are made following the same principles and algorithms.
 \subsubsection{Spectrum}
 \texttt{%
@@ -637,7 +639,7 @@ The PhaseVocoder file gathers both the Stationary Phase Vocoder and the Non-Stat
 		get\_pv\_spectrum(self) & \\
 		\hline
 \end{tabular}} \medskip\newline
-The Phase Vocoder algorithm is located here. It will correct the phase at each frequency bin k (remember that this module is not used at the end). To do so it proceed in 5 steps :\\
+\hspace{15pt}The Phase Vocoder algorithm is located here. It will correct the phase at each frequency bin k (remember that this module is not used at the end). To do so it proceed in 5 steps :\\
 -Get the phase difference,\\
 -Remove the expected phase difference,\\
 -Map the phase shift to $[-\pi, \pi]$ range,\\
@@ -654,14 +656,16 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 		get\_pv\_spectrum(self) & \\
 		\hline
 \end{tabular}} \medskip\newline
-\textbf {This module is not complete !} The detailed algorithm called Scaled-Phase Locking is also described in the paper \cite{karrer2006phavorit}. The idea is to correct the phase on the peaks bin and then apply this correction on each bin of the region containing the peak. To do so, a peak trajectory detection is needed to know between two frames if the peak is the same one on the other frame, because it could have changed his frequency bins due to the non-stationary case. We also need to get the region (bins near the peak bin). And then we apply on this peak the phase vocoder and the corrected phase shift is applied on all bins of the region corresponding to this peak. A Matlab implementation can be found in \cite {grunwald2010pv}.
+\hspace{15pt}\textbf {This module is not complete !} The detailed algorithm called Scaled-Phase Locking is also described in the paper \cite{karrer2006phavorit}. The idea is to correct the phase on the peaks bin and then apply this correction on each bin of the region containing the peak. To do so, a peak trajectory detection is needed to know between two frames if the peak is the same one on the other frame, because it could have changed his frequency bins due to the non-stationary case. We also need to get the region (bins near the peak bin). And then we apply on this peak the phase vocoder and the corrected phase shift is applied on all bins of the region corresponding to this peak. A Matlab implementation can be found in \cite {grunwald2010pv}.
 
 \newpage
 \part{Conclusion}
+\hspace{15pt}
+Six weeks was a very short period for such a research subject. Indeed, we lost most of the time trying to understand the phase vocoder and its utility in the overall project. Moreover, we are not sure that it can work in real time because we could not evaluate the real performances of such a method because we implemented it in Python which is a high-level interpreted programming language.\par
+For now, the stationary synthesis works quite well, and we succeeded in creating the look-up table and in interpolating the non-stationary lobes with it.\par
+An interesting thing to do would be to get a real \textbf{analysis} method to get the parameters from a real sound signal and then to listen to the synthesized sound. Because without an analysis tool, we cannot really test our synthesis method.\\
 
-Six weeks was a very short period for such a research subject. Indeed, we lost most of the time trying to understand the phase vocoder and its utility in the overall project. Moreover, we are not sure that it can work in real time because we could not evaluate the real performances of such a method because we implemented it in Python. Thus, it is a highly interpreted programming language. 
-For now, the stationary synthesis works quite well, and we succeeded in creating the look-up table and in interpolating the non-stationary lobes with it.\\
-An interesting thing to do would be to get a real analysis method to get the parameters from a real sound signal and then to listen to the synthesized sound.
+\hspace{15pt} In this project, we learned Python langage and how to manage the codes with GitHub. We also studied the phase of signals, something that in signal processing we didn't study much and which we don't really bother with.
 
 
 \newpage
