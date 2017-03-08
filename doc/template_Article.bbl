@@ -47,25 +47,33 @@ P.~Depalle, G.~Garcia, and X.~Rodet, ``Tracking of partials for additive sound
 D.~Arfib, F.~Keiler, and U.~Z{\"o}lzer, ``Time-frequency processing,''
   \emph{DAFX: digital audio effects}, pp. 237--297, 2002.
 
-\bibitem{pep8}
-G.~Van~Rossum, B.~Warsaw, and N.~Coghlan, ``Style guide for python code,'' Aug.
-  2013.
+\bibitem{hammer2001time}
+F.~Hammer, ``Time-scale modification using the phase vocoder,'' \emph{Institute
+  for Electr. Music and Ac, Graz Univ. of Dramatic Arts, Graz}, 2001.
+
+\bibitem{serra1989system}
+X.~Serra and X.~Serra, ``A system for sound analysis/transformation/synthesis
+  based on a deterministic plus stochastic decomposition,'' 1989.
 
 \bibitem{karrer2006phavorit}
 T.~Karrer, E.~Lee, and J.~O. Borchers, ``Phavorit: A phase vocoder for
   real-time interactive time-stretching.'' in \emph{ICMC}, 2006.
 
+\bibitem{pep8}
+G.~Van~Rossum, B.~Warsaw, and N.~Coghlan, ``Style guide for python code,'' Aug.
+  2013.
+
 \bibitem{barry2008time}
 D.~Barry, D.~Dorran, and E.~Coyle, ``Time and pitch scale modification: A
   real-time framework and tutorial,'' in \emph{Conference papers}, 2008, p.~16.
-
-\bibitem{hammer2001time}
-F.~Hammer, ``Time-scale modification using the phase vocoder,'' \emph{Institute
-  for Electr. Music and Ac, Graz Univ. of Dramatic Arts, Graz}, 2001.
 
 \bibitem{grunwald2010pv}
 J.~Grünwald, ``Theory, implementation and evaluation of the digital phase
   vocoder in the context of audio effects,'' \emph{Institute for Electr. Music
   and Ac, Graz Univ. of Dramatic Arts, Graz}, 2010.
+
+\bibitem{amatriain2002spectral}
+X.~Amatriain, J.~Bonada, A.~Loscos, and X.~Serra, ``Spectral processing,''
+  \emph{DAFX: Digital Audio Effects}, pp. 373--438, 2002.
 
 \end{thebibliography}

@@ -80,8 +80,9 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 \end{figure}
 
 \newpage
-\part{General analysis/synthesis approach}\label{part:general-approach}
-\section{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
+\part{Sound synthesis in the frequency domain}
+\section{General analysis/synthesis approach}\label{part:general-approach}
+\subsection{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
 In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a finite sum of time varying sinusoids, which are called partials \cite{quatieri2002audio} added to a residual, that is, a stochastic process equivalent to a noise:
 \begin{equation}
 s(t) = \sum_{i=1}^{K}\alpha_i(t) \sin(2\pi f_i(t) t + \phi_{i}) + e(t)
@@ -97,7 +98,7 @@ This synthesis method is also motivated by the fact that a great amount of resea
 \medskip
 However the main issue at stake is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.
 
-\section{General framework}\label{sec:general-framework}
+\subsection{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
 First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance:
@@ -125,7 +126,7 @@ Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the ori
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
 	\caption{Synthesized frame vs Original frame}
 \end{figure}
-\section{Phase Coherence}\label{phase-coherence}
+\subsection{Phase Coherence}\label{phase-coherence}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
 \begin{figure} [H]
 	\centering
@@ -134,10 +135,9 @@ The phase becomes a problem when we are synthesizing a signal, even a simple sin
 \end{figure}
 When we listen to a signal which phase is incoherent between frames (vertical jump) it will sound as "pops".  This is something very unpleasant to listen to. We need to do something to make sure there is no discontinuity. Thus, correcting the phase is absolutely necessary. \\
 In the stationary case, it is something easy to do. Knowing the exact frequency and for each frame, we advance the phase of $2\pi \tilde{f} R_a$  \footnote{To see details of the theoretical phase advance for the stationary case, please refer to the appendix \ref{theoretical_phase_advance} page \pageref{theoretical_phase_advance}.}.
-\newpage
-\part{Sinusoidal model synthesis in the frequency domain}
+\section{Sinusoid synthesis in the frequency domain}
 
-\section{Stationary Case}
+\subsection{Stationary Case}
 Most stationary signals can be decomposed in a sum of partials with seldom loss in perception :
 \begin{equation}
 s(n) = \sum_{i=1}^{K}\alpha_i \sin(2\pi \tilde{f_i} n + \phi_{i})
@@ -147,26 +147,31 @@ It is first needed to compute the Fourier transform of a given frame. Let $w_{t_
 \begin{equation}
 S_{t_a}(m) = \text{DFT}[s](m) \ast W_{t_a}(m)
 \end{equation}
+Where $W_{t_a}(m)$ is the DFT of the window $w_{t_a}$. Under the right assumptions on the window phase\footnote{Which involves circular shift to cancel the phase shift \cite{arfib2002time}.}, the spectrum consists in main and secondary lobes (which originates directly from $W_{t_a}(m)$) convolved at the sinus amplitude, phase and frequency.\\
+However since most of the energy is concentrated in the main lobe\footnote{At the condition that $w_{t_a}$ is not rectangular.}, one can omit the side lobes with little to no error, ever more so since most of the error is made on the edges of the temporal frame where the amplitude is small. In the stationary case, every main lobes are identical in shape, this means that one can synthesise a spectrum by copying a precomputed lobes onto the relevant bins of the FFT. This makes the process computationally light since only 9 points of the main lobes are sufficient \cite{rodet1992spectral}, although our method used 11 for further precision.\\
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.4]{Interpolation.eps}
 	\caption{Interpolation of stored lobe values onto the FFT bins.}
 	\label{interpBin}
 \end{figure}
-Where $W_{t_a}(m)$ is the DFT of the window $w_{t_a}$. Under the right assumptions on the window phase\footnote{Which involves circular shift to cancel the phase shift \cite{arfib2002time}.}, the spectrum consists in main and secondary lobes (which originates directly from $W_{t_a}(m)$) convolved at the sinus amplitude, phase and frequency.\\
-However since most of the energy is concentrated in the main lobe\footnote{At the condition that $w_{t_a}$ is not rectangular.}, one can omit the side lobes with little to no error, ever more so since most of the error is made on the edges of the temporal frame where the amplitude is small. In the stationary case, every main lobes are identical in shape, this means that one can synthesise a spectrum by copying a precomputed lobes onto the relevant bins of the FFT. This makes the process computationally light since only 9 points of the main lobes are sufficient \cite{rodet1992spectral}, although our method used 11 for further precision.\\
-Interpolation is necessary to fill the bins because the sinusoid frequency bin $\hat{f_i}$ is unlikely to fall on an integer bin number ($\hat{f_i} = \tilde{f_i}\times N$ with $N$ the fft size) as illustrated in figure \ref{interpBin}, this step allows for a good precision in frequency without the need for zero-padding the spectrum, thus increasing performance.\\
+Interpolation is necessary to fill the bins because the sinusoid frequency bin $\hat{f_i}$ is unlikely to fall on an integer bin number ($\hat{f_i} = \tilde{f_i}\times N$ with $N$ the FFT size) as illustrated in figure \ref{interpBin}, this step allows for a good precision in frequency without the need for zero-padding the spectrum, thus increasing performance.\\
 The phase is set at a common value for every bins of the lobe, on the rational that they all represents the contribution of the same sinusoid. Note that the phase used is the original phase $\phi_{i}$ corrected from the windowing effects and advanced by the time passed, to ensure phase coherence as explained in section \ref{phase-coherence}, that is to say that:
-\begin{equation}
+\begin{equation}\label{statPhaseShift}
 \phi_{lobe} = \hat{\phi_{i}} + k\times 2\pi \tilde{f_i} R_a
 \end{equation}
 Where $\hat{\phi_{i}}$ denote the window-corrected phase, $2\pi \tilde{f_i} R_a$ the phase advance for a single hop at frequency $\tilde{f_i}$ and $k$ s.t $t_a = k\times R_a$.
-\section{Quasi-Stationary Case}\label{quasi-stationary-case}
-\subsection{Theory}\label{theory-quasi-stat}
-\subsection{phase vocoder}\label{phase-vocoder-quasi-stationary}
-\section{Non-Stationary Case}\label{non-stationary-case}
-\subsection{Theory}\label{theory-non-stat}
-\subsection{phase vocoder}\label{phase-vocoder-stationary}
+\subsection{Quasi-Stationary Case}\label{quasi-stationary-case}
+Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made in order for the synthesis to work.\\
+The signal is a non stationary signal which can be approximately considered as stationary given a small enough window:
+\begin{equation}
+s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \sum_{i=1}^{K}\alpha_i^{u} \sin(2\pi \tilde{f_i^{u}} n + \phi_{i}^u)
+\end{equation}
+However, while the synthesised spectrum amplitude remain unchanged, the phase has to be corrected to take into account both the fact that the sinusoid initial phase $\phi_i$ has to be passed along the sinusoid track if its frequency where to change, and phase advance corrections due to the non-stationary nature of the signal. \\
+Indeed, although we assume the signal to be stationary in a short frame, this mainly implies that the synthesised lobe corresponding to the sinusoid is identical to a stationary sinusoid lobe. However, because of the recursive nature of the synthesis phase, errors in phase advances due to either a loss of precision in frequency estimation\footnote{As one will see in the true non-stationary case, amplitude and phase shifts have significant influence one the lobe appearance} or applying stationary phase shift as seen in (\ref{statPhaseShift}), may lead to significant phase deviation after a few iteration. This may in turn leads to significant phase de-coherence in the case of a note onset, that is the appearing of a new sinusoid.\\
+One proposed method relies on a Phase Vocoder\footnote{See annex \ref{phase-vocoder-annex} page \pageref{phase-vocoder-annex} for more informations on Phase Vocoders.} to take into account and corrects unexpected phase shift due to non-stationarity in the pre-analysed reference signal. The phase is then set to the reference signal phase corrected for a possible difference in analysis and synthesis hop size. However, because we rely on tha analysis phase to ensure correct phase propagation, the method loses the initial flexibility of a true sinusoidal model.\\
+Another possible approach is to pass the true theoretical phase advances along the track. Although it implies that one is able to track the sinusoid evolution (the complexity of which is substantial \cite{mcaulay1986speech, serra1989system, karrer2006phavorit}), this has the advantage of keeping a truly sinusoidal framework as in the stationary case.  
+\subsection{Non-Stationary Case}\label{non-stationary-case}
 
 \newpage
 \part{Results}
@@ -594,16 +599,16 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 \section*{Conclusion}
 \newpage
 \appendix
-\section{Phase Vocoder}
+\section{Phase Vocoder}\label{phase-vocoder-annex}
 \subsection{Simple Phase Vocoder algorithm}
-The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor proposed us to use a phase vocoder to correct the phase. That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).
-The approach is describe in the scheme below : 
+The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor suggested we use a phase vocoder to correct ans advance the phase. -------That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).---------
+The approach is described in the scheme below : 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale = 0.6]{pvoverview.png}
 	\caption{Phase Vocoder scheme}
 \end{figure}
-With different hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesize with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below \ref{phase-advance}.\\
+With different analysis ($R_a$) and synthesis ($R_s$) hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesize with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below \ref{phase-advance}.\\
 The general Phase Vocoder is expressed in 3 equations as follow :
 \begin{equation}\label{eq1}
 \Delta \Phi_{k}^{u} = \angle X(t_a^u, \Omega_k) - \angle X(t_a^{u-1}, \Omega_k) - R_a \Omega_k
@@ -642,7 +647,7 @@ At the first iteration :
 	\item $X(t_a^u)$ is the freshly generated spectrum
 	\item $Y(t_a^{u-1})$ is also void for the same reasons
 \end{itemize}
-Equation \ref{eq1} gives, for $k \in {1...N-1} \text{ s.t } X(t_a^{u}, \Omega_k) \text{ is a bin of the lobe}$ a phase shift error of $\tilde{\phi}$.\\
+(\ref{eq1}) gives, for $k \in {1...N-1} \text{ s.t } X(t_a^{u}, \Omega_k) \text{ is a bin of the lobe}$ a phase shift error of $\tilde{\phi}$.\\
 Then after \ref{eq2} and \ref{eq3} we obtain :
 \begin{equation*}
 \begin{split}
@@ -679,7 +684,7 @@ Where $H_a$ is the hop-size in seconds that is $H_a = \frac{R_a}{f_s}$.
 \subsubsection{Non-stationary case}
 We can not say much about the phase shift of non-stationary signals without making a few assumptions about the frequency modulation.\\
 We assume that given a small enough window the non-stationary signal can be expressed as the following Taylor expansion:
-\begin{equation}
+\begin{equation}\label{nonStat}
 s(t) \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq (\alpha + \mu t) \sin(2\pi f t + \frac{\psi}{2} t^2 + \phi_a)
 \end{equation}
 This is equivalent to assume that the signal is a linear chirp in the window, with $f$ the instantaneous frequency and $\alpha$ the instantaneous amplitude at the start of the analysis window, and $\phi_a$ is the phase at the start of the window.\\
@@ -687,11 +692,11 @@ The phase advance is thus computed in the same way as in the stationary case:
 \begin{equation}\label{phaseadvanceNonStat}
 \begin{split}
 \Delta \Phi_{f}^{t_a} & = \Phi_{f}^{H_a} - \Phi_{f}^{0}\\
-& = 2\pi f H_a + \frac{\psi}{2} (H_a)^2 + \phi_a - \phi_a\\
+& = 2\pi f H_a + \frac{\psi}{2} H_a^2 + \phi_a - \phi_a\\
 & = 2\pi f H_a + \frac{\psi}{2}H_a^2
 \end{split}
 \end{equation}
-
+Please not however that although the phase advance term is rather simple, (\ref{nonStat}) implies that we have a sinusoidal continuation scheme at hand to ensure a correct propagation of the phase $\phi_a$ along the sinusoid track, and while much work has been done on the subject \cite{amatriain2002spectral,karrer2006phavorit}, this is a complicated issue.
 
 \newpage
 \bibliographystyle{ieeetran}
