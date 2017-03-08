@@ -44,6 +44,8 @@
 \contentsline {subsection}{\numberline {13.1}PhaseVocoder}{24}
 \contentsline {subsection}{\numberline {13.2}StationaryPhaseVocoder}{25}
 \contentsline {subsection}{\numberline {13.3}NonStationaryPhaseVocoder}{25}
+\contentsline {part}{VI\hspace {1em}Conclusion}{26}
+\contentsline {part}{VII\hspace {1em}Appendix}{27}
 \contentsline {section}{\numberline {A}Phase Vocoder}{27}
 \contentsline {subsection}{\numberline {A.1}Simple Phase Vocoder algorithm}{27}
 \contentsline {section}{\numberline {B}Phase advance and propagation along the signal}{28}

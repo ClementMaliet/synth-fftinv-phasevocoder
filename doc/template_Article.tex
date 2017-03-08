@@ -630,9 +630,10 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 \textbf {This module is not complete !} The detailed algorithm called Scaled-Phase Locking is also described in the paper \cite{karrer2006phavorit}. The idea is to correct the phase on the peaks bin and then apply this correction on each bin of the region containing the peak. To do so, a peak trajectory detection is needed to know between two frames if the peak is the same one on the other frame, because it could have changed his frequency bins due to the non-stationary case. We also need to get the region (bins near the peak bin). And then we apply on this peak the phase vocoder and the corrected phase shift is applied on all bins of the region corresponding to this peak. A Matlab implementation can be found in \cite {grunwald2010pv}.
 
 \newpage
-\section*{Conclusion}
+\part{Conclusion}
 \newpage
 \appendix
+\part{Appendix}
 \section{Phase Vocoder}\label{phase-vocoder-annex}
 \subsection{Simple Phase Vocoder algorithm}
 The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor suggested we use a phase vocoder to correct ans advance the phase. -------That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).---------
