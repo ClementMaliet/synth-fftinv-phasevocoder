@@ -156,7 +156,7 @@ In the stationary case, it is something easy to do. Knowing the exact frequency 
 \section{Sinusoid synthesis in the frequency domain}
 
 \subsection{Stationary Case}
-\hspace{15pt}Most stationary signals can be decomposed in a sum of partials with seldom loss in perception :
+\hspace{15pt}Most stationary signals can be decomposed in a sum of partials with seldom loss in perception:
 \begin{equation}
 s(n) = \sum_{i=1}^{K}\alpha_i \sin(2\pi \tilde{f_i} n + \phi_{i})
 \end{equation}
@@ -210,11 +210,21 @@ The estimated phase advance (\ref{phaseadvanceNonStat}) computed in annex \ref{t
 \begin{equation}
 \Delta \Phi_{f}^{t_a} = 2\pi f_{t_a} H_a + \frac{\psi}{2}H_a^2 = 2\pi H_a\left(f_{t_a} + f_{(t_a + H_a)} - f_{t_a} \right) = 2\pi f_{(t_a + H_a)} H_a
 \end{equation}
+
 \subsection{Non-Stationary Case}\label{non-stationary-case}
 
-\subsubsection{The look-up table}\label{The look-up table}
+\subsubsection{Mathematical Model}\label{mathematical model}
+\hspace{15pt} In the non-stationary case, most signals can be modeled as  (see \cite{analysis-general} for more information) :
+\begin{equation}
+s(t) = exp[(\lambda_0 + \mu_0 t) + j(\phi_0 + 2\pi f_0 t + \frac{\psi_0}2 t^2 )]
+\end{equation}
+This polynomial model can be viewed either as truncated Taylor expansion of more complicated amplitude and frequency modulations. There's 2 more parameters than the stationary model, the Amplitude Change Rate $\mu_0$ and the Frequency Change Rate  $\psi_0$, the latter was already been introduced in the section before (\ref{quasi-stationary-case}). The overall amplitude is given with $\lambda_0 + \mu_0 t$. \\
+We then have 5 parameters to find to synthesize our sinusoids. We assume that the analysis part give us those parameters. \par
+Having $\lambda_0$, $\phi_0$ and $f_0$, we can modelize a stationary signal. The difficulty comes with the two other parameters. Indeed, the lobes are not the same as before, they can change in width or height because the signal is non-stationary. The idea is to stock in a table some already modelized sinusoids with different couple of ACR/FCR (Amplitude Change Rate/Frequency Change Rate) to know what the lobe will look like.And then we interpolate the lobe given from the analysis with our table.
+
+\subsubsection{The look-up table}\label{the look-up table}
 \hspace{15pt}
-The principle of the method is to create a regular or irregular ACR/FCR (Amplitude Change Rate/Frequency Change Rate) grid. For each point of the grid which is represented by an ACR/FCR couple, we store an eleven-point main lobe in the look-up table. Hence, the size of the look-up table is equal to number\_of\_ACR times number\_of\_FCR. Then, we can find the lobe for the couple of ACR/FCR we want by interpolating.
+The principle of the method is to create a regular or irregular ACR/FCR grid. For each point of the grid which is represented by an ACR/FCR couple, we store an eleven-point main lobe in the look-up table. Hence, the size of the look-up table is equal to number\_of\_ACR times number\_of\_FCR. Then, we can find the lobe for the couple of ACR/FCR we want by interpolating.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{grid.png}
