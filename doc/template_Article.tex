@@ -103,12 +103,13 @@ However the main issue at stake is that it is very costly to implement, so it is
 \subsection{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
-First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance:
+First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance (Figure \ref{windowing}):
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
-	{\includegraphics[scale=0.5]{slide1.png}}
+	{\includegraphics[scale=0.4]{slide1.png}}
 	\caption{Windowing step}
+	\label{windowing}
 \end{figure}
 
 \medskip
@@ -128,6 +129,18 @@ Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the ori
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
 	\caption{Synthesized frame vs Original frame}
 \end{figure}
+
+The image below is a little sum up of the method:
+
+\begin{figure}[H]
+	\begin{center}
+	{\includegraphics[scale = 0.8]{schema.png}}
+	\caption{Block diagram of a higher-level spectral-processing framework}
+	\end{center}
+\end{figure}
+
+\newpage
+
 \subsection{Phase Coherence}\label{phase-coherence}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
 \begin{figure} [H]
@@ -164,7 +177,7 @@ The phase is set at a common value for every bins of the lobe, on the rational t
 \end{equation}
 Where $\hat{\phi_{i}}$ denote the window-corrected phase, $2\pi \tilde{f_i} R_a$ the phase advance for a single hop at frequency $\tilde{f_i}$ and $k$ s.t $t_a = k\times R_a$.
 \subsection{Quasi-Stationary Case}\label{quasi-stationary-case}
-Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made in order for the synthesis to work.\\
+Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made so that the synthesis work.\\
 The signal is a non stationary signal which can be approximately considered as stationary given a small enough window:
 \begin{equation}
 s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \sum_{i=1}^{K}\alpha_i^{u} \sin(2\pi \tilde{f_i^{u}} n + \phi_{i}^u)
@@ -366,6 +379,8 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 		\_set\_current\_spectrum(self, new\_spectrum) & \\
 		\hline
 \end{tabular}} \medskip\newline
+
+The aim of the Synthesizer is to set all the parameters which are used to make the synthesis, that is to say the type and the size of the window, the FFT number and the hop size for the analysis and the synthesis. Moreover, it returns the spectrum of the signal.
 
 \subsection{StationarySynthesizer}
 
@@ -619,9 +634,10 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 \textbf {This module is not complete !} The detailed algorithm called Scaled-Phase Locking is also described in the paper \cite{karrer2006phavorit}. The idea is to correct the phase on the peaks bin and then apply this correction on each bin of the region containing the peak. To do so, a peak trajectory detection is needed to know between two frames if the peak is the same one on the other frame, because it could have changed his frequency bins due to the non-stationary case. We also need to get the region (bins near the peak bin). And then we apply on this peak the phase vocoder and the corrected phase shift is applied on all bins of the region corresponding to this peak. A Matlab implementation can be found in \cite {grunwald2010pv}.
 
 \newpage
-\section*{Conclusion}
+\part{Conclusion}
 \newpage
 \appendix
+\part{Appendix}
 \section{Phase Vocoder}\label{phase-vocoder-annex}
 \subsection{Simple Phase Vocoder algorithm}
 The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor suggested we use a phase vocoder to correct ans advance the phase. ------- That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).---------
