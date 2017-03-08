@@ -23,11 +23,16 @@
 \begin{abstract}
 The present document is to serve as both a technical report and a documentation for the code produced during the long project. As such the first part will explain the theoretical framework and the state-of-the-art of the field. The second part will give some insight about the code structure and the conventions that were adopted and last but not least, the third part will serve as an actual documentation and details every class, methods and attributes.
 \end{abstract}
-
-	\begin{figure}
-		
-		\includegraphics[scale=0.28]{agn7.png}
+ \vspace{5cm}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.28]{ag.png}
 	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.28]{enseeiht.png}
+	\end{figure}
+
 \newpage
 \tableofcontents
 
@@ -589,9 +594,17 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 \section*{Conclusion}
 \newpage
 \appendix
-\section{Phase advance and propagation along the signal}
-\subsection{On the first attempt at Phase Vocoder use}
-In the stationary case, the Phase Vocoder is expressed in 3 equations as follow :
+\section{Phase Vocoder}
+\subsection{Simple Phase Vocoder algorithm}
+The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor proposed us to use a phase vocoder to correct the phase. That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).
+The approach is describe in the scheme below : 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 0.6]{pvoverview.png}
+	\caption{Phase Vocoder scheme}
+\end{figure}
+With different hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesize with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below \ref{phase-advance}.\\
+The general Phase Vocoder is expressed in 3 equations as follow :
 \begin{equation}\label{eq1}
 \Delta \Phi_{k}^{u} = \angle X(t_a^u, \Omega_k) - \angle X(t_a^{u-1}, \Omega_k) - R_a \Omega_k
 \end{equation}
@@ -605,7 +618,13 @@ What (\ref{eq1}) means is that we look for the true phase shift (the analysis ph
 In (\ref{eq2}) we use the error in phase shift to compute the deviation in frequency $\frac{\Delta_p \Phi_{k}^u}{R_a}$ from the expected frequency $\Omega_k$ and thus compute the \emph{true} frequency at which the bin was excited between $t_a^{u-1}$ and $t_a^{u}$.\\
 Finally (\ref{eq3}) assume the correct synthesis phase shift will be $R_s\hat{\omega_k}(t_a^u)$ that is the true frequency times the synthesis hop.\\
 \\
+
+\section{Phase advance and propagation along the signal}\label{phase-advance}
+\subsection{On the first attempt at Phase Vocoder use}
+
 The issue with such an approach in our case is that we dropped the analysis. We want to use the Phase Vocoder to \emph{create} phase shifts in our spectra, but the Phase Vocoder is in fact nothing but a fancy way to copy existing phase shifts while taking into account a different hop during analysis and synthesis. I will try and break down the issues I have into two cases.
+
+
 \subsubsection{"Pure" synthesis}\label{puresynth}
 We wish to synthesize a stationary or a sum of stationary sinusoid from scratch. For simplicity's sake and without loss of generality we will take the one sinusoid case.
 That is to say that we want, without prior knowledge to generate $s(n)$ such as :
@@ -672,6 +691,7 @@ The phase advance is thus computed in the same way as in the stationary case:
 & = 2\pi f H_a + \frac{\psi}{2}H_a^2
 \end{split}
 \end{equation}
+
 
 \newpage
 \bibliographystyle{ieeetran}
