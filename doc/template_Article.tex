@@ -175,7 +175,7 @@ The phase is set at a common value for every bins of the lobe, on the rational t
 \end{equation}
 Where $\hat{\phi_{i}}$ denote the window-corrected phase, $2\pi \tilde{f_i} R_a$ the phase advance for a single hop at frequency $\tilde{f_i}$ and $k$ s.t $t_a = k\times R_a$.
 \subsection{Quasi-Stationary Case}\label{quasi-stationary-case}
-Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made in order for the synthesis to work.\\
+Although most of what has been said before still holds in the quasi-stationary case, a few changes have to be made so that the synthesis work.\\
 The signal is a non stationary signal which can be approximately considered as stationary given a small enough window:
 \begin{equation}
 s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \sum_{i=1}^{K}\alpha_i^{u} \sin(2\pi \tilde{f_i^{u}} n + \phi_{i}^u)
@@ -377,6 +377,8 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 		\_set\_current\_spectrum(self, new\_spectrum) & \\
 		\hline
 \end{tabular}} \medskip\newline
+
+The aim of the Synthesizer is to set all the parameters which are used to make the synthesis, that is to say the type and the size of the window, the FFT number and the hop size for the analysis and the synthesis. Moreover, it returns the spectrum of the signal.
 
 \subsection{StationarySynthesizer}
 
