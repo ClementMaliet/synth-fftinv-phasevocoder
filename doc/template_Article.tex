@@ -47,7 +47,7 @@ plug-in for movies and video games. They are base in Toulouse and Paris.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.19]{AudioFire_screen.png}
-	\caption{Audiofire: audio plug-in that recreates fire sound}
+	\caption{\it Audiofire: audio plug-in that recreates fire sound}
 \end{figure}
 
 \section{Objective}\label{sec:objective}
@@ -58,7 +58,7 @@ parts in this process: the Analysis and the Synthesis.
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.4]{Analysis_Synthesis.png}
-		\caption{General approach for modifying a sound in the spectral domain}
+		\caption{\it General approach for modifying a sound in the spectral domain}
 	\end{figure}
 
 Our objectives were to focus on the synthesis. We supposed that the analysis part is done and that we know all the parameters. The work is divided into two parts : the stationary synthesis and the non-stationary synthesis. 
@@ -98,7 +98,7 @@ However the main issue at stake is that it is very costly to implement, so it is
 \begin{figure}[H]
 	\centering
 	{\includegraphics[scale=0.4]{additif.png}}
-	\caption{The additive synthesis}
+	\caption{\it The additive synthesis}
 \end{figure} 
 \medskip
 
@@ -110,7 +110,7 @@ First of all, we window the signal in order to maximize the energy in the main l
 \begin{figure}[H]
 	\centering
 	{\includegraphics[scale=0.4]{slide1.png}}
-	\caption{Windowing step}
+	\caption{\it Windowing step}
 	\label{windowing}
 \end{figure}
 
@@ -121,7 +121,7 @@ Then, we apply a STFT (Short Time Fourier Transform) to extract the coefficients
 \begin{figure} [H]
 	\centering
 	{\includegraphics[scale=0.7]{slide2.png}}
-	\caption{Peaks detection}
+	\caption{\it Peaks detection}
 \end{figure}
 \medskip
 Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the original signal we applied the analysis to.
@@ -129,7 +129,7 @@ Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the ori
 \begin{figure}[H]
 	\centering
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
-	\caption{Synthesized frame vs Original frame}
+	\caption{\it Synthesized frame vs Original frame}
 \end{figure}
 
 The image below is a little sum up of the method:
@@ -137,7 +137,7 @@ The image below is a little sum up of the method:
 \begin{figure}[H]
 	\begin{center}
 	{\includegraphics[scale = 0.8]{schema.png}}
-	\caption{Block diagram of a higher-level spectral-processing framework}
+	\caption{\it Block diagram of a higher-level spectral-processing framework}
 	\end{center}
 \end{figure}
 
@@ -148,7 +148,7 @@ The phase becomes a problem when we are synthesizing a signal, even a simple sin
 \begin{figure} [H]
 	\centering
 	\includegraphics[scale = 0.2]{coherentphase.png}
-	\caption {Coherent phase (above) vs. Incoherent phase (below) between frames}
+	\caption {\it Coherent phase (above) vs. Incoherent phase (below) between frames}
 \end{figure}
 When we listen to a signal which phase is incoherent between frames (vertical jump) it will sound as "pops".  This is something very unpleasant to listen to. We need to do something to make sure there is no discontinuity. Thus, correcting the phase is absolutely necessary. \\
 In the stationary case, it is something easy to do. Knowing the exact frequency and for each frame, we advance the phase of $2\pi \tilde{f} R_a$  \footnote{To see details of the theoretical phase advance for the stationary case, please refer to the appendix \ref{theoretical_phase_advance} page \pageref{theoretical_phase_advance}.}.
@@ -169,7 +169,7 @@ However since most of the energy is concentrated in the main lobe\footnote{At th
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.4]{Interpolation.eps}
-	\caption{Interpolation of stored lobe values onto the FFT bins.}
+	\caption{\it Interpolation of stored lobe values onto the FFT bins.}
 	\label{interpBin}
 \end{figure}
 Interpolation is necessary to fill the bins because the sinusoid frequency bin $\hat{f_i}$ is unlikely to fall on an integer bin number ($\hat{f_i} = \tilde{f_i}\times N$ with $N$ the FFT size) as illustrated in figure \ref{interpBin}, this step allows for a good precision in frequency without the need for zero-padding the spectrum, thus increasing performance.\\
@@ -211,7 +211,26 @@ The estimated phase advance (\ref{phaseadvanceNonStat}) computed in annex \ref{t
 \end{equation}
 \subsection{Non-Stationary Case}\label{non-stationary-case}
 
-\subsubsection{}
+\subsubsection{The look-up table}\label{The look-up table}
+\hspace{15pt}
+The principle of the method is to create a regular or irregular ACR/FCR (Amplitude Change Rate/Frequency Change Rate) grid. For each point of the grid which is represented by an ACR/FCR couple, we store an eleven-point main lobe in the look-up table. Hence, the size of the look-up table is equal to number\_of\_ACR times number\_of\_FCR. Then, we can find the lobe for the couple of ACR/FCR we want by interpolating.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{grid.png}
+	\caption{\it Interpolation of stored lobe values onto the FFT bins.}
+\end{figure}
+
+The look-up table should not be too big so it does not take too much memory. As a consequence, we have to find a compromise between the size of the look-up table and the precision of the interpolation.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.8]{LUT.png}
+	\caption{\it Interpolation of stored lobe values onto the FFT bins.}
+\end{figure}
+
+We tested different kind of interpolation because the interpolation that gives the best results is not the same for the magnitude as for the phase. Finally, we figured out that the interpolation that works better for the magnitude in the cubic one, whereas the one that works better for the phase is the linear one which sounds quite logical giving the form of the curves. The user can choose the interpolation method he wishes for both amplitude and phase.
+
+
 
 \newpage
 \part{Results}
