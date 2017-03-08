@@ -91,19 +91,21 @@ s(t) = \sum_{i=1}^{K}\alpha_i(t) \sin(2\pi f_i(t) t + \phi_{i}) + e(t)
 \end{equation}
 Where the amplitude $\alpha_i(t)$ and the frequency $f_i(t)$ are smooth slowly varying functions.\\
 Although in most cases, that is speech or musical instruments synthesis, the residual contribution is not negligible compared to the partials \cite{quatieri2002audio, rodet1992spectral} one can, in a first time, set the residual term to zero\footnote{In fact, the sinusoidal plus residual model is a direct consequence of the source/filter model \cite{mcaulay1986speech}, the synthesis of the residual term is thus more or less equivalent to filtering a white noise, which is, in its naive resolution, simpler than the sinusoids synthesis. This is why we mainly focus on the sinusoidal synthesis despite the non negligible nature of the residual term.}.\\
-This synthesis method is also motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.
+This synthesis method is also motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.\\
+\\
+However the main issue at stake is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.\\
+
 \begin{figure}[H]
 	\centering
 	{\includegraphics[scale=0.4]{additif.png}}
 	\caption{The additive synthesis}
 \end{figure} 
 \medskip
-However the main issue at stake is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.
 
 \subsection{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
-First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance (Figure \ref{windowing}):
+First of all, we window the signal in order to maximize the energy in the main lobe, with Hanning, Blackman-Harris... window for instance (Figure \ref{windowing}):
 
 \begin{figure}[H]
 	\centering
