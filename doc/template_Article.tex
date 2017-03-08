@@ -77,20 +77,20 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 \newpage
 \part{General analysis/synthesis approach}\label{part:general-approach}
 \section{Additive Synthesis (Time Domain)}\label{sec:additive-synthesis-(time-domain)}
-In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a sum of time varying sinusoids, which are called partials \cite{quatieri2002audio} added to a residual, that is, a stochastic process equivalent to a noise:
+In signal processing, about as much work has been done in analysing sounds as in synthesizing them. The most common approach is to assimilate the sound to a finite sum of time varying sinusoids, which are called partials \cite{quatieri2002audio} added to a residual, that is, a stochastic process equivalent to a noise:
 \begin{equation}
 s(t) = \sum_{i=1}^{K}\alpha_i(t) \sin(2\pi f_i(t) t + \phi_{i}) + e(t)
 \end{equation}
 Where the amplitude $\alpha_i(t)$ and the frequency $f_i(t)$ are smooth slowly varying functions.\\
-Although in most cases, that is speech or musical instruments synthesis, the residual contribution is not negligible compared to the partials \cite{quatieri2002audio, rodet1992spectral} ERRORS!!!!!!!!!!!!!!!!111111111111!1!1!1!!!!!!!!!!!!!!!\\
-This is motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.
+Although in most cases, that is speech or musical instruments synthesis, the residual contribution is not negligible compared to the partials \cite{quatieri2002audio, rodet1992spectral} one can, in a first time, set the residual term to zero\footnote{In fact, the sinusoidal plus residual model is a direct consequence of the source/filter model \cite{mcaulay1986speech}, the synthesis of the residual term is thus more or less equivalent to filtering a white noise, which is, in its naive resolution, simpler than the sinusoids synthesis. This is why we mainly focus on the sinusoidal synthesis despite the non negligible nature of the residual term.}.\\
+This synthesis method is also motivated by the fact that a great amount of research has been done towards analysing such sound models \cite{rodet1992spectral, depalle1993tracking}. The most common and obvious approach consists in adding a number of independent oscillator to reproduce the sound, each one of them being controlled independently.
 \begin{figure}[H]
-	\centerline
-	{\includegraphics[scale=0.5]{additif.png}}
-	\caption{\it The additive synthesis}
+	\centering
+	{\includegraphics[scale=0.4]{additif.png}}
+	\caption{The additive synthesis}
 \end{figure} 
 \medskip
-The problem of this method is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.
+However the main issue at stake is that it is very costly to implement, so it is impossible to use in real-time applications. A solution would be to generate the sines in frequency domain, using the parameters given by the analysis.
 
 \section{General framework}\label{sec:general-framework}
 
@@ -98,9 +98,9 @@ The first step of the method is the analysis. The aim is to extract the paramete
 First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance:
 
 \begin{figure}
-	\centerline
+	\centering
 	{\includegraphics[scale=0.5]{slide1.png}}
-	\caption{\it Windowing step}
+	\caption{Windowing step}
 \end{figure}
 
 \medskip
@@ -108,17 +108,17 @@ First of all, we window the signal in order to maximize the energy in the main l
 Then, we apply a STFT (Short Time Fourier Transform) to extract the coefficients.  We assume each peak represents a sinusoid, and we use a particular case of STFT called STPT, that detects peaks in the signal and that applies the STFT in the areas that are close to the peaks and sets the rest of the signal to zero. It is a simplest version of STFT, because we neglect the residual part of the signal by only considering the periodic part of the signal. This is less costly and works quite well, except in case of transitional signal because it is very difficult to model with a finite sum of sines. 
 
 \begin{figure} [H]
-	\centerline
+	\centering
 	{\includegraphics[scale=0.7]{slide2.png}}
-	\caption{\it Peaks detection}
+	\caption{Peaks detection}
 \end{figure}
 \medskip
 Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the original signal we applied the analysis to.
 
 \begin{figure}[H]
-	\centerline
+	\centering
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
-	\caption{\it Synthesized frame vs Original frame}
+	\caption{Synthesized frame vs Original frame}
 \end{figure}
 \section{Phase Coherence}\label{phase-coherence}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
