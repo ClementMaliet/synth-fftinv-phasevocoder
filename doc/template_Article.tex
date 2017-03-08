@@ -10,6 +10,7 @@
 \usepackage{graphicx}
 \usepackage{dsfont}
 \usepackage{float}
+\usepackage[bottom]{footmisc}
  \graphicspath{{images/}}
 %opening
 \title{Stationary and non-stationary sinusoidal model synthesis with phase vocoder and FFT$^{-1}$}
@@ -76,7 +77,8 @@ We used PyCharm to program in Python, Slack to communicate with our supervisor (
 
 \subsection{Project management (Gantt chart)}
 \begin{figure}[H]
-	\includegraphics[scale=0.28]{Gantt.png}
+	\centering
+	\rotatebox{90}{\includegraphics[scale=0.44]{Gantt.png}}
 \end{figure}
 
 \newpage
@@ -169,7 +171,7 @@ s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \sum_{i=1}^{K}\alpha_i^{u} \sin
 \end{equation}
 However, while the synthesised spectrum amplitude remain unchanged, the phase has to be corrected to take into account both the fact that the sinusoid initial phase $\phi_i$ has to be passed along the sinusoid track if its frequency where to change, and phase advance corrections due to the non-stationary nature of the signal. \\
 Indeed, although we assume the signal to be stationary in a short frame, this mainly implies that the synthesised lobe corresponding to the sinusoid is identical to a stationary sinusoid lobe. However, because of the recursive nature of the synthesis phase, errors in phase advances due to either a loss of precision in frequency estimation\footnote{As one will see in the true non-stationary case, amplitude and phase shifts have significant influence one the lobe appearance} or applying stationary phase shift as seen in (\ref{statPhaseShift}), may lead to significant phase deviation after a few iteration. This may in turn leads to significant phase de-coherence in the case of a note onset, that is the appearing of a new sinusoid.\\
-One proposed method relies on a Phase Vocoder\footnote{See annex \ref{phase-vocoder-annex} page \pageref{phase-vocoder-annex} for more informations on Phase Vocoders.} to take into account and corrects unexpected phase shift due to non-stationarity in the pre-analysed reference signal. The phase is then set to the reference signal phase corrected for a possible difference in analysis and synthesis hop size. However, because we rely on tha analysis phase to ensure correct phase propagation, the method loses the initial flexibility of a true sinusoidal model.\\
+One proposed method relies on a Phase Vocoder\footnote{See annex \ref{phase-vocoder-annex} page \pageref{phase-vocoder-annex} for more informations on Phase Vocoders.} to take into account and corrects unexpected phase shift due to non-stationarity in the pre-analysed reference signal. The phase is then set to the reference signal phase corrected for a possible difference in analysis and synthesis hop size. However, because we rely on the analysis phase to ensure correct phase propagation, the method loses the initial flexibility of a true sinusoidal model.\\
 Another possible approach is to pass the true theoretical phase advances along the track. Although it implies that one is able to track the sinusoid evolution (the complexity of which is substantial \cite{mcaulay1986speech, serra1989system, karrer2006phavorit}), this has the advantage of keeping a truly sinusoidal framework as in the stationary case.\\
 The following has not been implemented, but the idea is to estimate coarsely the non-stationary \emph{Frequency Change Rate} ($\psi$) between two frame and apply non-stationary sinusoid phase shift.\\
 The linear chirp is written as follow\footnote{The non-stationary case hypotheses and framework can be found in the section \ref{non-stationary-case} below.}:
@@ -622,14 +624,14 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 \appendix
 \section{Phase Vocoder}\label{phase-vocoder-annex}
 \subsection{Simple Phase Vocoder algorithm}
-The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor suggested we use a phase vocoder to correct ans advance the phase. -------That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).---------
+The phase vocoder is a popular algorithm for time-stretching audio without changing the pitch. In this project, our supervisor suggested we use a phase vocoder to correct ans advance the phase. ------- That is what the phase vocoder do, correct the phase. But it correct the phase when the hop size are different between the analysis part and the synthesis part (respectively $R_a$ and $R_s$, or $hop_a$ and $hop_s$).---------
 The approach is described in the scheme below : 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale = 0.6]{pvoverview.png}
 	\caption{Phase Vocoder scheme}
 \end{figure}
-With different analysis ($R_a$) and synthesis ($R_s$) hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesize with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below \ref{phase-advance}.\\
+With different analysis ($R_a$) and synthesis ($R_s$) hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesize with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below (\ref{phase-advance}).\\
 The general Phase Vocoder is expressed in 3 equations as follow :
 \begin{equation}\label{eq1}
 \Delta \Phi_{k}^{u} = \angle X(t_a^u, \Omega_k) - \angle X(t_a^{u-1}, \Omega_k) - R_a \Omega_k
@@ -647,7 +649,6 @@ Finally (\ref{eq3}) assume the correct synthesis phase shift will be $R_s\hat{\o
 
 \section{Phase advance and propagation along the signal}\label{phase-advance}
 \subsection{On the first attempt at Phase Vocoder use}
-
 The issue with such an approach in our case is that we dropped the analysis. We want to use the Phase Vocoder to \emph{create} phase shifts in our spectra, but the Phase Vocoder is in fact nothing but a fancy way to copy existing phase shifts while taking into account a different hop during analysis and synthesis. I will try and break down the issues I have into two cases.
 
 
