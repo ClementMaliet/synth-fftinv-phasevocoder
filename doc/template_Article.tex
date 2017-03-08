@@ -101,11 +101,11 @@ However the main issue at stake is that it is very costly to implement, so it is
 \subsection{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
-First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance:
+First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance (Figure 5):
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
-	{\includegraphics[scale=0.5]{slide1.png}}
+	{\includegraphics[scale=0.4]{slide1.png}}
 	\caption{Windowing step}
 \end{figure}
 
@@ -126,6 +126,18 @@ Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the ori
 	{\includegraphics[scale=0.7]{synthesisstep.png}}
 	\caption{Synthesized frame vs Original frame}
 \end{figure}
+
+The image below is a little sum up of the method:
+
+\begin{figure}[H]
+	\begin{center}
+	{\includegraphics[scale = 0.8]{schema.png}}
+	\caption{Block diagram of a higher-level spectral-processing framework}
+	\end{center}
+\end{figure}
+
+\newpage
+
 \subsection{Phase Coherence}\label{phase-coherence}
 The phase becomes a problem when we are synthesizing a signal, even a simple sinusoid, because for each frame we create a "different" sinusoid with the same parameters. That is not what we want, we want to create a single sinusoid : 
 \begin{figure} [H]
