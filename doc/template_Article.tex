@@ -101,12 +101,13 @@ However the main issue at stake is that it is very costly to implement, so it is
 \subsection{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
-First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance (Figure 5):
+First of all, we window the signal in order to maximize the energy in the main lobe, using a 92 dB Blackman-Harris window for instance (Figure \ref{windowing}):
 
 \begin{figure}[H]
 	\centering
 	{\includegraphics[scale=0.4]{slide1.png}}
 	\caption{Windowing step}
+	\label{windowing}
 \end{figure}
 
 \medskip
