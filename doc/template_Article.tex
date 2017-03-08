@@ -170,7 +170,28 @@ s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \sum_{i=1}^{K}\alpha_i^{u} \sin
 However, while the synthesised spectrum amplitude remain unchanged, the phase has to be corrected to take into account both the fact that the sinusoid initial phase $\phi_i$ has to be passed along the sinusoid track if its frequency where to change, and phase advance corrections due to the non-stationary nature of the signal. \\
 Indeed, although we assume the signal to be stationary in a short frame, this mainly implies that the synthesised lobe corresponding to the sinusoid is identical to a stationary sinusoid lobe. However, because of the recursive nature of the synthesis phase, errors in phase advances due to either a loss of precision in frequency estimation\footnote{As one will see in the true non-stationary case, amplitude and phase shifts have significant influence one the lobe appearance} or applying stationary phase shift as seen in (\ref{statPhaseShift}), may lead to significant phase deviation after a few iteration. This may in turn leads to significant phase de-coherence in the case of a note onset, that is the appearing of a new sinusoid.\\
 One proposed method relies on a Phase Vocoder\footnote{See annex \ref{phase-vocoder-annex} page \pageref{phase-vocoder-annex} for more informations on Phase Vocoders.} to take into account and corrects unexpected phase shift due to non-stationarity in the pre-analysed reference signal. The phase is then set to the reference signal phase corrected for a possible difference in analysis and synthesis hop size. However, because we rely on tha analysis phase to ensure correct phase propagation, the method loses the initial flexibility of a true sinusoidal model.\\
-Another possible approach is to pass the true theoretical phase advances along the track. Although it implies that one is able to track the sinusoid evolution (the complexity of which is substantial \cite{mcaulay1986speech, serra1989system, karrer2006phavorit}), this has the advantage of keeping a truly sinusoidal framework as in the stationary case.  
+Another possible approach is to pass the true theoretical phase advances along the track. Although it implies that one is able to track the sinusoid evolution (the complexity of which is substantial \cite{mcaulay1986speech, serra1989system, karrer2006phavorit}), this has the advantage of keeping a truly sinusoidal framework as in the stationary case.\\
+The following has not been implemented, but the idea is to estimate coarsely the non-stationary \emph{Frequency Change Rate} ($\psi$) between two frame and apply non-stationary sinusoid phase shift.\\
+The linear chirp is written as follow\footnote{The non-stationary case hypotheses and framework can be found in the section \ref{non-stationary-case} below.}:
+\begin{equation}
+s(t) \propto \sin\left(2\pi\left(f  + \frac{1}{2\pi}\frac{\psi}{2} t\right)t + \phi_a\right)
+\end{equation}
+Thus the frequency shift between two consecutive frames is:
+\begin{equation}
+\begin{split}
+\Delta f & = f_{H_a} - f_0\\
+& = f_0 + \frac{\psi}{4\pi}H_a - f_0\\
+& = \frac{\psi}{4\pi}H_a
+\end{split}
+\end{equation}
+We can thus estimate $\psi$ between two frames:
+\begin{equation}
+\hat{\psi}_{t_a} = \frac{4\pi}{H_a}\left(f_{(t_a + H_a)} - f_{t_a} \right)
+\end{equation}
+The estimated phase advance (\ref{phaseadvanceNonStat}) computed in annex \ref{theoretical_phase_advance_nonstat} page \pageref{theoretical_phase_advance_nonstat} is thus:
+\begin{equation}
+\Delta \Phi_{f}^{t_a} = 2\pi f_{t_a} H_a + \frac{\psi}{2}H_a^2 = 2\pi H_a\left(f_{t_a} + f_{(t_a + H_a)} - f_{t_a} \right) = 2\pi f_{(t_a + H_a)} H_a
+\end{equation}
 \subsection{Non-Stationary Case}\label{non-stationary-case}
 
 \newpage
@@ -681,7 +702,7 @@ For stationary signals expressed as in (\ref{statSignal}) the phase advance from
 \end{split}
 \end{equation}
 Where $H_a$ is the hop-size in seconds that is $H_a = \frac{R_a}{f_s}$.
-\subsubsection{Non-stationary case}
+\subsubsection{Non-stationary case}\label{theoretical_phase_advance_nonstat}
 We can not say much about the phase shift of non-stationary signals without making a few assumptions about the frequency modulation.\\
 We assume that given a small enough window the non-stationary signal can be expressed as the following Taylor expansion:
 \begin{equation}\label{nonStat}
