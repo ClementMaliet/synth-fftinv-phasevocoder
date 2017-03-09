@@ -227,13 +227,20 @@ The estimated phase advance (\ref{phaseadvanceNonStat}) computed in annex \ref{t
 \end{equation}
 
 \subsection{Non-Stationary Case}\label{non-stationary-case}
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.25]{lobesFM.pdf}
+	\includegraphics[scale=0.17]{lobesAM.pdf}
+	\caption{Frequency and amplitude modulation affects the shape of the lobe}
+	\label{lobesAMFM}
+\end{figure}
 The non-stationary case is the most general one. For simplicity and without loss of generality we will assume in the following that the signal consists in a single sinusoid, that is :
 \begin{equation}
 s(t) = \alpha(t)\sin(2\pi f(t) t + \phi)
 \end{equation}
 With $\alpha, f \in \mathcal{C}^1$ such that they vary slowly compared to the sinusoid, and $\phi$ a constant corresponding to the phase at time 0.
 
-When applying the STFT we may not, as opposed to section \ref{quasi-stationary-case}, assume the signal to be stationary in a small enough window, despite the slow variation of amplitude and frequency hypothesis. This is because the shape main lobe of the Fourier transform of the sinusoid is greatly dependant on amplitude and frequency modulation \cite{wellsmethods,wells2006high}, as showed on Figure .
+When applying the STFT we may not, as opposed to section \ref{quasi-stationary-case}, assume the signal to be stationary in a small enough window, despite the slow variation of amplitude and frequency hypothesis. This is because the shape main lobe of the Fourier transform of the sinusoid is greatly dependant on amplitude and frequency modulation \cite{wellsmethods,wells2006high}, as showed on Figure \ref{lobesAMFM}.
 
 What it implies is that we may no longer use the same lobe\footnote{One may argues that the main advantage of FFT$^{-1}$ synthesis is lost because the computational cost gains offered by the method relied mainly on the systematic nature of lobe synthesis. However, while this imposes a non negligible additional computational strain, the number of points to compute is still one or two order of magnitudes less than in the temporal domain for a given frame.} for every sinusoid as in section \ref{stationary-case}. Because of time constraints it is not possible to compute the exact values of each lobes, the proposed method bellow was first mentioned and tested by the 2015 projects we built upon, it relies on interpolating lobe from a \emph{Look-up Table} and provides both excellent precision and small computational and memory costs. However this implies a simplified mathematical model.
 \subsubsection{Mathematical Model}\label{mathematical model}
