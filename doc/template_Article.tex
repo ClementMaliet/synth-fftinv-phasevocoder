@@ -227,48 +227,7 @@ The estimated phase advance (\ref{phaseadvanceNonStat}) computed in annex \ref{t
 \end{equation}
 
 \subsection{Non-Stationary Case}\label{non-stationary-case}
-<<<<<<< HEAD
-We can't use the same phase vocoder in the non stationary case because, in this case : sine
-waves that switch from a frequency bin to another bin. The phase might change a
-lot from one frame to another.
-Thus we have to use a refined version of the phase vocoder, there are several algorithm to do this explained in \cite{karrer2006phavorit}. Here we choose to use the Scaled-Phase Locking algorithm. 
-This method takes into account the frequency trajectory of each lobes.
-\begin{figure}
-	\centering
-	\includegraphics[scale=0.4]{peaktrajectory.png}
-	\caption{\it Peak coherence from a frame to another}
-\end{figure}
-We find each region corresponding to each peaks, and then we use the phase vocoder algorithm for each region. To choose the peak corresponding to a peak in the previous frame we take the nearest.
 
-
-\begin{equation}
-\hat{\omega}_{k_1} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}
-\end{equation}
-\centering
-Where:
-\begin{equation}
-\Delta\Phi_{k_1}^{u} = \angle X(t_{a}^{u}, \Omega_{k_1}) - \angle X(t_{a}^{u-1}, \Omega_{k_0}) - R_{a}\Omega_{k_1}
-\end{equation}
-\centering
-Hence,
-\begin{equation}
-\angle Y(t_{s}^{u}, \Omega_{k_1}) = \angle Y(t_{s}^{u-1}, \Omega_{k_0}) + R_{s}\hat{\omega}_{k_1}(t_{a}^{u})
-\end{equation}
-\centering 
-To determine which peak in frame u − 1 corresponds to the
-peak at $\Omega_k$ in frame u, the peak in frame u−1 that is closest
-to channel $\Omega_k_1$ is identified. The non-peak bins are said to
-belong to the closest peak’s region of influence, and are then
-phase-locked to that peak using the phase-locking equation:
-\begin{equation}
-\angle Y(t_{s}^{u}, \Omega_{k}) = \angle Y(t_{s}^{u}, \Omega_{k_1}) + \beta [ \angle X(t_{a}^{u}, \Omega_{k}) - \angle X(t_{a}^{u}, \Omega_{k_1}) ]
-\end{equation}
-where $\beta$ is a phase scaling factor. In this way the phase relations
-between each peak channel and its neighboring nonpeak
-channels are carried over from the original signal to the
-time-stretched signal which helps to preserve vertical phase
-coherence.
-=======
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.25]{lobesFM.pdf}
@@ -795,7 +754,47 @@ What (\ref{eq1}) means is that we look for the true phase shift (the analysis ph
 In (\ref{eq2}) we use the error in phase shift to compute the deviation in frequency $\frac{\Delta_p \Phi_{k}^u}{R_a}$ from the expected frequency $\Omega_k$ and thus compute the \emph{true} frequency at which the bin was excited between $t_a^{u-1}$ and $t_a^{u}$.
 
 Finally (\ref{eq3}) assume the correct synthesis phase shift will be $R_s\hat{\omega_k}(t_a^u)$ that is the true frequency times the synthesis hop.
+\subsection{Scale phase locking}
+We can't use the same phase vocoder in the non stationary case because, in this case : sine
+waves that switch from a frequency bin to another bin. The phase might change a
+lot from one frame to another.
+Thus we have to use a refined version of the phase vocoder, there are several algorithm to do this explained in \cite{karrer2006phavorit}. Here we choose to use the Scaled-Phase Locking algorithm. 
+This method takes into account the frequency trajectory of each lobes.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{peaktrajectory.png}
+	\caption{\it Peak coherence from a frame to another}
+\end{figure}
+We find each region corresponding to each peaks, and then we use the phase vocoder algorithm for each region. To choose the peak corresponding to a peak in the previous frame we take the nearest.
 
+
+\begin{equation}
+\hat{\omega}_{k_1} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}
+\end{equation}
+\centering
+Where:
+\begin{equation}
+\Delta\Phi_{k_1}^{u} = \angle X(t_{a}^{u}, \Omega_{k_1}) - \angle X(t_{a}^{u-1}, \Omega_{k_0}) - R_{a}\Omega_{k_1}
+\end{equation}
+\centering
+Hence,
+\begin{equation}
+\angle Y(t_{s}^{u}, \Omega_{k_1}) = \angle Y(t_{s}^{u-1}, \Omega_{k_0}) + R_{s}\hat{\omega}_{k_1}(t_{a}^{u})
+\end{equation}
+\centering 
+To determine which peak in frame u − 1 corresponds to the
+peak at $\Omega_k$ in frame u, the peak in frame u−1 that is closest
+to channel $\Omega_{k1}$ is identified. The non-peak bins are said to
+belong to the closest peak’s region of influence, and are then
+phase-locked to that peak using the phase-locking equation:
+\begin{equation}
+\angle Y(t_{s}^{u}, \Omega_{k}) = \angle Y(t_{s}^{u}, \Omega_{k_1}) + \beta [ \angle X(t_{a}^{u}, \Omega_{k}) - \angle X(t_{a}^{u}, \Omega_{k_1}) ]
+\end{equation}
+where $\beta$ is a phase scaling factor. In this way the phase relations
+between each peak channel and its neighboring nonpeak
+channels are carried over from the original signal to the
+time-stretched signal which helps to preserve vertical phase
+coherence.
 \section{Phase advance and propagation along the signal}\label{phase-advance}
 \subsection{On the first attempt at Phase Vocoder use}
 The issue with such an approach in our case is that we dropped the analysis. We want to use the Phase Vocoder to \emph{create} phase shifts in our spectra, but the Phase Vocoder is in fact nothing but a fancy way to copy existing phase shifts while taking into account a different hop during analysis and synthesis. I will try and break down the issues I have into two cases.
