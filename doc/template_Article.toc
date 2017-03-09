@@ -15,43 +15,45 @@
 \contentsline {subsection}{\numberline {6.1}Stationary Case}{11}
 \contentsline {subsection}{\numberline {6.2}Quasi-Stationary Case}{13}
 \contentsline {subsection}{\numberline {6.3}Non-Stationary Case}{14}
-\contentsline {part}{III\hspace {1em}Results}{15}
-\contentsline {section}{\numberline {7}Stationary Case}{15}
-\contentsline {section}{\numberline {8}Non-Stationary Case}{15}
-\contentsline {part}{IV\hspace {1em}Code structure and conventions}{16}
-\contentsline {section}{\numberline {9}Conventions}{16}
-\contentsline {subsection}{\numberline {9.1}Naming conventions}{16}
-\contentsline {subsection}{\numberline {9.2}Spectrum and sinusoids parameters classes}{17}
-\contentsline {subsubsection}{\numberline {9.2.1}Spectrum}{17}
-\contentsline {subsubsection}{\numberline {9.2.2}Parameters}{18}
-\contentsline {subsubsection}{\numberline {9.2.3}NonStationaryParameters}{18}
-\contentsline {section}{\numberline {10}Code structure}{19}
-\contentsline {subsection}{\numberline {10.1}General structure}{19}
-\contentsline {subsection}{\numberline {10.2}Class structure}{19}
-\contentsline {part}{V\hspace {1em}Documentation}{20}
-\contentsline {section}{\numberline {11}Core module}{20}
-\contentsline {subsection}{\numberline {11.1}Synthesizer}{20}
-\contentsline {subsection}{\numberline {11.2}StationarySynthesizer}{21}
-\contentsline {subsection}{\numberline {11.3}NonStationarySynthesizer}{21}
-\contentsline {section}{\numberline {12}Spectrum generation module}{22}
-\contentsline {subsection}{\numberline {12.1}SpectrumGenerator}{22}
-\contentsline {subsection}{\numberline {12.2}StationarySpectrumGenerator}{22}
-\contentsline {subsection}{\numberline {12.3}NonStationarySpectrumGenerator}{23}
-\contentsline {subsection}{\numberline {12.4}LobeGenerator}{23}
-\contentsline {subsubsection}{\numberline {12.4.1}StationnaryLobeGenerator}{23}
-\contentsline {subsubsection}{\numberline {12.4.2}NonStationaryLobeGenerator}{24}
-\contentsline {section}{\numberline {13}Phase Vocoder module}{24}
-\contentsline {subsection}{\numberline {13.1}PhaseVocoder}{24}
-\contentsline {subsection}{\numberline {13.2}StationaryPhaseVocoder}{25}
-\contentsline {subsection}{\numberline {13.3}NonStationaryPhaseVocoder}{25}
-\contentsline {part}{VI\hspace {1em}Conclusion}{26}
-\contentsline {part}{VII\hspace {1em}Appendix}{27}
-\contentsline {section}{\numberline {A}Phase Vocoder}{27}
-\contentsline {subsection}{\numberline {A.1}Simple Phase Vocoder algorithm}{27}
-\contentsline {section}{\numberline {B}Phase advance and propagation along the signal}{28}
-\contentsline {subsection}{\numberline {B.1}On the first attempt at Phase Vocoder use}{28}
-\contentsline {subsubsection}{\numberline {B.1.1}"Pure" synthesis}{28}
-\contentsline {subsubsection}{\numberline {B.1.2}"Parametered" synthesis}{29}
-\contentsline {subsection}{\numberline {B.2}Theoretical phases advance}{30}
-\contentsline {subsubsection}{\numberline {B.2.1}Stationary case}{30}
-\contentsline {subsubsection}{\numberline {B.2.2}Non-stationary case}{30}
+\contentsline {subsubsection}{\numberline {6.3.1}Mathematical Model}{14}
+\contentsline {subsubsection}{\numberline {6.3.2}The look-up table}{15}
+\contentsline {part}{III\hspace {1em}Results}{17}
+\contentsline {section}{\numberline {7}Stationary Case}{17}
+\contentsline {section}{\numberline {8}Non-Stationary Case}{17}
+\contentsline {part}{IV\hspace {1em}Code structure and conventions}{18}
+\contentsline {section}{\numberline {9}Conventions}{18}
+\contentsline {subsection}{\numberline {9.1}Naming conventions}{18}
+\contentsline {subsection}{\numberline {9.2}Spectrum and sinusoids parameters classes}{19}
+\contentsline {subsubsection}{\numberline {9.2.1}Spectrum}{19}
+\contentsline {subsubsection}{\numberline {9.2.2}Parameters}{20}
+\contentsline {subsubsection}{\numberline {9.2.3}NonStationaryParameters}{20}
+\contentsline {section}{\numberline {10}Code structure}{21}
+\contentsline {subsection}{\numberline {10.1}General structure}{21}
+\contentsline {subsection}{\numberline {10.2}Class structure}{21}
+\contentsline {part}{V\hspace {1em}Documentation}{22}
+\contentsline {section}{\numberline {11}Core module}{22}
+\contentsline {subsection}{\numberline {11.1}Synthesizer}{22}
+\contentsline {subsection}{\numberline {11.2}StationarySynthesizer}{23}
+\contentsline {subsection}{\numberline {11.3}NonStationarySynthesizer}{23}
+\contentsline {section}{\numberline {12}Spectrum generation module}{24}
+\contentsline {subsection}{\numberline {12.1}SpectrumGenerator}{24}
+\contentsline {subsection}{\numberline {12.2}StationarySpectrumGenerator}{24}
+\contentsline {subsection}{\numberline {12.3}NonStationarySpectrumGenerator}{24}
+\contentsline {subsection}{\numberline {12.4}LobeGenerator}{25}
+\contentsline {subsubsection}{\numberline {12.4.1}StationnaryLobeGenerator}{25}
+\contentsline {subsubsection}{\numberline {12.4.2}NonStationaryLobeGenerator}{26}
+\contentsline {section}{\numberline {13}Phase Vocoder module}{26}
+\contentsline {subsection}{\numberline {13.1}PhaseVocoder}{26}
+\contentsline {subsection}{\numberline {13.2}StationaryPhaseVocoder}{27}
+\contentsline {subsection}{\numberline {13.3}NonStationaryPhaseVocoder}{27}
+\contentsline {part}{VI\hspace {1em}Conclusion}{28}
+\contentsline {part}{VII\hspace {1em}Appendix}{29}
+\contentsline {section}{\numberline {A}Phase Vocoder}{29}
+\contentsline {subsection}{\numberline {A.1}Simple Phase Vocoder algorithm}{29}
+\contentsline {section}{\numberline {B}Phase advance and propagation along the signal}{30}
+\contentsline {subsection}{\numberline {B.1}On the first attempt at Phase Vocoder use}{30}
+\contentsline {subsubsection}{\numberline {B.1.1}"Pure" synthesis}{30}
+\contentsline {subsubsection}{\numberline {B.1.2}"Parametered" synthesis}{31}
+\contentsline {subsection}{\numberline {B.2}Theoretical phases advance}{32}
+\contentsline {subsubsection}{\numberline {B.2.1}Stationary case}{32}
+\contentsline {subsubsection}{\numberline {B.2.2}Non-stationary case}{32}
