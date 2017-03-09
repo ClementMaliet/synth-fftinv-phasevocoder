@@ -53,7 +53,7 @@ plug-in for movies and video games. They are base in Toulouse and Paris.
 \section{Objective}\label{sec:objective}
 
 The objective of the project is to use
-inverse Fourier transform to synthesize a sound. There are two
+inverse Fourier transform to synthesise a sound. There are two
 parts in this process: the Analysis and the Synthesis.
 	\begin{figure}[H]
 		\centering
@@ -128,7 +128,7 @@ Then, we apply a STFT (Short Time Fourier Transform) to extract the coefficients
 	\caption{ Peaks detection}
 \end{figure}
 \medskip
-Finally, we synthesize the new signal by FFT$^{-1}$ and we compare it to the original signal we applied the analysis to.
+Finally, we synthesise the new signal by FFT$^{-1}$ and we compare it to the original signal we applied the analysis to.
 
 \begin{figure}[H]
 	\centering
@@ -718,7 +718,7 @@ Six weeks was a very short period for such a research subject. Indeed, we lost m
 
 For now, the stationary synthesis works quite well, and we succeeded in creating the look-up table and in interpolating the non-stationary lobes with it.
 
-An interesting thing to do would be to get a real \textbf{analysis} method to get the parameters from a real sound signal and then to listen to the synthesized sound. Because without an analysis tool, we cannot really test our synthesis method.
+An interesting thing to do would be to get a real \textbf{analysis} method to get the parameters from a real sound signal and then to listen to the synthesised sound. Because without an analysis tool, we cannot really test our synthesis method.
 
  In this project, we learned Python langage and how to manage the codes with GitHub. We also studied the phase of signals, something that in signal processing we didn't study much and which we don't really bother with.
 
@@ -735,7 +735,7 @@ The approach is described in the scheme below :
 	\includegraphics[scale = 0.6]{pvoverview.png}
 	\caption{Phase Vocoder scheme}
 \end{figure}
-With different analysis ($R_a$) and synthesis ($R_s$) hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesize with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below (\ref{phase-advance}).
+With different analysis ($R_a$) and synthesis ($R_s$) hop size, we can change the pitch of the original sound. This is not what we want to do in this project. We just want to synthesise with a correct phase between frames. The main idea of using a phase vocoder was to correct the phase with the two same hop size without bothering for the phase anymore. But it didn't work. We explain why the phase vocoder is useless in our case in the part below (\ref{phase-advance}).
 
 The general Phase Vocoder is expressed in 3 equations as follow :
 \begin{equation}\label{eq1}
@@ -759,7 +759,7 @@ The issue with such an approach in our case is that we dropped the analysis. We 
 
 
 \subsubsection{"Pure" synthesis}\label{puresynth}
-We wish to synthesize a stationary or a sum of stationary sinusoid from scratch. For simplicity's sake and without loss of generality we will take the one sinusoid case.
+We wish to synthesise a stationary or a sum of stationary sinusoid from scratch. For simplicity's sake and without loss of generality we will take the one sinusoid case.
 That is to say that we want, without prior knowledge to generate $s(n)$ such as :
 \begin{equation}\label{statSignal}
 s(n) = \alpha \cos(2\pi\tilde{f} n + \phi)
@@ -787,7 +787,7 @@ Then after \ref{eq2} and \ref{eq3} we obtain :
 & = \angle Y(t_s^{u-1}, \Omega_k) + \frac{R_s}{R_a}\tilde{\phi} + R_s\Omega_k
 \end{split}
 \end{equation*}
-If $R_s = R_a$ we have a perfect reconstruction of the time synthesized overlap-add test signal. However, in that case, the Phase Vocoder is perfectly irrelevant to the synthesis, indeed, since we have no \emph{actual} analysis phase, we only need to modify $R_a$ to change the length of the final signal.
+If $R_s = R_a$ we have a perfect reconstruction of the time synthesised overlap-add test signal. However, in that case, the Phase Vocoder is perfectly irrelevant to the synthesis, indeed, since we have no \emph{actual} analysis phase, we only need to modify $R_a$ to change the length of the final signal.
 
 At the following iteration, we have to update the phase of the generated spectrum to $\tilde{\phi} + 2\times2\pi \tilde{f} R_a$ instead of $\tilde{\phi} + 2\pi \tilde{f} R_a$ (as computed in (\ref{phaseAdvanceStat})), recursively, we can define the phase of the lobe the ith generated spectrum as :
 \begin{equation}
@@ -797,7 +797,7 @@ At the following iteration, we have to update the phase of the generated spectru
 \end{cases}
 \end{equation}
 \subsubsection{"Parametered" synthesis}
-In this case, we will not synthesize a truly stationary signal but we assume that the signal is quasi-stationary, which is to say that given a small enough analysis window, it can be considered stationary within that frame.
+In this case, we will not synthesise a truly stationary signal but we assume that the signal is quasi-stationary, which is to say that given a small enough analysis window, it can be considered stationary within that frame.
 \begin{equation}
 s(n)\cdot \mathds{1}_{[t_a^{u-1}, t_a^u]} \simeq \alpha \cos(2\pi\tilde{f} n + \phi)
 \end{equation}
