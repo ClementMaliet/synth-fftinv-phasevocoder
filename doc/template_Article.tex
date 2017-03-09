@@ -258,7 +258,7 @@ The principle of the method is to create a regular or irregular ACR/FCR grid. Fo
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{grid.png}
-	\caption{ Interpolation of stored lobe values onto the FFT bins.}
+	\caption{ Regular ACR/FCR grid}
 \end{figure}
 
 The look-up table should not be too big so it does not take too much memory. As a consequence, we have to find a compromise between the size of the look-up table and the precision of the interpolation.
@@ -266,10 +266,10 @@ The look-up table should not be too big so it does not take too much memory. As 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8]{LUT.png}
-	\caption{ Interpolation of stored lobe values onto the FFT bins.}
+	\caption{ Interpolation of stored lobe values onto the FFT bins}
 \end{figure}
-
-We tested different kind of interpolation because the interpolation that gives the best results is not the same for the magnitude as for the phase. Finally, we figured out that the interpolation that works better for the magnitude in the cubic one, whereas the one that works better for the phase is the linear one which sounds quite logical giving the form of the curves. The user can choose the interpolation method he wishes for both amplitude and phase.
+\newpage
+We tested different kind of interpolation because the interpolation that gives the best results is not the same for the magnitude as for the phase. Finally, we figured out that the interpolation that works better for the magnitude is the cubic one, whereas the one that works better for the phase is the linear one which sounds quite logical giving the form of the curves. The user can choose the interpolation method he wishes for both amplitude and phase.
 
 Finally, the non-stationary phase advance equation (\ref{phaseadvanceNonStat}) computed in annex \ref{theoretical_phase_advance_nonstat} page \pageref{theoretical_phase_advance_nonstat} is:
 \begin{equation}
@@ -657,7 +657,7 @@ This class generates a 11 points main lobe.
 \end{tabular}} \medskip\newline
 \\
 
-The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must chose the kind of interpolation he or she wants to use for magnitude, phase and frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.
+The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must choose the kind of interpolation he or she wants to use for the magnitude, the phase and the frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.
 \section{Phase Vocoder module}\label{sec:phase-vocoder-module}
 \subsection{PhaseVocoder}\label{sec:phasevocoder}
 \texttt{%
@@ -714,13 +714,13 @@ For the details, please refer to \cite{karrer2006phavorit, barry2008time, hammer
 \newpage
 \part{Conclusion}
 
-Six weeks was a very short period for such a research subject. Indeed, we lost most of the time trying to understand the phase vocoder and its utility in the overall project. Moreover, we are not sure that it can work in real time because we could not evaluate the real performances of such a method because we implemented it in Python which is a high-level interpreted programming language.
+\hspace {15pt} Six weeks was a very short period for such a research subject. Indeed, we lost most of the time trying to understand the phase vocoder and its utility in the overall project. Moreover, we are not sure that it can work in real-time conditions because we could not evaluate the real performances of such a method. Indeed, we implemented it in Python which is a high-level interpreted programming language.
 
 For now, the stationary synthesis works quite well, and we succeeded in creating the look-up table and in interpolating the non-stationary lobes with it.
 
-An interesting thing to do would be to get a real \textbf{analysis} method to get the parameters from a real sound signal and then to listen to the synthesised sound. Because without an analysis tool, we cannot really test our synthesis method.
+An interesting thing to do would be to get a real \textbf{analysis} method to get the parameters from a real sound signal and then to listen to the synthesized sound. Indeed, without an analysis tool, we cannot really test our synthesis method.
 
- In this project, we learned Python langage and how to manage the codes with GitHub. We also studied the phase of signals, something that in signal processing we didn't study much and which we don't really bother with.
+ In this project, we learned Python language and how to manage the codes with GitHub. We also studied the phase of signals, something that in signal processing we didn't study much and which we don't really bother with.
 
 
 \newpage
