@@ -10,6 +10,7 @@ from scipy.interpolate import interp2d
 from data_structure import *
 from LobeGenerator import LobeGenerator
 from NonStationaryLobe import *
+from next2pow import next2pow
 
 
 class NonStationaryLobeGenerator(LobeGenerator):
@@ -41,6 +42,7 @@ class NonStationaryLobeGenerator(LobeGenerator):
         self._number_fcr = number_fcr
         self._number_points = number_acr*number_fcr
         self._lut = []
+        self.step = 2 ** (next2pow(self._nfft) - next2pow(self._window_size))
         self._gen_lobe()
 
     def _gen_uniform_lut(self):
@@ -56,12 +58,38 @@ class NonStationaryLobeGenerator(LobeGenerator):
         for i in xrange(self._number_acr):
             for j in xrange(self._number_fcr):
                 lobe = self._gen_lobes_legacy(i, j, acr, fcr, t, n)
+                # lobe = self._gen_lobes(i, j, acr, fcr, t)
                 self._abscisse.append(acr[i])
                 self._ordonnee.append(fcr[j])
                 self._lut.append(lobe)
 
     def _gen_non_uniform_lut(self):
         pass
+
+    def _gen_lobes(self, i, j, acr, fcr, t):
+        # Generate chirp
+        mu = acr[i]
+        psi = fcr[j]
+        s = (1 + mu * t) * np.exp(1j * ((0.5 * psi * (t ** 2)) + (2 * np.pi * 6000 * t)))
+
+        # Apply window
+        s *= self._window
+
+        # Correct phase
+        sw = np.complex_(np.zeros(self._nfft))
+        sw[:(self._window_size - 1) / 2] = s[(self._window_size + 1) / 2:]
+        sw[self._nfft - (self._window_size - 1) / 2:] = s[:(self._window_size + 1) / 2 - 1]
+
+        # Compute the fft
+        fft_s = np.fft.fft(sw, self._nfft)
+        mod_fft_s = np.absolute(fft_s)
+
+        f = int(np.round((6000./44100)*self._nfft))
+        # f = np.argmax(mod_fft_s[:int(np.round(self._nfft/2.))])
+        w1 = fft_s[f - 5 * self.step:f + 5 * self.step + 1:self.step]
+        abscisses = (np.arange(self._nfft)[f - 5 * self.step:f + 5 * self.step + 1:self.step])/float(self._nfft) \
+            - (6000./44100.)
+        return NonStationaryLobe.from_complex_lobe(w1, abscisses)
 
     def _gen_lobes_legacy(self, i, j, acr, fcr, t, n):
         # Generate chirp

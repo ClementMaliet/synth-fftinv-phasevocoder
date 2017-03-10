@@ -28,7 +28,7 @@ class NonStationarySpectrumGenerator(SpectrumGenerator):
         self._lobe_generator.interpolate_lobe(acr, fcr)
         lobe = self._lobe_generator.get_lobe()
         phase = self._parameters.get_phase(k) + 2*np.pi*self._parameters.get_frequency(k)*self._analysis_hop + \
-            fcr * self._analysis_hop**2 / 2
+            fcr * self._analysis_hop**2 / 2.
         nfft = self._spectrum.get_nfft()
         frequency = self._parameters.get_frequency(k) * nfft
         spectrum = Spectrum.void_spectrum(nfft)
