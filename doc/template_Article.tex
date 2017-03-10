@@ -157,6 +157,8 @@ The phase becomes a problem when we are synthesizing a signal, even a simple sin
 When we listen to a signal which phase is incoherent between frames (vertical jump) it will sound as "pops".  This is something very unpleasant to listen to. We need to do something to make sure there is no discontinuity. Thus, correcting the phase is absolutely necessary. 
 
 In the stationary case, it is something easy to do. Knowing the exact frequency and for each frame, we advance the phase of $2\pi \tilde{f} R_a$  \footnote{To see details of the theoretical phase advance for the stationary case, please refer to the appendix \ref{theoretical_phase_advance} page \pageref{theoretical_phase_advance}.}.
+
+\newpage
 \section{Sinusoid synthesis in the frequency domain}
 
 \subsection{Stationary Case}\label{stationary-case}
@@ -258,7 +260,7 @@ It is important to note however that (\ref{nonStatModel}) builds upon the slow v
 The principle of the method is to create a regular or irregular ACR/FCR grid. For each point of the grid which is represented by an ACR/FCR couple, we store an eleven-point main lobe in the look-up table. Hence, the size of the look-up table is equal to number\_of\_ACR times number\_of\_FCR. Then, we can find the lobe for the couple of ACR/FCR we want by interpolating.
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.6]{grid.png}
+	\includegraphics[scale=0.55]{grid.png}
 	\caption{ Regular ACR/FCR grid}
 \end{figure}
 
@@ -266,7 +268,7 @@ The look-up table should not be too big so it does not take too much memory. As 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.8]{LUT.png}
+	\includegraphics[scale=0.7]{LUT.png}
 	\caption{ Interpolation of stored lobe values onto the FFT bins}
 \end{figure}
 \newpage
@@ -441,8 +443,8 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 		\_past\_spectrum : Spectrum & \\
 		\_current\_spectrum : Spectrum & \\
 		\hdashline
-		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor, analysis\_hop, 
-		\\ synthesis\_hop, current\_parameters, fs=None) & \\
+		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor,\\ 
+		analysis\_hop, synthesis\_hop, current\_parameters, fs=None) & \\
 		\_\_del\_\_(cls) & \\
 		reset\_synthetizer (self, window\_size, window\_type, zero\_padding\_factor, \\
 		analysis\_hop, synthesis\_hop, current\_parameters, fs) & \\
@@ -458,7 +460,7 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 		\hline
 \end{tabular}} \medskip\newline
 
-The aim of the Synthesizer is to set all the parameters which are used to make the synthesis, that is to say the type and the size of the window, the FFT number and the hop size for the analysis and the synthesis. Moreover, it returns the spectrum of the signal.
+The aim of the Synthesizer is to set all the parameters which are used to make the synthesis, that is to say the type and the size of the window, the FFT number and the hop size for the analysis and the synthesis. Moreover, it returns the spectrum of the signal. To use the synthesizer, just use the two subclasses below.
 
 \subsection{StationarySynthesizer}
 
@@ -480,13 +482,17 @@ The aim of the Synthesizer is to set all the parameters which are used to make t
 		\_current\_spectrum : Spectrum & \\
 		\_spectrum\_generator : StationarySpectrumGenerator & \\
 		\hdashline
-		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor, analysis\_hop, \\
-		 synthesis\_hop, current\_parameters, fs=None) & \\
+		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor,\\
+ 		analysis\_hop, synthesis\_hop, current\_parameters, fs=None) & \\
 		get\_next\_frame(self) & \\
 		inverse\_fft(self, current\_spectrum) & \\
 		\hline
 \end{tabular}} \medskip\newline
-
+To use it on a main.py file, just write for instance : \\
+\texttt{your\_synthesized\_signal\_parameters = StationarySynthesizer(window\_size, window\_type, zero\_padding\_factor, analysis\_hop, synthesis\_hop, parameter)\\
+your\_synthesized\_signal\_parameters.set\_next\_frame(parameter)
+your\_synthesized\_signal = your\_synthesized\_signal\_parameters.get\_next\_frame()
+}
 
 \subsection{NonStationarySynthesizer}
 
@@ -508,13 +514,17 @@ The aim of the Synthesizer is to set all the parameters which are used to make t
 		\_current\_spectrum : Spectrum & \\
 		\_spectrum\_generator : StationarySpectrumGenerator & \\
 		\hdashline
-		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor, analysis\_hop, \\
-		 synthesis\_hop, current\_parameters, fs=None) & \\
+		\_\_init\_\_(self, window\_size, window\_type, zero\_padding\_factor,\\ 
+		analysis\_hop, synthesis\_hop, current\_parameters, fs=None) & \\
 		get\_next\_frame(self) & \\
 		inverse\_fft(self, current\_spectrum) & \\
 		\hline
 \end{tabular}} \medskip\newline
-
+To use it on a main.py file, just write for instance : \\
+\texttt{your\_synthesized\_signal\_parameters = NonStationarySynthesizer(window\_size, window\_type, zero\_padding\_factor, analysis\_hop, synthesis\_hop, parameter)\\
+your\_synthesized\_signal\_parameters.set\_next\_frame(parameter)
+your\_synthesized\_signal = your\_synthesized\_signal\_parameters.get\_next\_frame()
+}
 
 \section{Spectrum generation module}\label{sec:spectrum-generation-module}
 \subsection{SpectrumGenerator}\label{sec:spectrumgenerator}
@@ -647,13 +657,13 @@ This class generates a 11 points main lobe.
 		\_LUT : np.array & \\
 		\_gen\_lobe : Spectrum & \\
 		\hdashline
-		\_\_init\_\_(self, regular\_grid, acr\_domain, fcr\_domain, number\_acr, number\_fcr, window\_type,\\ window\_size, nfft, fs=None, method\_a=None, method\_p=None, method\_f=None) &\\
+		\_\_init\_\_(self, regular\_grid, acr\_domain, fcr\_domain, number\_acr,\\ number\_fcr, window\_type, window\_size, nfft, fs=None,\\ method\_a=None, method\_p=None, method\_f=None) &\\
 		\_gen\_uniform\_lut(self) & \\
 		\_gen\_non\_uniform\_lut(self) & \\
 		\_gen\_lobes\_legacy(self, i, j, acr, fcr, t, n) & \\
 		\_gen\_lobe(self) & \\
 		\_get\_lobe(self) & \\
-		\_interpolate\_lobe(self, acr, fcr, method\_a=None, method\_p=None, method\_f = None)) & \\
+		\_interpolate\_lobe(self, acr, fcr, method\_a=None, method\_p=None,\\ method\_f = None)) & \\
 		\hline
 \end{tabular}} \medskip\newline
 \\
@@ -683,6 +693,15 @@ The aim is to generate a LUT with a uniform or a non-uniform grid, and to genera
  \textbf {This module is not used !}
 
 The PhaseVocoder file gathers both the Stationary Phase Vocoder and the Non-Stationary Phase.
+To re-link this module on the whole structure, in the file \textbf{Synthesizer.py}, uncomment the lines 115- 119 - 120. \\
+\texttt{
+\# self.\_phase\_vocoder = StationaryPhaseVocoder(self.\_analysis\_hop, self.\_synthesis\_hop, self.\_current\_spectrum) \\
+\# self.\_phase\_vocoder.current\_analysis\_spectrum = self.\_current\_spectrum \\
+\# self.\_current\_spectrum = self.\_phase\_vocoder.get\_pv\_spectrum() \\
+}
+
+
+
 \subsection{StationaryPhaseVocoder}\label{sec:stationaryphasevocoder}
 \texttt{%
 	\begin{tabular}{|lc|}
