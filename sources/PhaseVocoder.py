@@ -51,9 +51,7 @@ class PhaseVocoder(object):
         # self.current_synthesis_spectrum = Spectrum.void_spectrum(self._current_analysis_spectrum.get_nfft())
     current_analysis_spectrum = property(fset=_set_current_analysis_spectrum)
 
-
-    @classmethod
-    def get_regions(self,amp):
+    def get_regions(self, amp):
         #set the min amplitude of a peak
         self.region = []
         self.peak_indices = []

@@ -19,7 +19,7 @@ class SpectrumGenerator(object):
 
     __metaclass__ = ABCMeta
 
-    """The class SpectrumGenerator is used to generate a spectrum with 9*self._zero_padding_factor points per lobe"""
+    """The class SpectrumGenerator is used to generate a spectrum with 11 known lobe points"""
 
     def __init__(self, window_size, parameters, nfft, analysis_hop):
         self._parameters = parameters
