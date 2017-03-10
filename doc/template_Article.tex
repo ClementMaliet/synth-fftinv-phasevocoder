@@ -271,13 +271,12 @@ The look-up table should not be too big so it does not take too much memory. As 
 \end{figure}
 \newpage
 We tested different kind of interpolation because the interpolation that gives the best results is not the same for the magnitude as for the phase. Finally, we figured out that the interpolation that works better for the magnitude is the cubic one, whereas the one that works better for the phase is the linear one which sounds quite logical giving the form of the curves. The user can choose the interpolation method he wishes for both amplitude and phase.
+\\
 
 Finally, the non-stationary phase advance equation (\ref{phaseadvanceNonStat}) computed in annex \ref{theoretical_phase_advance_nonstat} page \pageref{theoretical_phase_advance_nonstat} is:
 \begin{equation}
 \Delta \Phi_{f}^{t_a} = 2\pi f_{t_a} H_a + \frac{\psi}{2}H_a^2
 \end{equation}
-
->>>>>>> origin/master
 
 \newpage
 \part{Results}
@@ -767,7 +766,7 @@ This method takes into account the frequency trajectory of each lobes.
 \end{figure}
 We find each region corresponding to each peaks, and then we use the phase vocoder algorithm for each region. To choose the peak corresponding to a peak in the previous frame we take the nearest.
 
-
+\begin{center}
 \begin{equation}
 \hat{\omega}_{k_1} (t_{a}^{u})= \Omega_{k} + \frac {\Delta_{p} \Phi_{k}^{u}} {R_{a}}
 \end{equation}
@@ -776,12 +775,12 @@ Where:
 \begin{equation}
 \Delta\Phi_{k_1}^{u} = \angle X(t_{a}^{u}, \Omega_{k_1}) - \angle X(t_{a}^{u-1}, \Omega_{k_0}) - R_{a}\Omega_{k_1}
 \end{equation}
-\centering
 Hence,
 \begin{equation}
 \angle Y(t_{s}^{u}, \Omega_{k_1}) = \angle Y(t_{s}^{u-1}, \Omega_{k_0}) + R_{s}\hat{\omega}_{k_1}(t_{a}^{u})
 \end{equation}
-\centering 
+\end{center}
+
 To determine which peak in frame u − 1 corresponds to the
 peak at $\Omega_k$ in frame u, the peak in frame u−1 that is closest
 to channel $\Omega_{k1}$ is identified. The non-peak bins are said to

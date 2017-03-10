@@ -5,6 +5,8 @@ Database file #1: biblioProjetLong.bib
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 Warning--empty journal in serra1989system
+Warning--empty journal in wellsmethods
+Warning--empty year in wellsmethods
 
 Done.
-(There was 1 warning)
+(There were 3 warnings)

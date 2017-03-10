@@ -3,3 +3,165 @@
 \catcode `;\active 
 \catcode `!\active 
 \catcode `?\active 
+\select@language{english}
+\@writefile{toc}{\select@language{english}}
+\@writefile{lof}{\select@language{english}}
+\@writefile{lot}{\select@language{english}}
+\@writefile{toc}{\contentsline {part}{I\hspace  {1em}Introduction}{4}}
+\newlabel{sec:introduction}{{I}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}The company}{4}}
+\newlabel{sec:the-company}{{1}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Audiofire: audio plug-in that recreates fire sound}}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Objective}{4}}
+\newlabel{sec:objective}{{2}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  General approach for modifying a sound in the spectral domain}}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Context of the project}{5}}
+\newlabel{sec:context-of-the-project}{{3}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Work environment and project management}{5}}
+\newlabel{sec:work-environment-and-project-management}{{4}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Work environment}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  {\it  PyCharm} as Python IDE , {\it  Slack} to communicate,{\it  GitHub} to stock the codes and have a versionning, {\it  Freedcamp} to plan the project events }}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Project management (Gantt chart)}{6}}
+\citation{quatieri2002audio}
+\citation{quatieri2002audio,rodet1992spectral}
+\citation{mcaulay1986speech}
+\citation{rodet1992spectral,depalle1993tracking}
+\@writefile{toc}{\contentsline {part}{II\hspace  {1em}Sound synthesis in the frequency domain}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}General analysis/synthesis approach}{7}}
+\newlabel{part:general-approach}{{5}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Additive Synthesis (Time Domain)}{7}}
+\newlabel{sec:additive-synthesis-(time-domain)}{{5.1}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  The additive synthesis}}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}General framework}{8}}
+\newlabel{sec:general-framework}{{5.2}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Windowing step}}{8}}
+\newlabel{windowing}{{5}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  Peaks detection}}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  Synthesized frame vs Original frame}}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces  Block diagram of a higher-level spectral-processing framework}}{10}}
+\citation{arfib2002time}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Phase Coherence}{11}}
+\newlabel{phase-coherence}{{5.3}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \it  Coherent phase (above) vs. Incoherent phase (below) between frames}}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Sinusoid synthesis in the frequency domain}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Stationary Case}{11}}
+\newlabel{stationary-case}{{6.1}{11}}
+\citation{rodet1992spectral}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces  Interpolation of stored lobe values onto the FFT bins.}}{12}}
+\newlabel{interpBin}{{10}{12}}
+\newlabel{statPhaseShift}{{4}{12}}
+\citation{mcaulay1986speech,serra1989system,karrer2006phavorit}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Quasi-Stationary Case}{13}}
+\newlabel{quasi-stationary-case}{{6.2}{13}}
+\citation{wellsmethods,wells2006high}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Frequency and amplitude modulation affects the shape of the lobe}}{14}}
+\newlabel{lobesAMFM}{{11}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Non-Stationary Case}{14}}
+\newlabel{non-stationary-case}{{6.3}{14}}
+\citation{analysis-general}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Mathematical Model}{15}}
+\newlabel{mathematical model}{{6.3.1}{15}}
+\newlabel{nonStatModel}{{11}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}The look-up table}{15}}
+\newlabel{the look-up table}{{6.3.2}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces  Regular ACR/FCR grid}}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces  Interpolation of stored lobe values onto the FFT bins}}{16}}
+\@writefile{toc}{\contentsline {part}{III\hspace  {1em}Results}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Stationary Case}{18}}
+\newlabel{sec:stationary-results}{{7}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Non-Stationary Case}{18}}
+\newlabel{non-stationary-results}{{8}{18}}
+\citation{pep8}
+\@writefile{toc}{\contentsline {part}{IV\hspace  {1em}Code structure and conventions}{19}}
+\newlabel{sec:code-structure-and-conventions}{{IV}{19}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Conventions}{19}}
+\newlabel{sec:conventions}{{9}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Naming conventions}{19}}
+\newlabel{sec:naming-conventions}{{9.1}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Spectrum and sinusoids parameters classes}{20}}
+\newlabel{sec:spectrums-and-sinusoids-parameters}{{9.2}{20}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.2.1}Spectrum}{20}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.2.2}Parameters}{21}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.2.3}NonStationaryParameters}{21}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Code structure}{22}}
+\newlabel{sec:code-structure}{{10}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}General structure}{22}}
+\newlabel{sec:general-structure}{{10.1}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Class structure}{22}}
+\newlabel{sec:class-structure}{{10.2}{22}}
+\@writefile{toc}{\contentsline {part}{V\hspace  {1em}Documentation}{23}}
+\newlabel{sec:documentation}{{V}{23}}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Core module}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1}Synthesizer}{23}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2}StationarySynthesizer}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3}NonStationarySynthesizer}{24}}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Spectrum generation module}{25}}
+\newlabel{sec:spectrum-generation-module}{{12}{25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.1}SpectrumGenerator}{25}}
+\newlabel{sec:spectrumgenerator}{{12.1}{25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2}StationarySpectrumGenerator}{25}}
+\newlabel{sec:stationaryspectrumgenerator}{{12.2}{25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.3}NonStationarySpectrumGenerator}{25}}
+\newlabel{sec:nonstationaryspectrumgenerator}{{12.3}{25}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.4}LobeGenerator}{26}}
+\newlabel{sec:lobegenerator}{{12.4}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {12.4.1}StationnaryLobeGenerator}{26}}
+\newlabel{sec:stationnarylobegenerator}{{12.4.1}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {12.4.2}NonStationaryLobeGenerator}{27}}
+\newlabel{sec:nonstationarylobegenerator}{{12.4.2}{27}}
+\@writefile{toc}{\contentsline {section}{\numberline {13}Phase Vocoder module}{27}}
+\newlabel{sec:phase-vocoder-module}{{13}{27}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.1}PhaseVocoder}{27}}
+\newlabel{sec:phasevocoder}{{13.1}{27}}
+\citation{karrer2006phavorit,barry2008time,hammer2001time}
+\citation{karrer2006phavorit}
+\citation{grunwald2010pv}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.2}StationaryPhaseVocoder}{28}}
+\newlabel{sec:stationaryphasevocoder}{{13.2}{28}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.3}NonStationaryPhaseVocoder}{28}}
+\newlabel{sec:nonstationaryphasevocoder}{{13.3}{28}}
+\@writefile{toc}{\contentsline {part}{VI\hspace  {1em}Conclusion}{29}}
+\@writefile{toc}{\contentsline {part}{VII\hspace  {1em}Appendix}{30}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Phase Vocoder}{30}}
+\newlabel{phase-vocoder-annex}{{A}{30}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Simple Phase Vocoder algorithm}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Phase Vocoder scheme}}{30}}
+\newlabel{eq1}{{13}{30}}
+\newlabel{eq2}{{14}{30}}
+\newlabel{eq3}{{15}{30}}
+\citation{karrer2006phavorit}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Scale phase locking}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces \it  Peak coherence from a frame to another}}{31}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Phase advance and propagation along the signal}{32}}
+\newlabel{phase-advance}{{B}{32}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}On the first attempt at Phase Vocoder use}{32}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.1.1}"Pure" synthesis}{32}}
+\newlabel{puresynth}{{B.1.1}{32}}
+\newlabel{statSignal}{{20}{32}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.1.2}"Parametered" synthesis}{33}}
+\citation{amatriain2002spectral,karrer2006phavorit}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Theoretical phases advance}{34}}
+\newlabel{theoretical_phase_advance}{{B.2}{34}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.2.1}Stationary case}{34}}
+\newlabel{phaseAdvanceStat}{{23}{34}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.2.2}Non-stationary case}{34}}
+\newlabel{theoretical_phase_advance_nonstat}{{B.2.2}{34}}
+\newlabel{nonStat}{{24}{34}}
+\newlabel{phaseadvanceNonStat}{{25}{34}}
+\bibstyle{ieeetran}
+\bibdata{biblioProjetLong}
+\bibcite{quatieri2002audio}{1}
+\bibcite{rodet1992spectral}{2}
+\bibcite{mcaulay1986speech}{3}
+\bibcite{depalle1993tracking}{4}
+\bibcite{arfib2002time}{5}
+\bibcite{serra1989system}{6}
+\bibcite{karrer2006phavorit}{7}
+\bibcite{wellsmethods}{8}
+\bibcite{wells2006high}{9}
+\bibcite{analysis-general}{10}
+\bibcite{pep8}{11}
+\bibcite{barry2008time}{12}
+\bibcite{hammer2001time}{13}
+\bibcite{grunwald2010pv}{14}
+\bibcite{amatriain2002spectral}{15}

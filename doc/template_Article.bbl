@@ -55,6 +55,20 @@ X.~Serra and X.~Serra, ``A system for sound analysis/transformation/synthesis
 T.~Karrer, E.~Lee, and J.~O. Borchers, ``Phavorit: A phase vocoder for
   real-time interactive time-stretching.'' in \emph{ICMC}, 2006.
 
+\bibitem{wellsmethods}
+J.~J. Wells, ``Methods for separation of amplitude and frequency modulation in
+  fourier transformed signals.''
+
+\bibitem{wells2006high}
+J.~J. Wells and D.~T. Murphy, ``High accuracy frame-by-frame non-stationary
+  sinusoidal modelling,'' in \emph{Proc. of the 9th International Conference on
+  Digital Audio Effects (DAFx-06)}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Citeseer, 2006, pp. 253--258.
+
+\bibitem{analysis-general}
+S.~Marchand and P.~Depalle, ``Generalization of the derivative analysis method
+  to non-stationary sinusoidal modeling,'' \emph{Addison Wesley}, 1994.
+
 \bibitem{pep8}
 G.~Van~Rossum, B.~Warsaw, and N.~Coghlan, ``Style guide for python code,'' Aug.
   2013.
