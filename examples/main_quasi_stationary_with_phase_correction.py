@@ -60,12 +60,12 @@ for i in xrange(number_frames):
     synth.set_next_frame(parameter)
     s = synth.get_next_frame()
     vector_frames[i, :] = s
+    parameter._frequencies += np.array([(analysis_hop * a) / (2 * np.pi * fs ** 2) for a in parameter._fcrs])
+    parameter._amplitudes += np.array([(analysis_hop * a) / float(fs) for a in parameter._acrs])
     parameter._phases += np.array([2 * np.pi * analysis_hop *
                                    (parameter.get_frequency(k) + (analysis_hop * parameter.get_fcrs(k)) /
-                                    (4 * np.pi * fs**2)) - (2*np.pi*parameter.get_frequency(k)*analysis_hop)
+                                    (2 * np.pi * fs ** 2)) - (2 * np.pi * parameter.get_frequency(k) * analysis_hop)
                                    for k in xrange(parameter.get_number_sinuses())])
-    parameter._frequencies += np.array([(analysis_hop * a) / (4 * np.pi * fs ** 2) for a in parameter._fcrs])
-    parameter._amplitudes += np.array([(analysis_hop * a) / float(fs) for a in parameter._acrs])
     # phases = np.array([synth.current_spectrum.phase[int(round(a * nfft))] for a in parameter._frequencies])
     # parameter._phases = phases  # We feed the phase advance back to the synthesizer
 

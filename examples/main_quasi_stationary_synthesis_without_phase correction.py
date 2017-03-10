@@ -20,7 +20,7 @@ nfft = 2**(next2pow(window_size) + zero_padding_factor)
 analysis_hop = 205
 synthesis_hop = 205
 
-parameter = NonStationaryParameters(np.array([1.]), np.array([0.05]), np.array([3.]), np.array([-0.5]), np.array([1000]))
+parameter = NonStationaryParameters(np.array([1.]), np.array([0.05]), np.array([3.]), np.array([-0.5]), np.array([4000]))
 
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
@@ -60,7 +60,7 @@ for i in xrange(number_frames):
     synth.set_next_frame(parameter)
     s = synth.get_next_frame()
     vector_frames[i, :] = s
-    parameter._frequencies += np.array([(analysis_hop * a) / (4 * np.pi * fs**2) for a in parameter._fcrs])
+    parameter._frequencies += np.array([(analysis_hop * a) / (2 * np.pi * fs**2) for a in parameter._fcrs])
     parameter._amplitudes += np.array([(analysis_hop * a) / float(fs) for a in parameter._acrs])
     parameter._phases += np.array([2 * np.pi * analysis_hop * a for a in parameter._frequencies])
     # phases = np.array([synth.current_spectrum.phase[int(round(a * nfft))] for a in parameter._frequencies])

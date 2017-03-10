@@ -10,17 +10,17 @@ import matplotlib.pyplot as plt
 from utils import gen_triangle_parameters
 
 fs = 44100
-sine_duration = 96e-3  # s
+sine_duration = 100e-3  # s
 window_length = 23e-3  # s
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
 window_type = "hanning"
 zero_padding_factor = 1
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
-analysis_hop = 105
-synthesis_hop = 105
+analysis_hop = 205
+synthesis_hop = 205
 
-parameter = NonStationaryParameters(np.array([1.]), np.array([0.008]), np.array([3.]), np.array([0.]), np.array([0.]))
+parameter = NonStationaryParameters(np.array([1.]), np.array([0.01]), np.array([3.]), np.array([0.]), np.array([1000]))
 
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
@@ -64,11 +64,11 @@ for i in xrange(number_frames):
     synth.set_next_frame(parameter)
     s = synth.get_next_frame()
     vector_frames[i, :] = s
+    parameter._frequencies += np.array([(analysis_hop * a) / (2 * np.pi * fs ** 2) for a in parameter._fcrs])
+    parameter._amplitudes += np.array([(analysis_hop * a) / float(fs) for a in parameter._acrs])
     parameter._phases += np.array([(2*np.pi*parameter.get_frequency(k)*analysis_hop) +
                                    (parameter.get_fcrs(k) * analysis_hop**2 / 2)
                                    for k in xrange(parameter.get_number_sinuses())])
-    parameter._frequencies += np.array([(analysis_hop * a) / (4 * np.pi * fs ** 2) for a in parameter._fcrs])
-    parameter._amplitudes += np.array([(analysis_hop * a) / float(fs) for a in parameter._acrs])
     # phases = np.array([synth.current_spectrum.phase[int(round(a * nfft))] for a in parameter._frequencies])
     # parameter._phases = phases  # We feed the phase advance back to the synthesizer
 
