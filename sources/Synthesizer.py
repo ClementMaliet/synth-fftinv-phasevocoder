@@ -112,10 +112,41 @@ class StationarySynthesizer(Synthesizer):
                              current_parameters, fs)
         self._spectrum_generator = StationarySpectrumGenerator(self._window_type, self._window_size,
                                                                self._current_parameters, self._nfft, analysis_hop)
+        # We unplugged the Phase Vocoder to improve time of execution. Please read annexe 1 for more information
         # self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
 
     def get_next_frame(self):
         self._current_spectrum = self._spectrum_generator.get_spectrum()
+        # We unplugged the Phase Vocoder to improve time of execution. Please read annexe 1 for more information
+        # self._phase_vocoder.current_analysis_spectrum = self._current_spectrum
+        # self._current_spectrum = self._phase_vocoder.get_pv_spectrum()
+        temporal_frame = self.inverse_fft(self._current_spectrum)
+        return temporal_frame
+
+    def inverse_fft(self, current_spectrum):
+        assert isinstance(current_spectrum, Spectrum)
+        sw = np.fft.ifft(current_spectrum.get_complex_spectrum()).real
+        s = np.zeros(self._window_size)
+        s[(self._window_size + 1) / 2:] = sw[:(self._window_size - 1) / 2]
+        s[:(self._window_size + 1) / 2] = sw[self._nfft - (self._window_size - 1) / 2 - 1:]
+        return s
+
+
+class NonStationarySynthesizer(Synthesizer):
+    def __init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
+                 current_parameters, regular_grid, acr_domain, fcr_domain, number_acr, number_fcr, fs=None):
+        Synthesizer.__init__(self, window_size, window_type, zero_padding_factor, analysis_hop, synthesis_hop,
+                             current_parameters, fs)
+        self._spectrum_generator = NonStationarySpectrumGenerator(self._window_type, self._window_size,
+                                                                  self._current_parameters, self._nfft, analysis_hop,
+                                                                  regular_grid, acr_domain, fcr_domain, number_acr,
+                                                                  number_fcr)
+        # We unplugged the Phase Vocoder to improve time of execution. Please read annexe 1 for more information
+        # self._phase_vocoder = StationaryPhaseVocoder(self._analysis_hop, self._synthesis_hop, self._current_spectrum)
+
+    def get_next_frame(self):
+        self._current_spectrum = self._spectrum_generator.get_spectrum()
+        # We unplugged the Phase Vocoder to improve time of execution. Please read annexe 1 for more information
         # self._phase_vocoder.current_analysis_spectrum = self._current_spectrum
         # self._current_spectrum = self._phase_vocoder.get_pv_spectrum()
         temporal_frame = self.inverse_fft(self._current_spectrum)
