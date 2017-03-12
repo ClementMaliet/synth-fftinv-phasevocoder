@@ -563,7 +563,8 @@ your\_synthesized\_signal = your\_synthesized\_signal\_parameters.get\_next\_fra
 
 
  
-The aim of this class is to generate a synthetic spectrum from known parameters (amplitudes, phases, frequencies). This class is divided into two subclasses that generate stationary and non-stationary spectrums.
+The aim of this class is to generate a synthetic spectrum from known parameters (amplitudes, phases, frequencies). This class is divided into two subclasses that generate stationary and non-stationary spectrums.\\
+Using add\_lobe method in a FOR loop, get\_lobe adds as many lobes as you want to a spectrum to create it.
 
 \subsection{StationarySpectrumGenerator}\label{sec:stationaryspectrumgenerator}
 
@@ -628,7 +629,8 @@ This class has not been made yet, but the goal is the same as for the Stationary
 		\_get\_lobe & \\
 		\hline
 \end{tabular}} \medskip\newline
-This class generates a 11 points main lobe.
+This class generates a 11 points main lobe.\\
+\_gen\_lobe is an abstract class called either in StationaryLobeGenerator or in NonStationaryLobeGenerator that generates the. Both methods will be more explained in the following paragraphs.
 
 \subsubsection{StationnaryLobeGenerator}\label{sec:stationnarylobegenerator}
 
@@ -649,6 +651,8 @@ This class generates a 11 points main lobe.
 		\_gen\_lobe(self) & \\
 		\hline
 \end{tabular}} \medskip\newline
+
+\_gen\_lobe first makes a circular shifting, that is to say that it turns the signal over so as to correct the phase. Then it computes the FFT on this new signal. Finally, it concatenates the 6 first points and the 5 last points of the signal to reconstruct the lobe.
 
 \subsubsection{NonStationaryLobeGenerator}\label{sec:nonstationarylobegenerator}
 \texttt{%
@@ -679,7 +683,8 @@ This class generates a 11 points main lobe.
 \end{tabular}} \medskip\newline
 \\
 
-The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must choose the kind of interpolation he or she wants to use for the magnitude, the phase and the frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.
+The aim is to generate a LUT with a uniform or a non-uniform grid, and to generate a lobe for a given ACR/FCR couple by interpolating with existing lobes of the LUT. The user must choose the kind of interpolation he or she wants to use for the magnitude, the phase and the frequency. Besides, he can choose the size of the LUT to build by giving the number of ACRs and FCRs.\\
+\_interpolate\_lobe defines the three interpolation methods to compute the amplitude, the phase or the frequency that the user can choose using scipy function interp2d.
 \section{Phase Vocoder module}\label{sec:phase-vocoder-module}
 \subsection{PhaseVocoder}\label{sec:phasevocoder}
 \texttt{%

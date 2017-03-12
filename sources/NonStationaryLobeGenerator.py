@@ -133,7 +133,7 @@ class NonStationaryLobeGenerator(LobeGenerator):
         # Indexes of the main lobe
         lobe_index = np.array(range(lower_zero_loc, upper_zero_loc))
 
-        # Split the lobe in 9 lobe points
+        # Split the lobe in 11 lobe points
         x = np.linspace(lower_zero_loc * 1.001, upper_zero_loc * 0.999, 11)
 
         # Store the relevant lobe
