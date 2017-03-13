@@ -13,7 +13,8 @@ window_type = "hanning"
 zero_padding_factor = 4
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 
-parameter = NonStationaryParameters(np.array([1.]), np.array([0.1]), np.array([3.]), np.array([0.]), np.array([8000.]))
+parameter = NonStationaryParameters(amplitudes=np.array([1.]), frequencies=np.array([0.1]), phases=np.array([3.]),
+                                    acrs=np.array([0.]), fcrs=np.array([8000.]))
 
 # Analysis
 w = signal.get_window(window_type, window_size)

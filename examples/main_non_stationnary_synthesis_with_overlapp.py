@@ -20,7 +20,8 @@ nfft = 2**(next2pow(window_size) + zero_padding_factor)
 analysis_hop = 205
 synthesis_hop = 205
 
-parameter = NonStationaryParameters(np.array([1.]), np.array([0.1]), np.array([3.]), np.array([0.]), np.array([8000.]))
+parameter = NonStationaryParameters(amplitudes=np.array([1.]), frequencies=np.array([0.1]), phases=np.array([3.]),
+                                    acrs=np.array([0.]), fcrs=np.array([8000.]))
 
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))

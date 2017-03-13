@@ -20,15 +20,16 @@ nfft = 2**(next2pow(window_size) + zero_padding_factor)
 analysis_hop = 205
 synthesis_hop = 205
 
-# parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
-# parameter = Parameters(np.exp(-1*np.arange(5)), np.array([0.05])*np.arange(1, 6), np.array([3.]*5))
 amp = 3.
 freq = 0.005
 phi = 3.
 n_harmonic = 100
 
-# parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
+# parameter = Parameters(amplitudes=np.array([500.]), frequencies=np.array([0.05]), phases=np.array([3.]))
+# parameter = Parameters(amplitudes=np.exp(-0.2*np.arange(20)), frequencies=np.array([0.012])*np.arange(1, 21),
+#                        phases=np.array([3.]*20))
 parameter = gen_triangle_parameters(amp, freq, phi, n_harmonic)
+
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
 

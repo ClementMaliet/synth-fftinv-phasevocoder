@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from utils import gen_triangle_parameters
 
 fs = 44100
-sine_duration = 96e-3  # s
+sine_duration = 50e-3  # s
 window_length = 23e-3  # s
 
 window_size = int(round(fs*window_length) if round(fs*window_length) % 2 != 0 else round(fs*window_length) + 1)
@@ -20,7 +20,8 @@ nfft = 2**(next2pow(window_size) + zero_padding_factor)
 analysis_hop = 205
 synthesis_hop = 205
 
-parameter = NonStationaryParameters(np.array([1.]), np.array([0.05]), np.array([3.]), np.array([-0.5]), np.array([4000]))
+parameter = NonStationaryParameters(amplitudes=np.array([1.]), frequencies=np.array([0.05]), phases=np.array([3.]),
+                                    acrs=np.array([-0.5]), fcrs=np.array([1000]))
 
 # Find the max number of slices that can be obtained
 number_frames = int(np.floor((sine_duration*fs-window_size)/analysis_hop))
@@ -79,7 +80,7 @@ for i in xrange(number_frames):
     time_index += synthesis_hop
 
 # Comparison
-plt.title("Synthetised and original frame")
+plt.title("Synthetised and original frame without phase correction")
 plt.plot(range(len(vector_time)), vector_time, label="Synthesized")
 plt.plot(range(min(len(s_gt), len(vector_time))), s_gt_env[:min(len(s_gt), len(vector_time))]*s_gt[:min(len(s_gt), len(vector_time))], '--', label="Original")
 plt.xlabel("Echantillons")

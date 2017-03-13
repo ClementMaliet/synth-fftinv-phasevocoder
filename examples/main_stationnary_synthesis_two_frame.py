@@ -13,9 +13,15 @@ window_type = "hanning"
 zero_padding_factor = 0
 nfft = 2**(next2pow(window_size) + zero_padding_factor)
 
-# parameter = Parameters(np.array([500.]), np.array([0.05]), np.array([3.]))
-# parameter = Parameters(np.exp(-0.2*np.arange(20)), np.array([0.012])*np.arange(1, 21), np.array([3.]*20))
-parameter = gen_sawtooth_parameters(3., 0.005, 0, 10)
+amp = 3.
+freq = 0.005
+phi = 3.
+n_harmonic = 100
+
+# parameter = Parameters(amplitudes=np.array([500.]), frequencies=np.array([0.05]), phases=np.array([3.]))
+# parameter = Parameters(amplitudes=np.exp(-0.2*np.arange(20)), frequencies=np.array([0.012])*np.arange(1, 21),
+#                        phases=np.array([3.]*20))
+parameter = gen_triangle_parameters(amp, freq, phi, n_harmonic)
 
 # Analysis
 w = signal.get_window(window_type, window_size)

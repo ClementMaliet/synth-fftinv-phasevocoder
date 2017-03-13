@@ -26,7 +26,6 @@ freq = 0.05
 phi = 3.
 n_harmonic = 10
 
-# parameter = Parameters(np.array([1, 0.2, 2, 1.5]), np.array([0.1, 0.3, 0.23, 0.11]), np.array([3., -2., 5, -0.3]))
 parameter = gen_triangle_parameters(amp, freq, phi, n_harmonic)
 
 # Find the max number of slices that can be obtained

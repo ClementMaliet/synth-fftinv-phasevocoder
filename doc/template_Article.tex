@@ -109,7 +109,7 @@ However the main issue at stake is that it is very costly to implement, so it is
 \subsection{General framework}\label{sec:general-framework}
 
 The first step of the method is the analysis. The aim is to extract the parameters of the signal (magnitude, phase, frequency).
-First of all, we window the signal in order to maximize the energy in the main lobe, with Hanning, Blackman-Harris... window for instance (Figure \ref{windowing}):
+First of all, we window the signal in order to maximize the energy in the main lobe, with Hanning, Blackman-Harris... window for instance (figure \ref{windowing}):
 
 \begin{figure}[H]
 	\centering
@@ -183,7 +183,7 @@ However since most of the energy is concentrated in the main lobe\footnote{At th
 	\caption{ Interpolation of stored lobe values onto the FFT bins.}
 	\label{interpBin}
 \end{figure}
-Interpolation is necessary to fill the bins because the sinusoid frequency bin $\hat{f_i}$ is unlikely to fall on an integer bin number ($\hat{f_i} = \tilde{f_i}\times N$ with $N$ the FFT size) as illustrated in figure \ref{interpBin}, this step allows for a good precision in frequency without the need for zero-padding the spectrum, thus increasing performance.
+Interpolation is necessary to fill the bins because the sinusoid frequency bin $\hat{f_i}$ is unlikely to fall on an integer bin number ($\hat{f_i} = \tilde{f_i}\times N$ with $N$ the FFT size) as illustrated in Figure \ref{interpBin}, this step allows for a good precision in frequency without the need for zero-padding the spectrum, thus increasing performance.
 
 The phase is set at a common value for every bins of the lobe, on the rational that they all represents the contribution of the same sinusoid. Note that the phase used is the original phase $\phi_{i}$ corrected from the windowing effects and advanced by the time passed, to ensure phase coherence as explained in section \ref{phase-coherence}, that is to say that:
 \begin{equation}\label{statPhaseShift}
@@ -282,9 +282,51 @@ Finally, the non-stationary phase advance equation (\ref{phaseadvanceNonStat}) c
 
 \newpage
 \part{Results}
-\section{Stationary Case}\label{sec:stationary-results}
-\section{Non-Stationary Case}\label{non-stationary-results}
+The stationary synthesiser has been fully implemented and tested. The quasi-stationary and non-stationary cases have been implemented but remains mostly non functional as of today.
 
+The mains are located in the \texttt{example} sub-folder of the repository.
+\section{Stationary Case}\label{sec:stationary-results}
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.3]{triangle.PNG}
+	\caption{Two frame overlap-add reconstruction example}
+	\label{statResult}
+\end{figure}
+\begin{figure}
+	\centering
+		\includegraphics[scale=0.4]{time.eps}
+		\includegraphics[scale=0.4]{relativetime.eps}
+		\caption{Time and Relative Time of Execution}
+		\label{time}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.4]{rmse.eps}
+	\caption{RMSE of reconstruction function of the frequency}
+	\label{precision}
+\end{figure}
+\sloppy
+Stationary case has been tested for two consecutive frames in \texttt{main\_stationnary\_synthesis\_two\_frame.py} with their respective spectrum plotted, and with overlap-add in \texttt{main\_stationnary\_synthesis\_with\_overlapp.py}. 
+
+The method works as shown in Figure \ref{statResult}. The execution time and precision analyses presented in Figure \ref{time} and \ref{precision} may be tested with \texttt{main\_compare\_with\_temporal\_synthesis.py}
+
+In fact the true limitation of the method as of now in the stationary case in the computation time required for synthesis, which incompatible with real time by a comfortable margin. The precision however seems to very slightly outperform time-domain synthesis which is a promising result.
+
+The \texttt{main\_stationnary\_synthesis\_with\_overlapp\_and\_analysis.py} is a test of the method on real quasi-stationary signals, using either the \texttt{estimation\_func.py} analysis method for non-stationary signals retrieved from the 2015 project or an elementary method located in \texttt{utils.py}\footnote{The method is non-functional as of now, for it lacks a sinusoid continuation algorithm to correctly propagates the phase}. Although the test seems not to work we left the file because we did not work on analysis, and everything seem to indicate that the error comes from the analysis part. Further work are is thus required to assess the validity of the method on real life sounds.
+\section{Quasi-stationary and Non-Stationary Cases}\label{non-stationary-results}
+The quasi-stationary synthesis has been tested with and without phase correction (Figure \ref{quasi-stationary}) for small frequency modulation ($\psi < 2000$) and surprisingly seems to perform significantly better without phase correction\footnote{Described in section \ref{quasi-stationary-case} page \pageref{quasi-stationary-case}}. This may be because of the inherent nature of phase coherence and a possible mistake in the phase correction term computed in section \ref{quasi-stationary-case}, if one wishes to check our results, details about phase advance computation may be found in appendix \ref{phase-advance} page \pageref{phase-advance}.
+
+\sloppy
+Both can be tested in the \texttt{main\_quasi\_stationary\_synthesis\_without\_phase correction.py} and \texttt{main\_quasi\_stationary\_synthesis\_with\_phase correction.py} files.
+
+Non-stationary synthesis has been tested for two consecutive frames in \texttt{main\_non\_stationnary\_synthesis\_two\_frame.py} with their respective spectrum plotted, and with overlap-add in \texttt{main\_non\_stationnary\_synthesis\_with\_overlapp.py}. Although it does work, most probably because the LUT interpolation is either not precise enough or some mistakes are made at some points in the process. The code has been left as it is and may be ran to assess the errors, further work and corrections are required to make the method functional.
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.3]{quasistatwophasecorr.PNG}
+	\includegraphics[scale=0.3]{quasistatwphasecorr.PNG}
+	\caption{Two frame overlap-add reconstruction example for a quasi-stationary sinusoid}
+	\label{quasi-stationary}
+\end{figure}
 \newpage
 \part{Code structure and conventions}\label{sec:code-structure-and-conventions}
 
@@ -417,7 +459,9 @@ Thus we inherit the \texttt{Parameters} class to add the two additional paramete
 \end{description}
 \footnotetext[1]{Please look up section \ref{non-stationary-case} page \pageref{non-stationary-case} for more details}
 \section{Code structure}\label{sec:code-structure}
-To understand which module is using which module, you can look at the code strcture just below.
+The code has been structured in interdependent module to ensure parallel and easy implementation of the synthesiser.
+
+To understand which module is using which module, you can look at the code structure just below.
 \subsection{General structure}\label{sec:general-structure}
 \begin{figure} [H]
 	\centerline{
@@ -426,10 +470,10 @@ To understand which module is using which module, you can look at the code strct
 \end{figure}
 \newpage
 \subsection{Class structure}\label{sec:class-structure}
+Below is an Object Oriented public class diagram showing the relationships between the different classes. For more information on the inner working and the non-public elements of each classes, please refer to the code documentation part \ref{sec:documentation} page \pageref{sec:documentation}.
 \begin{figure} [H]
-	\centerline{
-	\includegraphics[scale = 0.8] {code_structure.pdf}
-}
+	\centering
+	\includegraphics[scale = 0.6] {code_structure.pdf}
 \end{figure}
 
 \newpage
